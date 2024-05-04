@@ -8,6 +8,9 @@ namespace DouglasGreen\OptParser;
 class OptionHandler
 {
     /** @var array */
+    protected $allAliases = [];
+
+    /** @var array */
     protected $flags = [];
 
     /** @var array */
@@ -15,9 +18,6 @@ class OptionHandler
 
     /** @var array */
     protected $terms = [];
-
-    /** @var array */
-    protected $allAliases = [];
 
     /**
      * A flag has no arguments.
