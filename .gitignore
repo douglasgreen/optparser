@@ -1,0 +1,48 @@
+# apache
+.htaccess
+.user.ini
+
+# bower
+bower/
+
+# composer
+composer.phar
+vendor/
+
+# git
+!.gitkeep
+
+# log files
+*.log
+
+# mercurial
+*.orig
+
+# minified css/js
+*.min.*
+
+# node
+node/
+node_modules/
+
+# phpcs
+.phpcs-cache
+
+# phpstorm
+.idea/
+
+# phpunit
+.phpunit
+.phpunit.result.cache
+
+# symfony
+build/*
+parameters.yml
+public/bundles/
+var/*
+web/bundles/
+
+# vim
+*~
+*.swp
+*.swo
