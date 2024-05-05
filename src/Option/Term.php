@@ -10,6 +10,19 @@ class Term extends Option
         $this->setType($type);
     }
 
+    public function matchInput(string $value): bool
+    {
+        switch ($this->getType()) {
+            case 'BOOL':
+                $result = $this->castBool($value);
+                if ($result === null) {
+                    return false;
+                }
+                break;
+        }
+        return false;
+    }
+
     public function write(): string
     {
         return $this->name . ':' . $this->type;

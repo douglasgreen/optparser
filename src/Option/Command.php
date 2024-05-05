@@ -13,6 +13,15 @@ class Command extends Option
         $this->aliases = $aliases;
     }
 
+    public function matchInput(string $value): bool
+    {
+        if ($this->name == $value) {
+            return true;
+        }
+
+        return $this->hasAlias($value);
+    }
+
     public function write(): string
     {
         return $this->name;

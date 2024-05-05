@@ -72,6 +72,10 @@ abstract class Option
         }
     }
 
+    abstract public function matchInput(string $value): bool;
+
+    abstract public function write(): string;
+
     /**
      * Check for supported types.
      *
@@ -90,6 +94,4 @@ abstract class Option
         $this->checkType($type);
         $this->type = $type;
     }
-
-    abstract public function write(): string;
 }

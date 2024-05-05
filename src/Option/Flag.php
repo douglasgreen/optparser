@@ -16,6 +16,12 @@ class Flag extends Option
         $this->aliases = $aliases;
     }
 
+    /** @todo Finish */
+    public function matchInput(string $value): bool
+    {
+        return false;
+    }
+
     public function write(): string
     {
         return $this->hyphenate($this->name);

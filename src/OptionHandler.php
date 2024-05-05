@@ -127,12 +127,8 @@ class OptionHandler
             return false;
         }
 
-        if ($name == $value) {
-            return true;
-        }
-
         $command = $this->commands[$name];
-        return $command->hasAlias($value);
+        return $command->matchInput($value);
     }
 
     /**
@@ -145,15 +141,7 @@ class OptionHandler
         }
 
         $term = $this->terms[$name];
-        switch ($term->getType()) {
-            case 'BOOL':
-                $result = $term->castBool($value);
-                if ($result === null) {
-                    return false;
-                }
-                break;
-        }
-        return false;
+        return $term->matchInput($value);
     }
 
     /**
