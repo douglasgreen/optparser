@@ -1,6 +1,6 @@
 <?php
 
-namespace DouglasGreen\OptionParser;
+namespace DouglasGreen\OptParser;
 
 use Exception;
 

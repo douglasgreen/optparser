@@ -1,6 +1,6 @@
 <?php
 
-namespace DouglasGreen\OptionParser;
+namespace DouglasGreen\OptParser;
 
 /**
  * Define and print options.
