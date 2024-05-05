@@ -66,7 +66,7 @@ class Usage
                 }
                 $output .= $this->optionHandler->writeOption($name);
                 if (!$required) {
-                    $output .= "[";
+                    $output .= "]";
                 }
             }
         }
