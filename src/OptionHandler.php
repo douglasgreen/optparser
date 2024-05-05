@@ -138,16 +138,16 @@ class OptionHandler
             $output .= $this->writeCommandBlock();
         }
 
+        if ($this->terms) {
+            $output .= $this->writeTermBlock();
+        }
+
         if ($this->params) {
             $output .= $this->writeParamBlock();
         }
 
         if ($this->flags) {
             $output .= $this->writeFlagBlock();
-        }
-
-        if ($this->terms) {
-            $output .= $this->writeTermBlock();
         }
 
         return $output;
