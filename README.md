@@ -39,8 +39,21 @@ Every argument must have at least one long alias. The first long alias that is
 specified for that argument is used as the argument name. You must retrieve the
 argument using its name.
 
+A term is not marked so it only has a name, not aliases.
+
+## Formatting
+
+Flags can be combined, for example -a -b -c can be written as -abc.
+
+Space must separate every short parameter from its argument.
+
+An equal sign must separate every long parameter from its argument.
+
+The argument list can be terminated by --.
+
 ## References
-* http://docopt.org/
-* https://github.com/nategood/commando
-* https://github.com/getopt-php/getopt-php
-* https://www.php.net/manual/en/function.getopt.php
+- http://docopt.org/
+- https://github.com/nategood/commando
+- https://github.com/getopt-php/getopt-php
+- https://www.php.net/manual/en/function.getopt.php
+- https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
