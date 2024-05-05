@@ -64,7 +64,7 @@ class Program
     public function writeHelpBlock(): string
     {
         $output = $this->name . "\n\n";
-        $output = wordwrap($this->desc) . "\n\n";
+        $output .= wordwrap($this->desc) . "\n\n";
         $output .= "Usage:\n";
         $programName = $this->argumentParser->getProgramName();
         foreach ($this->usages as $usage) {
