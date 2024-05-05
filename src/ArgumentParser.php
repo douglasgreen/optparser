@@ -11,6 +11,9 @@ class ArgumentParser
     /** @var list<string> */
     protected $nonOptions = [];
 
+    /** @var string */
+    protected $programName;
+
     /** @var list<string> */
     protected $unmarkedOptions = [];
 
@@ -22,6 +25,12 @@ class ArgumentParser
      */
     public function __construct(array $argv)
     {
+        $programName = array_shift($argv);
+        if (!$programName) {
+            throw new OptionParserException("No program name");
+        }
+
+        $this->programName = basename($programName);
         [$options, $this->nonOptions] = $this->splitArrayAroundDash($argv);
         $options = $this->joinArguments($options);
         foreach ($options as $option) {
@@ -49,6 +58,11 @@ class ArgumentParser
     public function getNonOptions(): array
     {
         return $this->nonOptions;
+    }
+
+    public function getProgramName(): string
+    {
+        return $this->programName;
     }
 
     /**
@@ -105,9 +119,11 @@ class ArgumentParser
             ) {
                 // Join parameter with argument by =.
                 $value .= '=' . $array[++$index];
+                $newArray[] = $value;
+            } else {
+                $newArray[] = $value;
             }
 
-            $newArray[] = $value;
             $index++;
         }
         return $newArray;
