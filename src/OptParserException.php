@@ -4,6 +4,6 @@ namespace DouglasGreen\OptParser;
 
 use Exception;
 
-class OptionParserException extends Exception
+class OptParserException extends Exception
 {
 }

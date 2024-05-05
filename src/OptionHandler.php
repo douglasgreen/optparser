@@ -2,57 +2,44 @@
 
 namespace DouglasGreen\OptParser;
 
+use DouglasGreen\OptParser\Option\Command;
+use DouglasGreen\OptParser\Option\Flag;
+use DouglasGreen\OptParser\Option\Option;
+use DouglasGreen\OptParser\Option\Param;
+use DouglasGreen\OptParser\Option\Term;
+
 /**
  * Define and print options.
  */
 class OptionHandler
 {
-    /** @var list<string> */
-    protected static $validTypes = [
-        'BOOL',
-        'FLOAT',
-        'INT',
-        'STRING',
-    ];
-
     /** @var array<string, bool> */
     protected $allAliases = [];
 
-    /** @var array<string, bool> */
-    protected $allNames = [];
-
     /**
-     * @var array<string, array{
-     *     aliases: list<string>,
-     *     desc: string
-     * }>
+     * @var array<string, Command>
      */
     protected $commands = [];
 
     /**
-     * @var array<string, array{
-     *     aliases: list<string>,
-     *     desc: string
-     * }>
+     * @var array<string, Flag>
      */
     protected $flags = [];
 
     /**
-     * @var array<string, array{
-     *     aliases: list<string>,
-     *     type: string,
-     *     desc: string
-     * }>
+     * @var array<string, Param>
      */
     protected $params = [];
 
     /**
-     * @var array<string, array{
-     *      type: string,
-     *      desc: string
-     * }>
+     * @var array<string, Term>
      */
     protected $terms = [];
+
+    public function __construct()
+    {
+        $this->addFlag(['h', 'help'], 'Display program help');
+    }
 
     /**
      * A command is a predefined list of command words.
@@ -62,10 +49,7 @@ class OptionHandler
     public function addCommand(array $aliases, string $desc): void
     {
         [$name, $others] = $this->pickName($aliases);
-        $this->commands[$name] = [
-            'aliases' => $others,
-            'desc' => $desc
-        ];
+        $this->commands[$name] = new Command($name, $desc, $others);
     }
 
     /**
@@ -76,10 +60,7 @@ class OptionHandler
     public function addFlag(array $aliases, string $desc): void
     {
         [$name, $others] = $this->pickName($aliases);
-        $this->flags[$name] = [
-            'aliases' => $others,
-            'desc' => $desc
-        ];
+        $this->flags[$name] = new Flag($name, $desc, $others);
     }
 
     /**
@@ -87,19 +68,10 @@ class OptionHandler
      *
      * @param list<string> $aliases
      */
-    public function addParam(
-        array $aliases,
-        string $type,
-        string $desc
-    ): void {
+    public function addParam(array $aliases, string $type, string $desc): void
+    {
         [$name, $others] = $this->pickName($aliases);
-        $type = strtoupper($type);
-        $this->checkType($type);
-        $this->params[$name] = [
-            'aliases' => $others,
-            'desc' => $desc,
-            'type' => $type
-        ];
+        $this->params[$name] = new Param($name, $desc, $others, $type);
     }
 
     /**
@@ -108,71 +80,89 @@ class OptionHandler
     public function addTerm(string $name, string $type, string $desc): void
     {
         $this->checkAlias($name);
-        $this->allNames[$name] = true;
-        $this->terms[$name] = [
-            'desc' => $desc,
-            'type' => $type
-        ];
+        $this->terms[$name] = new Term($name, $desc, $type);
     }
 
     /**
      * Get the type of a command.
      */
-    public function getType(string $name): string
+    public function getType(string $name): ?string
+    {
+        $option = $this->getOption($name);
+        return $option->getType();
+    }
+
+    /*
+     * Get an option by name.
+     *
+     * @throws OptParserException
+     */
+    public function getOption(string $name): Option
     {
         if (isset($this->commands[$name])) {
-            return 'command';
+            return $this->commands[$name];
         }
 
         if (isset($this->params[$name])) {
-            return 'param';
+            return $this->params[$name];
         }
 
         if (isset($this->terms[$name])) {
-            return 'term';
+            return $this->terms[$name];
         }
 
         if (isset($this->flags[$name])) {
-            return 'flat';
+            return $this->flags[$name];
         }
 
-        throw new OptionParserException("Name not found");
+        throw new OptParserException("Name not found");
     }
 
     /**
-     * Has the name been defined?
+     * Match a command.
      */
-    public function hasName(string $name): bool
+    public function matchCommand(string $name, string $value): bool
     {
-        return isset($this->names[$name]);
+        if (!isset($this->commands[$name])) {
+            return false;
+        }
+
+        if ($name == $value) {
+            return true;
+        }
+
+        $command = $this->commands[$name];
+        return $command->hasAlias($value);
+    }
+
+    /**
+     * Match a term.
+     */
+    public function matchTerm(string $name, string $value): bool
+    {
+        if (!isset($this->terms[$name])) {
+            return false;
+        }
+
+        $term = $this->terms[$name];
+        switch ($term->getType()) {
+            case 'BOOL':
+                $result = $term->castBool($value);
+                if ($result === null) {
+                    return false;
+                }
+                break;
+        }
+        return false;
     }
 
     /**
      * Write an option by name.
-     *
-     * @throws OptionParserException
      */
     public function writeOption(string $name): string
     {
-        if (isset($this->commands[$name])) {
-            return $name;
-        }
-
-        if (isset($this->params[$name])) {
-            $param = $this->params[$name];
-            return $this->hyphenate($name) . '=' . $param['type'];
-        }
-
-        if (isset($this->terms[$name])) {
-            $term = $this->terms[$name];
-            return $this->hyphenate($name) . ':' . $term['type'];
-        }
-
-        if (isset($this->flags[$name])) {
-            return $this->hyphenate($name);
-        }
-
-        throw new OptionParserException("Name not found");
+        $option = $this->getOption($name);
+        return $option->write();
     }
 
     /**
@@ -204,41 +194,20 @@ class OptionHandler
     /**
      * Check alias for uniqueness.
      *
-     * @throws OptionParserException
+     * @throws OptParserException
      */
     protected function checkAlias(string $alias): void
     {
         if (isset($this->allAliases[$alias])) {
-            throw new OptionParserException("Duplicate alias: " . $alias);
+            throw new OptParserException("Duplicate alias: " . $alias);
         }
         $this->allAliases[$alias] = true;
     }
 
     /**
-     * Check for supported types.
-     *
-     * @throws OptionParserException
-     */
-    protected function checkType(string $type): void
-    {
-        if (!in_array($type, self::$validTypes)) {
-            throw new OptionParserException("Unsupported type: " . $type);
-        }
-    }
-
-    protected function hyphenate(string $alias): string
-    {
-        if (strlen($alias) == 1) {
-            return '-' . $alias;
-        } else {
-            return '--' . $alias;
-        }
-    }
-
-    /**
      * @param list<string> $aliases
      * @return array{string, list<string>}
-     * @throws OptionParserException
+     * @throws OptParserException
      */
     protected function pickName(array $aliases): array
     {
@@ -248,14 +217,13 @@ class OptionHandler
             $this->checkAlias($alias);
             if (!$name && strlen($alias) > 1) {
                 $name = $alias;
-                $this->allNames[$name] = true;
             } else {
                 $others[] = $alias;
             }
         }
 
         if (!$name) {
-            throw new OptionParserException("Missing required long name");
+            throw new OptParserException("Missing required long name");
         }
 
         return [$name, $others];
@@ -266,10 +234,13 @@ class OptionHandler
         $output = "Commands:\n";
         foreach ($this->commands as $name => $command) {
             $output .= "  $name";
-            foreach ($command['aliases'] as $alias) {
-                $output .= " | $alias";
+            $aliases = $command->getAliases();
+            if ($aliases) {
+                foreach ($aliases as $alias) {
+                    $output .= " | $alias";
+                }
             }
-            $output .= '  ' . $command['desc'] . "\n";
+            $output .= '  ' . $command->getDesc() . "\n";
         }
         $output .= "\n";
         return $output;
@@ -280,12 +251,15 @@ class OptionHandler
         $output = "Flags:\n";
         foreach ($this->flags as $name => $flag) {
             $output .= '  ';
-            $output .= $this->hyphenate($name);
-            foreach ($flag['aliases'] as $alias) {
-                $output .= ' | ';
-                $output .= $this->hyphenate($alias);
+            $output .= $flag->hyphenate($name);
+            $aliases = $flag->getAliases();
+            if ($aliases) {
+                foreach ($aliases as $alias) {
+                    $output .= ' | ';
+                    $output .= $flag->hyphenate($alias);
+                }
             }
-            $output .= '  ' . $flag['desc'] . "\n";
+            $output .= '  ' . $flag->getDesc() . "\n";
         }
         $output .= "\n";
         return $output;
@@ -296,13 +270,16 @@ class OptionHandler
         $output = "Parameters:\n";
         foreach ($this->params as $name => $param) {
             $output .= '  ';
-            $output .= $this->hyphenate($name);
-            foreach ($param['aliases'] as $alias) {
-                $output .= ' | ';
-                $output .= $this->hyphenate($alias);
+            $output .= $param->hyphenate($name);
+            $aliases = $param->getAliases();
+            if ($aliases) {
+                foreach ($aliases as $alias) {
+                    $output .= ' | ';
+                    $output .= $param->hyphenate($alias);
+                }
             }
-            $output .= ' = ' . $param['type'];
-            $output .= '  ' . $param['desc'] . "\n";
+            $output .= ' = ' . $param->getType();
+            $output .= '  ' . $param->getDesc() . "\n";
         }
         $output .= "\n";
         return $output;
@@ -312,7 +289,7 @@ class OptionHandler
     {
         $output = "Terms:\n";
         foreach ($this->terms as $name => $term) {
-            $output .= "  $name: " . $term['type'] . '  ' . $term['desc'] . "\n";
+            $output .= "  $name: " . $term->getType() . '  ' . $term->getDesc() . "\n";
         }
         $output .= "\n";
         return $output;

@@ -27,7 +27,7 @@ class ArgumentParser
     {
         $programName = array_shift($argv);
         if (!$programName) {
-            throw new OptionParserException("No program name");
+            throw new OptParserException("No program name");
         }
 
         $this->programName = basename($programName);

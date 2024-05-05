@@ -3,9 +3,9 @@
 namespace DouglasGreen\OptParser;
 
 /**
- * Define a command with a series of options.
+ * Define a usage with a series of options.
  */
-class CommandHandler
+class Usage
 {
     /** @var OptionHandler */
     protected $optionHandler;
@@ -24,18 +24,36 @@ class CommandHandler
     }
 
     /**
-     * Add an option to the command by name.
+     * Add an option to the usage by name.
      *
-     * @throws OptionParserException
+     * @throws OptParserException
      */
     public function addOption(string $name, bool $required = false): void
     {
         $type = $this->optionHandler->getType($name);
+        if ($type == 'command' && $this->options['command']) {
+            throw new OptParserException('Multiple commands defined');
+        }
+
         $this->options[$type][$name] = $required;
     }
 
     /**
-     * Write the options line for the command.
+     * @return array<string, bool>
+     *
+     * @throws OptParserException
+     */
+    public function getOptions(string $type): array
+    {
+        if (isset($this->options[$type])) {
+            return $this->options[$type];
+        }
+
+        throw new OptParserException('Invalid type');
+    }
+
+    /**
+     * Write the options line for the usage.
      */
     public function writeOptionsLine(string $programName): string
     {
