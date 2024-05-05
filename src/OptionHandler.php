@@ -7,6 +7,14 @@ namespace DouglasGreen\OptParser;
  */
 class OptionHandler
 {
+    /** @var list<string> */
+    protected static $validTypes = [
+        'BOOL',
+        'FLOAT',
+        'INT',
+        'STRING',
+    ];
+
     /** @var array<string, bool> */
     protected $hasExtras = [
         'flag' => false,
@@ -29,7 +37,7 @@ class OptionHandler
     /**
      * @var array<string, array{
      *     aliases: list<string>,
-     *     arg: string,
+     *     type: string,
      *     desc: string,
      *     required: bool
      * }>
@@ -67,21 +75,21 @@ class OptionHandler
     /**
      * @param array<string> $aliases
      */
-    public function addExtraParam(array $aliases, string $arg, string $desc): void
+    public function addExtraParam(array $aliases, string $type, string $desc): void
     {
         $this->hasExtras['param'] = true;
-        $this->addParam($aliases, $arg, $desc, false);
+        $this->addParam($aliases, $type, $desc, false);
     }
 
     /**
      * @param array<string> $aliases
      */
-    public function addRequiredParam(array $aliases, string $arg, string $desc): void
+    public function addRequiredParam(array $aliases, string $type, string $desc): void
     {
         if ($this->hasExtras['param']) {
             throw new OptionParserException("Required param added after extra param");
         }
-        $this->addParam($aliases, $arg, $desc, true);
+        $this->addParam($aliases, $type, $desc, true);
     }
 
     public function addExtraTerm(string $name, string $desc): void
@@ -146,7 +154,7 @@ class OptionHandler
      */
     protected function addParam(
         array $aliases,
-        string $arg,
+        string $type,
         string $desc,
         bool $required
     ): void {
@@ -159,10 +167,12 @@ class OptionHandler
                 $others[] = $alias;
             }
         }
+        $type = strtoupper($type);
+        $this->checkType($type);
         $this->params[$name] = [
             'aliases' => $others,
             'desc' => $desc,
-            'arg' => $arg,
+            'type' => $type,
             'required' => $required
         ];
     }
@@ -190,6 +200,18 @@ class OptionHandler
             throw new OptionParserException("Duplicate alias: " . $alias);
         }
         $this->allAliases[$alias] = true;
+    }
+
+    /**
+     * Check for supported types.
+     *
+     * @throws OptionParserException
+     */
+    protected function checkType(string $type): void
+    {
+        if (!in_array($type, self::$validTypes)) {
+            throw new OptionParserException("Unsupported type: " . $type);
+        }
     }
 
     /**
@@ -249,7 +271,7 @@ class OptionHandler
                 echo ' | ';
                 $this->printAlias($alias);
             }
-            echo ' = ' . $param['arg'];
+            echo ' = ' . $param['type'];
             if (!$param['required']) {
                 echo ']';
             }
