@@ -8,6 +8,13 @@ namespace DouglasGreen\OptionParser;
 class OptionHandler
 {
     /** @var array */
+    protected $hasExtras = [
+        'flag' => false,
+        'param' => false,
+        'term' => false
+    ];
+
+    /** @var array */
     protected $allAliases = [];
 
     /** @var array */
@@ -19,47 +26,46 @@ class OptionHandler
     /** @var array */
     protected $terms = [];
 
-    /**
-     * A flag has no arguments.
-     */
-    public function addFlag(array $aliases, string $desc): void
+    public function addExtraFlag(array $aliases, string $desc): void
     {
-        $name = $this->pickName($aliases);
-        $this->checkAlias($name);
-        $others = [];
-        foreach ($aliases as $alias) {
-            if ($alias != $name) {
-                $this->checkAlias($alias);
-                $others[] = $alias;
-            }
-        }
-        $this->flags[$name] = ['desc' => $desc, 'aliases' => $others];
+        $this->hasExtras['flag'] = true;
+        $this->addFlag($aliases, $desc, false):
     }
 
-    /**
-     * A parameter has a required argument.
-     */
-    public function addParam(array $aliases, string $arg, string $desc): void
+    public function addRequiredFlag(array $aliases, string $desc): void
     {
-        $name = $this->pickName($aliases);
-        $this->checkAlias($name);
-        $others = [];
-        foreach ($aliases as $alias) {
-            if ($alias != $name) {
-                $this->checkAlias($alias);
-                $others[] = $alias;
-            }
+        if ($this->hasExtras['flag']) {
+            throw new OptionParserException("Required flag added after extra flag");
         }
-        $this->params[$name] = ['desc' => $desc, 'aliases' => $others, 'arg' => $arg];
+        $this->addFlag($aliases, $desc, true):
     }
 
-    /**
-     * A term is a positional argument.
-     */
-    public function addTerm(string $name, string $desc): void
+    public function addExtraParam(array $aliases, string $arg, string $desc): void
     {
-        $this->checkAlias($name):
-        $this->terms[$name] = $desc;
+        $this->hasExtras['param'] = true;
+        $this->addParam($aliases, $arg, $desc, false):
+    }
+
+    public function addRequiredParam(array $aliases, string $arg, string $desc): void
+    {
+        if ($this->hasExtras['param']) {
+            throw new OptionParserException("Required param added after extra param");
+        }
+        $this->addParam($aliases, $arg, $desc, true):
+    }
+
+    public function addExtraTerm(string $name, string $desc): void
+    {
+        $this->hasExtras['term'] = true;
+        $this->addTerm($name, $desc, false):
+    }
+
+    public function addRequiredTerm(string $name, string $desc): void
+    {
+        if ($this->hasExtras['term']) {
+            throw new OptionParserException("Required term added after extra term");
+        }
+        $this->addTerm($name, $desc, true):
     }
 
     /**
@@ -70,13 +76,19 @@ class OptionHandler
         if ($this->params) {
             echo "Parameters:\n":
             foreach ($this->params as $name => $param) {
-                echo "  ";
+                echo '  ';
+                if (!$param['required']) {
+                    echo '<';
+                }
                 $this->printAlias($name);
                 foreach ($param['aliases'] as $alias) {
                     echo ' | ';
                     $this->printAlias($alias);
                 }
                 echo ' = ' . $param['arg'];
+                if (!$param['required']) {
+                    echo '<';
+                }
                 echo '  ' . $param['desc'] . "\n";
             }
             echo "\n";
@@ -85,7 +97,7 @@ class OptionHandler
         if ($this->flags) {
             echo "Flags:\n":
             foreach ($this->flags as $name => $flag) {
-                echo "  ";
+                echo '  ';
                 $this->printAlias($name);
                 foreach ($flag['aliases'] as $alias) {
                     echo ' | ';
@@ -103,6 +115,65 @@ class OptionHandler
             }
             echo "\n";
         }
+    }
+
+    /**
+     * A flag has no arguments.
+     */
+    protected function addFlag(array $aliases, string $desc, bool $required): void
+    {
+        $name = $this->pickName($aliases);
+        $this->checkAlias($name);
+        $others = [];
+        foreach ($aliases as $alias) {
+            if ($alias != $name) {
+                $this->checkAlias($alias);
+                $others[] = $alias;
+            }
+        }
+        $this->flags[$name] = [
+            'desc' => $desc,
+            'aliases' => $others,
+            'required'=> $required
+        ];
+    }
+
+    /**
+     * A parameter has a required argument.
+     */
+    protected function addParam(
+        array $aliases,
+        string $arg,
+        string $desc,
+        bool $required
+    ): void {
+        $name = $this->pickName($aliases);
+        $this->checkAlias($name);
+        $others = [];
+        foreach ($aliases as $alias) {
+            if ($alias != $name) {
+                $this->checkAlias($alias);
+                $others[] = $alias;
+            }
+        }
+        $this->params[$name] = [
+            'desc' => $desc,
+            'aliases' => $others,
+            'arg' => $arg,
+            'required'=> $required
+        ];
+    }
+
+    /**
+     * A term is a positional argument.
+     */
+    protected function addTerm(string $name, string $desc, bool $required): void
+    {
+        $this->checkAlias($name):
+        $this->terms[$name] = [
+            'desc' => $desc,
+            'required'=> $required
+        ];
     }
 
     /**
