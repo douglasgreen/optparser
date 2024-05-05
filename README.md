@@ -5,14 +5,39 @@ A replacement for getopt. It's better than getopt because:
 - It checks for unrecognized arguments.
 - It returns arguments as a specific scalar type.
 
-## Description
+## Commands
 
 A program accepts one or more types of commands. A command is a series of
-options, each of which can be required or not required.
+options, each of which can be required or extra (not required).
+
+## Options
 
 An option is either:
 - A flag, with zero arguments.
 - A parameter, with one required argument.
+- A term, which is a positional argument.
+
+Required options must be specified before extra arguments.
+
+## Command matching
+
+To find a match, each command is tried in order. The first command that
+completely matches with no leftover arguments is used. If no match is found, an
+error code is returned and the help message is printed.
+
+## Argument aliases
+
+Each argument can have one or more aliases. If an alias is short (only one
+character), it is invoked with a single hyphen like `-h`. If an alias is long
+(more than one character), it is invoked with two hyphens like `--help`.
+
+Commands may reuse aliases but each alias must be defined only once.
+
+## Argument names
+
+Every argument must have at least one long alias. The first long alias that is
+specified for that argument is used as the argument name. You must retrieve the
+argument using its name.
 
 ## References
 * http://docopt.org/
