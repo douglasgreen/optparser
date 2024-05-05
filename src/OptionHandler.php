@@ -119,32 +119,6 @@ class OptionHandler
     }
 
     /**
-     * Match a command.
-     */
-    public function matchCommand(string $name, string $value): bool
-    {
-        if (!isset($this->commands[$name])) {
-            return false;
-        }
-
-        $command = $this->commands[$name];
-        return $command->matchInput($value);
-    }
-
-    /**
-     * Match a term.
-     */
-    public function matchTerm(string $name, string $value): bool
-    {
-        if (!isset($this->terms[$name])) {
-            return false;
-        }
-
-        $term = $this->terms[$name];
-        return $term->matchInput($value);
-    }
-
-    /**
      * Write an option by name.
      */
     public function writeOption(string $name): string

@@ -85,11 +85,12 @@ class Program
         $commands = $usage->getOptions('command');
         if ($commands) {
             foreach ($commands as $name => $required) {
+                $command = $this->optionHandler->getOption($name);
                 $found = false;
                 $matches[$name] = false;
                 if ($unmarkedOptions) {
                     $value = array_shift($unmarkedOptions);
-                    $isMatch = $this->optionHandler->matchCommand($name, $value);
+                    $isMatch = $command->matchInput($value);
                     if ($isMatch) {
                         $matches[$name] = true;
                         $found = true;
@@ -108,11 +109,12 @@ class Program
         $terms = $usage->getOptions('term');
         if ($terms) {
             foreach ($terms as $name => $required) {
+                $term = $this->optionHandler->getOption($name);
                 $found = false;
                 $matches[$name] = false;
                 if ($unmarkedOptions) {
                     $value = array_shift($unmarkedOptions);
-                    $isMatch = $this->optionHandler->matchTerm($name, $value);
+                    $isMatch = $term->matchInput($value);
                     if ($isMatch) {
                         $matches[$name] = true;
                         $found = true;
