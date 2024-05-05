@@ -7,17 +7,22 @@ A replacement for getopt. It's better than getopt because:
 
 ## Commands
 
-A program accepts one or more types of commands. A command is a series of
-options, each of which can be required or extra (not required).
+A program accepts one or more types of usage. A usage is a series of options,
+each of which can be required or extra (not required).
 
 ## Options
 
 An option is either:
+- A command, which is the name of a requested operation.
+- A term, which is a positional argument.
 - A flag, with zero arguments.
 - A parameter, with one required argument.
-- A term, which is a positional argument.
 
-Required options must be specified before extra arguments.
+Options are processed in the order given.
+
+If there is a command, there can only be one command and it must come first.
+
+If there are terms, they must follow the command, if any.
 
 ## Command matching
 
@@ -45,9 +50,7 @@ A term is not marked so it only has a name, not aliases.
 
 Flags can be combined, for example -a -b -c can be written as -abc.
 
-Space must separate every short parameter from its argument.
-
-An equal sign must separate every long parameter from its argument.
+Space or equal sign must separate every parameter from its argument.
 
 The argument list can be terminated by --.
 

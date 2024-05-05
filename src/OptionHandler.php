@@ -116,6 +116,30 @@ class OptionHandler
     }
 
     /**
+     * Get the type of a command.
+     */
+    public function getType(string $name): string
+    {
+        if (isset($this->commands[$name])) {
+            return 'command';
+        }
+
+        if (isset($this->params[$name])) {
+            return 'param';
+        }
+
+        if (isset($this->terms[$name])) {
+            return 'term';
+        }
+
+        if (isset($this->flags[$name])) {
+            return 'flat';
+        }
+
+        throw new OptionParserException("Name not found");
+    }
+
+    /**
      * Has the name been defined?
      */
     public function hasName(string $name): bool
