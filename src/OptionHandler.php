@@ -1,6 +1,6 @@
 <?php
 
-namespace DouglasGreen\OptParser;
+namespace DouglasGreen\OptionParser;
 
 /**
  * Define and print options.
@@ -108,18 +108,18 @@ class OptionHandler
     /**
      * Check alias for uniqueness.
      *
-     * @throws OptParserException
+     * @throws OptionParserException
      */
     protected function checkAlias(string $alias): string
     {
         if (isset($this->allAliases[$alias])) {
-            throw new OptParserException("Duplicate alias: " . $alias);
+            throw new OptionParserException("Duplicate alias: " . $alias);
         }
         $this->allAliases[$alias] = true;
     }
 
     /**
-     * @throws OptParserException
+     * @throws OptionParserException
      */
     protected function pickName(array $aliases): string
     {
@@ -131,7 +131,7 @@ class OptionHandler
         }
 
         if (!$name) {
-            throw new OptParserException("Missing required long name");
+            throw new OptionParserException("Missing required long name");
         }
 
         return $name;

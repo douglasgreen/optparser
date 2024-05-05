@@ -1,8 +1,8 @@
 <?php
 
-namespace DouglasGreen\OptParser;
+namespace DouglasGreen\OptionParser;
 
-class OptParser
+class OptionParser
 {
     /** @var array */
     protected $args = [];
