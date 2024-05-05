@@ -11,11 +11,12 @@ class Param extends Option
         string $name,
         string $desc,
         array $aliases,
-        string $type
+        string $type,
+        string $regexp = null
     ) {
         parent::__construct($name, $desc);
         $this->aliases = $aliases;
-        $this->setType($type);
+        $this->setType($type, $regexp);
     }
 
     /** @todo Finish */

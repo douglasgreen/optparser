@@ -6,12 +6,19 @@ use DouglasGreen\OptParser\OptParserException;
 
 abstract class Option
 {
-   /** @var list<string> */
+   /**
+    * @var list<string>
+    * @todo Validate using https://www.php.net/manual/en/filter.filters.validate.php
+    */
     protected const VALID_TYPES = [
         'BOOL',
+        'EMAIL',
         'FLOAT',
         'INT',
+        'IP',
+        'REGEXP',
         'STRING',
+        'URL',
     ];
 
     /** @var ?list<string> */
@@ -22,6 +29,9 @@ abstract class Option
 
     /** @var string */
     protected $desc;
+
+    /** @var ?string */
+    protected $regexp;
 
     /** @var ?string */
     protected $type;
@@ -88,10 +98,13 @@ abstract class Option
         }
     }
 
-    protected function setType(string $type): void
+    protected function setType(string $type, ?string $regexp = null): void
     {
         $type = strtoupper($type);
         $this->checkType($type);
         $this->type = $type;
+        if ($this->type == 'REGEXP') {
+            $this->regexp = $regexp;
+        }
     }
 }

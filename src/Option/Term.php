@@ -4,10 +4,14 @@ namespace DouglasGreen\OptParser\Option;
 
 class Term extends Option
 {
-    public function __construct(string $name, string $desc, string $type)
-    {
+    public function __construct(
+        string $name,
+        string $desc,
+        string $type,
+        string $regexp = null
+    ) {
         parent::__construct($name, $desc);
-        $this->setType($type);
+        $this->setType($type, $regexp);
     }
 
     public function matchInput(string $value): bool
