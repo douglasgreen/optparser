@@ -10,24 +10,24 @@
     "require": {
         "php": ">=8.3.0"
     },
-    "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-        "phpcompatibility/php-compatibility": "^9.3",
+   "require-dev": {
         "phpmd/phpmd": "^2.15",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.5",
         "rector/rector": "^1.0",
-        "squizlabs/php_codesniffer": "^3.9"
+        "symplify/easy-coding-standard": "^12.1"
     },
     "scripts": {
-        "fix-php": "phpcbf",
-        "lint-php": "phpcs && phpmd bin,src,tests text phpmd.xml && phpstan analyse",
-        "test-php": "phpunit",
-        "upgrade-php": "rector process"
-    },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
+        "fix-php": [
+            "ecs --fix",
+            "rector"
+        ],
+        "lint-php": [
+            "ecs",
+            "phpmd src,tests text phpmd.xml",
+            "phpstan analyse",
+            "rector --dry-run"
+        ],
+        "test-php": "phpunit"
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DouglasGreen\OptParser;
 
 use DouglasGreen\OptParser\Option\Command;
@@ -13,7 +15,9 @@ use DouglasGreen\OptParser\Option\Term;
  */
 class OptionHandler
 {
-    /** @var array<string, bool> */
+    /**
+     * @var array<string, bool>
+     */
     protected $allAliases = [];
 
     /**
@@ -89,6 +93,7 @@ class OptionHandler
     public function getType(string $name): ?string
     {
         $option = $this->getOption($name);
+
         return $option->getType();
     }
 
@@ -115,7 +120,7 @@ class OptionHandler
             return $this->flags[$name];
         }
 
-        throw new OptParserException("Name not found");
+        throw new OptParserException('Name not found');
     }
 
     /**
@@ -124,6 +129,7 @@ class OptionHandler
     public function writeOption(string $name): string
     {
         $option = $this->getOption($name);
+
         return $option->write();
     }
 
@@ -155,21 +161,20 @@ class OptionHandler
 
     /**
      * Check alias for uniqueness.
-     *
-     * @throws OptParserException
      */
     protected function checkAlias(string $alias): void
     {
         if (isset($this->allAliases[$alias])) {
-            throw new OptParserException("Duplicate alias: " . $alias);
+            throw new OptParserException('Duplicate alias: ' . $alias);
         }
+
         $this->allAliases[$alias] = true;
     }
 
     /**
      * @param list<string> $aliases
+     *
      * @return array{string, list<string>}
-     * @throws OptParserException
      */
     protected function pickName(array $aliases): array
     {
@@ -177,15 +182,15 @@ class OptionHandler
         $others = [];
         foreach ($aliases as $alias) {
             $this->checkAlias($alias);
-            if (!$name && strlen($alias) > 1) {
+            if ($name === null && strlen($alias) > 1) {
                 $name = $alias;
             } else {
                 $others[] = $alias;
             }
         }
 
-        if (!$name) {
-            throw new OptParserException("Missing required long name");
+        if ($name === null) {
+            throw new OptParserException('Missing required long name');
         }
 
         return [$name, $others];
@@ -195,17 +200,18 @@ class OptionHandler
     {
         $output = "Commands:\n";
         foreach ($this->commands as $name => $command) {
-            $output .= "  $name";
+            $output .= '  ' . $name;
             $aliases = $command->getAliases();
             if ($aliases) {
                 foreach ($aliases as $alias) {
-                    $output .= " | $alias";
+                    $output .= ' | ' . $alias;
                 }
             }
+
             $output .= '  ' . $command->getDesc() . "\n";
         }
-        $output .= "\n";
-        return $output;
+
+        return $output . "\n";
     }
 
     protected function writeFlagBlock(): string
@@ -221,10 +227,11 @@ class OptionHandler
                     $output .= $flag->hyphenate($alias);
                 }
             }
+
             $output .= '  ' . $flag->getDesc() . "\n";
         }
-        $output .= "\n";
-        return $output;
+
+        return $output . "\n";
     }
 
     protected function writeParamBlock(): string
@@ -240,20 +247,21 @@ class OptionHandler
                     $output .= $param->hyphenate($alias);
                 }
             }
+
             $output .= ' = ' . $param->getType();
             $output .= '  ' . $param->getDesc() . "\n";
         }
-        $output .= "\n";
-        return $output;
+
+        return $output . "\n";
     }
 
     protected function writeTermBlock(): string
     {
         $output = "Terms:\n";
         foreach ($this->terms as $name => $term) {
-            $output .= "  $name: " . $term->getType() . '  ' . $term->getDesc() . "\n";
+            $output .= sprintf('  %s: ', $name) . $term->getType() . '  ' . $term->getDesc() . "\n";
         }
-        $output .= "\n";
-        return $output;
+
+        return $output . "\n";
     }
 }

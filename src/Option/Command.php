@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DouglasGreen\OptParser\Option;
 
 class Command extends Option
@@ -13,15 +15,17 @@ class Command extends Option
         $this->aliases = $aliases;
     }
 
+    #[\Override]
     public function matchInput(string $value): bool
     {
-        if ($this->name == $value) {
+        if ($this->name === $value) {
             return true;
         }
 
         return $this->hasAlias($value);
     }
 
+    #[\Override]
     public function write(): string
     {
         return $this->name;

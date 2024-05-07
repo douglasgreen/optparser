@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DouglasGreen\OptParser\Option;
 
 class Term extends Option
@@ -8,25 +10,26 @@ class Term extends Option
         string $name,
         string $desc,
         string $type,
-        string $regexp = null
+        ?string $regexp = null
     ) {
         parent::__construct($name, $desc);
         $this->setType($type, $regexp);
     }
 
+    #[\Override]
     public function matchInput(string $value): bool
     {
-        switch ($this->getType()) {
-            case 'BOOL':
-                $result = $this->castBool($value);
-                if ($result === null) {
-                    return false;
-                }
-                break;
+        if ($this->getType() === 'BOOL') {
+            $result = $this->castBool($value);
+            if ($result === null) {
+                return false;
+            }
         }
+
         return false;
     }
 
+    #[\Override]
     public function write(): string
     {
         return $this->name . ':' . $this->type;

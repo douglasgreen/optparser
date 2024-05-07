@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DouglasGreen\OptParser;
 
 /**
@@ -7,31 +9,28 @@ namespace DouglasGreen\OptParser;
  */
 class Usage
 {
-    /** @var OptionHandler */
-    protected $optionHandler;
-
-    /** @var array<string, array<string, bool>> */
+    /**
+     * @var array<string, array<string, bool>>
+     */
     protected $options = [
         'command' => [],
         'term' => [],
         'flag' => [],
-        'param' => []
+        'param' => [],
     ];
 
-    public function __construct(OptionHandler $optionHandler)
-    {
-        $this->optionHandler = $optionHandler;
+    public function __construct(
+        protected OptionHandler $optionHandler
+    ) {
     }
 
     /**
      * Add an option to the usage by name.
-     *
-     * @throws OptParserException
      */
     public function addOption(string $name, bool $required = false): void
     {
         $type = $this->optionHandler->getType($name);
-        if ($type == 'command' && $this->options['command']) {
+        if ($type === 'command' && $this->options['command']) {
             throw new OptParserException('Multiple commands defined');
         }
 
@@ -40,8 +39,6 @@ class Usage
 
     /**
      * @return array<string, bool>
-     *
-     * @throws OptParserException
      */
     public function getOptions(string $type): array
     {
@@ -58,19 +55,20 @@ class Usage
     public function writeOptionsLine(string $programName): string
     {
         $output = '  ' . $programName;
-        foreach ($this->options as $names) {
-            foreach ($names as $name => $required) {
+        foreach ($this->options as $option) {
+            foreach ($option as $name => $required) {
                 $output .= ' ';
-                if (!$required) {
-                    $output .= "[";
+                if (! $required) {
+                    $output .= '[';
                 }
+
                 $output .= $this->optionHandler->writeOption($name);
-                if (!$required) {
-                    $output .= "]";
+                if (! $required) {
+                    $output .= ']';
                 }
             }
         }
-        $output .= "\n";
-        return $output;
+
+        return $output . "\n";
     }
 }

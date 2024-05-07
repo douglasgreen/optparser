@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 use DouglasGreen\OptParser\ArgumentParser;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 class ArgumentParserTest extends TestCase
 {
-    public function testGetMarkedOptions()
+    public function testGetMarkedOptions(): void
     {
         $argv = ['script.php', '-a', '-b', 'arg1', '--foo=bar', '--baz', 'arg2', '--', 'non1', 'non2'];
-        $parser = new ArgumentParser($argv);
+        $argumentParser = new ArgumentParser($argv);
 
         $expected = [
             'a' => '',
@@ -18,69 +20,69 @@ class ArgumentParserTest extends TestCase
             'baz' => 'arg2',
         ];
 
-        $this->assertEquals($expected, $parser->getMarkedOptions());
+        $this->assertSame($expected, $argumentParser->getMarkedOptions());
     }
 
-    public function testGetNonOptions()
+    public function testGetNonOptions(): void
     {
         $argv = ['script.php', '-a', '-b', 'arg1', '--foo=bar', '--baz', 'arg2', '--', 'non1', 'non2'];
-        $parser = new ArgumentParser($argv);
+        $argumentParser = new ArgumentParser($argv);
 
         $expected = ['non1', 'non2'];
 
-        $this->assertEquals($expected, $parser->getNonOptions());
+        $this->assertSame($expected, $argumentParser->getNonOptions());
     }
 
-    public function testGetUnmarkedOptions()
+    public function testGetUnmarkedOptions(): void
     {
         $argv = ['script.php', '-a', '-b', 'arg1', '--foo=bar', '--baz', 'arg2', '--', 'non1', 'non2'];
-        $parser = new ArgumentParser($argv);
+        $argumentParser = new ArgumentParser($argv);
 
         $expected = [];
 
-        $this->assertEquals($expected, $parser->getUnmarkedOptions());
+        $this->assertSame($expected, $argumentParser->getUnmarkedOptions());
     }
 
-    public function testSplitArrayAroundDash()
+    public function testSplitArrayAroundDash(): void
     {
         $argv = ['script.php', '-a', '-b', 'arg1', '--foo=bar', '--baz', 'arg2', '--', 'non1', 'non2'];
         $others = array_slice($argv, 1);
-        $parser = new ArgumentParser($argv);
+        $argumentParser = new ArgumentParser($argv);
 
         $expectedBefore = ['-a', '-b', 'arg1', '--foo=bar', '--baz', 'arg2'];
         $expectedAfter = ['non1', 'non2'];
 
-        $result = $this->invokeMethod($parser, 'splitArrayAroundDash', [$others]);
+        $result = $this->invokeMethod($argumentParser, 'splitArrayAroundDash', [$others]);
 
-        $this->assertEquals($expectedBefore, $result[0]);
-        $this->assertEquals($expectedAfter, $result[1]);
+        $this->assertSame($expectedBefore, $result[0]);
+        $this->assertSame($expectedAfter, $result[1]);
     }
 
-    public function testJoinArguments()
+    public function testJoinArguments(): void
     {
         $argv = ['-abc', '-d', 'arg1', '--foo', 'bar', '--baz=qux'];
-        $parser = new ArgumentParser($argv);
+        $argumentParser = new ArgumentParser($argv);
 
         $expected = ['-a', '-b', '-c', '-d=arg1', '--foo=bar', '--baz=qux'];
 
-        $result = $this->invokeMethod($parser, 'joinArguments', [$argv]);
+        $result = $this->invokeMethod($argumentParser, 'joinArguments', [$argv]);
 
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
      * Call protected/private method of a class.
      *
-     * @param object $object     Instantiated object that we will run method on.
+     * @param object $object     Instantiated object that we will run method on
      * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
+     * @param array  $parameters Array of parameters to pass into method
      *
-     * @return mixed Method return.
+     * @return mixed method return
      */
     protected function invokeMethod(object $object, string $methodName, array $parameters = [])
     {
-        $reflection = new ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
+        $reflectionClass = new ReflectionClass($object::class);
+        $method = $reflectionClass->getMethod($methodName);
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DouglasGreen\OptParser\Option;
 
 class Flag extends Option
@@ -16,12 +18,16 @@ class Flag extends Option
         $this->aliases = $aliases;
     }
 
-    /** @todo Finish */
+    /**
+     * @todo Finish
+     */
+    #[\Override]
     public function matchInput(string $value): bool
     {
         return false;
     }
 
+    #[\Override]
     public function write(): string
     {
         return $this->hyphenate($this->name);

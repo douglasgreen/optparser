@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DouglasGreen\OptParser;
 
 /**
@@ -7,34 +9,19 @@ namespace DouglasGreen\OptParser;
  */
 class Program
 {
-    /** @var ArgumentParser */
-    protected $argumentParser;
-
-    /** @var string */
-    protected $desc;
-
-    /** @var string */
-    protected $name;
-
-    /** @var OptionHandler */
-    protected $optionHandler;
-
-    /** @var list<Usage> */
+    /**
+     * @var list<Usage>
+     */
     protected $usages = [];
 
     public function __construct(
-        ArgumentParser $argumentParser,
-        OptionHandler $optionHandler,
-        string $name,
-        string $desc
+        protected ArgumentParser $argumentParser,
+        protected OptionHandler $optionHandler,
+        protected string $name,
+        protected string $desc
     ) {
-        $this->argumentParser = $argumentParser;
-        $this->optionHandler = $optionHandler;
-        $this->name = $name;
-        $this->desc = $desc;
-
         // Add a default help usage.
-        $usage = new Usage($optionHandler);
+        $usage = new Usage($this->optionHandler);
         $usage->addOption('help', true);
         $this->addUsage($usage);
     }
@@ -51,10 +38,21 @@ class Program
     {
         foreach ($this->usages as $usage) {
             $matches = $this->tryToMatchUsage($usage);
-            if ($matches) {
-                return $usage;
+            if ($matches === null) {
+                continue;
             }
+
+            if ($matches === '') {
+                continue;
+            }
+
+            if ($matches === '0') {
+                continue;
+            }
+
+            return $usage;
         }
+
         return null;
     }
 
@@ -70,64 +68,78 @@ class Program
         foreach ($this->usages as $usage) {
             $output .= $usage->writeOptionsLine($programName);
         }
+
         $output .= "\n";
-        $output .= $this->optionHandler->writeOptionBlock();
-        return $output;
+
+        return $output . $this->optionHandler->writeOptionBlock();
     }
 
-    protected function tryToMatchUsage(Usage $usage): ?array
+    /**
+     * @todo Finish
+     */
+    protected function tryToMatchUsage(Usage $usage): ?string
     {
         $unmarkedOptions = $this->argumentParser->getUnmarkedOptions();
-        //$markedOptions = $this->argumentParser->getMarkedOptions();
-        //$nonOptions = $this->argumentParser->getNonOptions();
+        // $markedOptions = $this->argumentParser->getMarkedOptions();
+        // $nonOptions = $this->argumentParser->getNonOptions();
         $matches = [];
 
         $commands = $usage->getOptions('command');
-        if ($commands) {
-            foreach ($commands as $name => $required) {
-                $command = $this->optionHandler->getOption($name);
-                $found = false;
-                $matches[$name] = false;
-                if ($unmarkedOptions) {
-                    $value = array_shift($unmarkedOptions);
-                    $isMatch = $command->matchInput($value);
-                    if ($isMatch) {
-                        $matches[$name] = true;
-                        $found = true;
-                    } else {
-                        array_unshift($unmarkedOptions, $value);
-                        $found = false;
-                    }
-                }
-
-                if ($required && !$found) {
-                    return null;
+        foreach ($commands as $name => $required) {
+            $command = $this->optionHandler->getOption($name);
+            $found = false;
+            $matches[$name] = false;
+            if ($unmarkedOptions !== []) {
+                $value = array_shift($unmarkedOptions);
+                $isMatch = $command->matchInput($value);
+                if ($isMatch) {
+                    $matches[$name] = true;
+                    $found = true;
+                } else {
+                    array_unshift($unmarkedOptions, $value);
+                    $found = false;
                 }
             }
+
+            if (! $required) {
+                continue;
+            }
+
+            if ($found) {
+                continue;
+            }
+
+            return null;
         }
 
         $terms = $usage->getOptions('term');
-        if ($terms) {
-            foreach ($terms as $name => $required) {
-                $term = $this->optionHandler->getOption($name);
-                $found = false;
-                $matches[$name] = false;
-                if ($unmarkedOptions) {
-                    $value = array_shift($unmarkedOptions);
-                    $isMatch = $term->matchInput($value);
-                    if ($isMatch) {
-                        $matches[$name] = true;
-                        $found = true;
-                    } else {
-                        array_unshift($unmarkedOptions, $value);
-                        $found = false;
-                    }
-                }
-
-                if ($required && !$found) {
-                    return null;
+        foreach ($terms as $name => $required) {
+            $term = $this->optionHandler->getOption($name);
+            $found = false;
+            $matches[$name] = false;
+            if ($unmarkedOptions !== []) {
+                $value = array_shift($unmarkedOptions);
+                $isMatch = $term->matchInput($value);
+                if ($isMatch) {
+                    $matches[$name] = true;
+                    $found = true;
+                } else {
+                    array_unshift($unmarkedOptions, $value);
+                    $found = false;
                 }
             }
+
+            if (! $required) {
+                continue;
+            }
+
+            if ($found) {
+                continue;
+            }
+
+            return null;
         }
+
+        return '';
     }
 }

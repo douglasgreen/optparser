@@ -1,23 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DouglasGreen\OptParser;
 
 /**
  * Parse $argv.
+ *
  * @see https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
  */
 class ArgumentParser
 {
-    /** @var list<string> */
+    /**
+     * @var list<string>
+     */
     protected $nonOptions = [];
 
-    /** @var string */
-    protected $programName;
+    protected string $programName;
 
-    /** @var list<string> */
+    /**
+     * @var list<string>
+     */
     protected $unmarkedOptions = [];
 
-    /** @var array<string, string> */
+    /**
+     * @var array<string, string>
+     */
     protected $markedOptions = [];
 
     /**
@@ -26,8 +34,8 @@ class ArgumentParser
     public function __construct(array $argv)
     {
         $programName = array_shift($argv);
-        if (!$programName) {
-            throw new OptParserException("No program name");
+        if (! $programName) {
+            throw new OptParserException('No program name');
         }
 
         $this->programName = basename($programName);
@@ -75,12 +83,13 @@ class ArgumentParser
 
     /**
      * @param list<string> $array
+     *
      * @return array{list<string>, list<string>}
      */
     protected function splitArrayAroundDash(array $array): array
     {
         // Find the index of '--'
-        $dashIndex = array_search('--', $array);
+        $dashIndex = array_search('--', $array, true);
 
         // Check if '--' was found
         if ($dashIndex === false) {
@@ -97,6 +106,7 @@ class ArgumentParser
 
     /**
      * @param list<string> $array
+     *
      * @return list<string>
      */
     protected function joinArguments(array $array): array
@@ -113,9 +123,9 @@ class ArgumentParser
                     $newArray[] = '-' . $char;
                 }
             } elseif (
-                preg_match('/^(-\w|--\w+)\b/', $value) &&
-                isset($array[$index + 1]) &&
-                !preg_match('/^-/', $array[$index + 1])
+                preg_match('/^(-\w|--\w+)\b/', $value)
+                && isset($array[$index + 1])
+                && preg_match('/^-/', $array[$index + 1]) === 0
             ) {
                 // Join parameter with argument by =.
                 $value .= '=' . $array[++$index];
@@ -124,8 +134,9 @@ class ArgumentParser
                 $newArray[] = $value;
             }
 
-            $index++;
+            ++$index;
         }
+
         return $newArray;
     }
 }
