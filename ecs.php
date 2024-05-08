@@ -61,7 +61,7 @@ if ($useRisky) {
 }
 
 return ECSConfig::configure()
-    ->withPaths([__DIR__ . '/src', __DIR__ . '/tests'])
+    ->withPaths([__DIR__ . '/bin', __DIR__ . '/src', __DIR__ . '/tests'])
     ->withRootFiles()
     ->withPreparedSets(cleanCode: true, common: true, psr12: true, strict: true, symplify: true)
     ->withPhpCsFixerSets(
@@ -110,39 +110,100 @@ return ECSConfig::configure()
         symfonyRisky: $sets['symfonyRisky'],
     )
     ->withConfiguredRule(
+        // Be careful about this part of the config. ECS removes the tag and its
+        // contents when what you often want to do is remove or modify the tag
+        // only and not its contents.
         GeneralPhpdocAnnotationRemoveFixer::class,
         [
             'annotations' => [
-                'arg',
+                // Use abstract keyword instead
+                'abstract',
+
+                // Use public, protected, or private keyword instead
+                'access',
+
+                // Use version history instead
                 'author',
+
+                // Use namespaces instead
                 'category',
+
+                // Use class keyword instead
                 'class',
+
+                // Use @var tag or const keyword instead
                 'const',
+
+                // Use constructor keyword instead
                 'constructor',
+
+                // Use license file instead
                 'copyright',
+
+                // Use plain text description without tag
                 'desc',
+
+                // First comment is automatically file comment
                 'file',
-                'group',
-                'important',
+
+                // Use final keyword instead
+                'final',
+
+                // Use dependency injection instead of globals
+                'global',
+
+                // Use @todo tag instead
+                'hack',
+
+                // Use @inheritdoc instead
                 'inherit',
+
+                // Use license file instead
+                'license',
+
+                // Use void return type instead
                 'noreturn',
-                'option',
+
+                // Use namespaces instead
                 'package',
+
+                // Use @param instead
                 'parm',
+
+                // Use private keyword instead
                 'private',
+
+                // Use protected keyword instead
                 'protected',
+
+                // Use public keyword instead
                 'public',
+
+                // Use plain text description without tag
                 'purpose',
+
+                // Use readonly keyword instead
                 'readonly',
+
+                // Use @uses tag instead
                 'requires',
-                'src',
+
+                // Use static keyword instead
                 'static',
+
+                // Use namespaces instead
                 'subpackage',
-                'template',
-                'this',
+
+                // Use type declaration or @var tag instead.
                 'type',
+
+                // Use type declaration or @var tag instead.
                 'typedef',
+
+                // Use version history instead
                 'updated',
+
+                // Use @uses on the other code instead
                 'usedby',
             ],
         ]
