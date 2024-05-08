@@ -5,31 +5,39 @@ declare(strict_types=1);
 namespace DouglasGreen\OptParser;
 
 /**
- * Parse $argv.
+ * Parse command-line arguments from $argv.
+ *
+ * This class parses command-line arguments according to the GNU argument syntax.
  *
  * @see https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
  */
 class ArgumentParser
 {
     /**
-     * @var list<string>
+     * @var list<string> Non-option arguments
      */
     protected $nonOptions = [];
 
+    /**
+     * @var string Program name
+     */
     protected string $programName;
 
     /**
-     * @var list<string>
-     */
-    protected $unmarkedOptions = [];
-
-    /**
-     * @var array<string, string>
+     * @var array<string, string> Marked options (options with leading dash)
      */
     protected $markedOptions = [];
 
     /**
-     * @param list<string> $argv
+     * @var list<string> Unmarked options (options without leading dash)
+     */
+    protected $unmarkedOptions = [];
+
+    /**
+     * Constructor.
+     *
+     * @param list<string> $argv Command-line arguments
+     * @throws OptParserException If no program name is provided
      */
     public function __construct(array $argv)
     {
@@ -53,7 +61,9 @@ class ArgumentParser
     }
 
     /**
-     * @return array<string, string>
+     * Get the marked options.
+     *
+     * @return array<string, string> Marked options as key-value pairs
      */
     public function getMarkedOptions(): array
     {
@@ -61,20 +71,29 @@ class ArgumentParser
     }
 
     /**
-     * @return list<string>
+     * Get the non-option arguments.
+     *
+     * @return list<string> Non-option arguments
      */
     public function getNonOptions(): array
     {
         return $this->nonOptions;
     }
 
+    /**
+     * Get the program name.
+     *
+     * @return string Program name
+     */
     public function getProgramName(): string
     {
         return $this->programName;
     }
 
     /**
-     * @return list<string>
+     * Get the unmarked options.
+     *
+     * @return list<string> Unmarked options
      */
     public function getUnmarkedOptions(): array
     {
@@ -82,9 +101,10 @@ class ArgumentParser
     }
 
     /**
-     * @param list<string> $array
+     * Split an array into two parts around the '--' separator.
      *
-     * @return array{list<string>, list<string>}
+     * @param list<string> $array Input array
+     * @return array{list<string>, list<string>} Array with elements before '--' and after '--'
      */
     protected function splitArrayAroundDash(array $array): array
     {
@@ -105,9 +125,10 @@ class ArgumentParser
     }
 
     /**
-     * @param list<string> $array
+     * Join option names with their arguments using '='.
      *
-     * @return list<string>
+     * @param list<string> $array Input array of options and arguments
+     * @return list<string> Array with joined options and arguments
      */
     protected function joinArguments(array $array): array
     {
