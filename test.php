@@ -5,7 +5,7 @@ declare(strict_types=1);
 require_once 'vendor/autoload.php';
 
 use DouglasGreen\OptParser\OptionHandler;
-use DouglasGreen\OptParser\Program;
+use DouglasGreen\OptParser\OptParser;
 
 $optHandler = new OptionHandler();
 
