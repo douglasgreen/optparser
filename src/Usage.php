@@ -19,26 +19,43 @@ class Usage
         'flag' => [],
     ];
 
-    public function __construct(
-        protected OptionHandler $optionHandler
-    ) {
-    }
-
     /**
-     * Add an option to the usage by name.
+     * Constructor for the Usage class.
+     *
+     * @param OptionHandler $optionHandler   The option handler instance
+     * @param array<string> $requiredOptions An array of required option names
+     * @param array<string> $extraOptions    An array of extra option names
+     *
+     * @throws OptParserException If multiple commands are defined
      */
-    public function addOption(string $name, bool $required = false): void
-    {
-        $type = $this->optionHandler->getType($name);
-        if ($type === 'command' && $this->options['command']) {
-            throw new OptParserException('Multiple commands defined');
+    public function __construct(
+        protected OptionHandler $optionHandler,
+        array $requiredOptions,
+        array $extraOptions
+    ) {
+        foreach ($requiredOptions as $name) {
+            $type = $this->optionHandler->getType($name);
+            if ($type === 'command' && $this->options['command']) {
+                throw new OptParserException('Multiple commands defined');
+            }
+
+            $this->options[$type][$name] = true;
         }
 
-        $this->options[$type][$name] = $required;
+        foreach ($extraOptions as $extraOption) {
+            $type = $this->optionHandler->getType($extraOption);
+            $this->options[$type][$extraOption] = false;
+        }
     }
 
     /**
-     * @return array<string, bool>
+     * Get the options of a specific type.
+     *
+     * @param string $type The type of options to retrieve
+     *
+     * @return array<string, bool> The options of the specified type
+     *
+     * @throws OptParserException If an invalid type is provided
      */
     public function getOptions(string $type): array
     {
@@ -51,20 +68,20 @@ class Usage
 
     /**
      * Write the options line for the usage.
+     *
+     * @param string $programName The name of the program
+     *
+     * @return string The options line for the usage
      */
     public function writeOptionsLine(string $programName): string
     {
         $output = '  ' . $programName;
         foreach ($this->options as $option) {
             foreach ($option as $name => $required) {
-                $output .= ' ';
-                if (! $required) {
-                    $output .= '[';
-                }
-
-                $output .= $this->optionHandler->writeOption($name);
-                if (! $required) {
-                    $output .= ']';
+                if ($required) {
+                    $output .= ' ' . $this->optionHandler->writeOption($name);
+                } else {
+                    $output .= ' [' . $this->optionHandler->writeOption($name) . ']';
                 }
             }
         }
