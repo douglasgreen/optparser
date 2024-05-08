@@ -33,13 +33,13 @@ class Usage
         array $requiredOptions,
         array $extraOptions
     ) {
-        foreach ($requiredOptions as $name) {
-            $type = $this->optionHandler->getType($name);
+        foreach ($requiredOptions as $requiredOption) {
+            $type = $this->optionHandler->getType($requiredOption);
             if ($type === 'command' && $this->options['command']) {
                 throw new OptParserException('Multiple commands defined');
             }
 
-            $this->options[$type][$name] = true;
+            $this->options[$type][$requiredOption] = true;
         }
 
         foreach ($extraOptions as $extraOption) {

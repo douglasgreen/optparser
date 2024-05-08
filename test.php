@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 require_once 'vendor/autoload.php';
 
-use DouglasGreen\OptParser\ArgumentParser;
 use DouglasGreen\OptParser\OptionHandler;
 use DouglasGreen\OptParser\Program;
-use DouglasGreen\OptParser\Usage;
-
-$argParser = new ArgumentParser($argv);
 
 $optHandler = new OptionHandler();
 
-$program = new Program($argParser, $optHandler, 'Test', 'My testing program');
+$program = new Program($argv, $optHandler, 'Test', 'My testing program');
 
 $optHandler->addCommand(['run'], 'Run it');
 $optHandler->addCommand(['stop'], 'Stop it');
@@ -31,14 +27,7 @@ $optHandler->addParam(['t', 'timeout'], 'INT', 'Timeout in seconds');
 $optHandler->addTerm('command', 'string', 'Command to execute');
 $optHandler->addTerm('arguments', 'string', 'Additional arguments');
 
-$runUsage = new Usage($optHandler);
-$runUsage->addOption('run', true);
-$runUsage->addOption('verbose');
+$program->addUsage(['run'], ['verbose']);
+$program->addUsage(['stop'], ['timeout']);
 
-$stopUsage = new Usage($optHandler);
-$stopUsage->addOption('stop', true);
-$stopUsage->addOption('timeout');
-
-$program->addUsage($runUsage);
-$program->addUsage($stopUsage);
 echo $program->writeHelpBlock();

@@ -10,28 +10,39 @@ namespace DouglasGreen\OptParser;
 class Program
 {
     /**
+     * @var ArgumentParser
+     */
+    public $argumentParser;
+
+    /**
      * @var list<Usage>
      */
     protected $usages = [];
 
+    /**
+     * @param string[] $argv
+     */
     public function __construct(
-        protected ArgumentParser $argumentParser,
+        protected array $argv,
         protected OptionHandler $optionHandler,
         protected string $name,
         protected string $desc
     ) {
+        $this->argumentParser = new ArgumentParser($argv);
+
         // Add a default help usage.
-        $usage = new Usage($this->optionHandler);
-        $usage->addOption('help', true);
-        $this->addUsage($usage);
+        $this->addUsage(['help']);
     }
 
     /**
      * Add a usage to the command by name.
+     *
+     * @param list<string> $requiredOptions
+     * @param list<string> $extraOptions
      */
-    public function addUsage(Usage $usage): void
+    public function addUsage(array $requiredOptions, array $extraOptions = []): void
     {
-        $this->usages[] = $usage;
+        $this->usages[] = new Usage($this->optionHandler, $requiredOptions, $extraOptions);
     }
 
     public function matchUsage(): ?Usage
