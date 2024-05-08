@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 // I removed phpCsFixer and phpCsFixerRisky because they conflict with Rector.
@@ -107,4 +108,42 @@ return ECSConfig::configure()
         psr12Risky: $sets['psr12Risky'],
         symfony: $sets['symfony'],
         symfonyRisky: $sets['symfonyRisky'],
+    )
+    ->withConfiguredRule(
+        GeneralPhpdocAnnotationRemoveFixer::class,
+        [
+            'annotations' => [
+                'arg',
+                'author',
+                'category',
+                'class',
+                'const',
+                'constructor',
+                'copyright',
+                'desc',
+                'file',
+                'group',
+                'important',
+                'inherit',
+                'noreturn',
+                'option',
+                'package',
+                'parm',
+                'private',
+                'protected',
+                'public',
+                'purpose',
+                'readonly',
+                'requires',
+                'src',
+                'static',
+                'subpackage',
+                'template',
+                'this',
+                'type',
+                'typedef',
+                'updated',
+                'usedby',
+            ],
+        ]
     );

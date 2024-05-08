@@ -37,6 +37,7 @@ class ArgumentParser
      * Constructor.
      *
      * @param list<string> $argv Command-line arguments
+     *
      * @throws OptParserException If no program name is provided
      */
     public function __construct(array $argv)
@@ -104,6 +105,7 @@ class ArgumentParser
      * Split an array into two parts around the '--' separator.
      *
      * @param list<string> $array Input array
+     *
      * @return array{list<string>, list<string>} Array with elements before '--' and after '--'
      */
     protected function splitArrayAroundDash(array $array): array
@@ -128,6 +130,7 @@ class ArgumentParser
      * Join option names with their arguments using '='.
      *
      * @param list<string> $array Input array of options and arguments
+     *
      * @return list<string> Array with joined options and arguments
      */
     protected function joinArguments(array $array): array
