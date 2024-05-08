@@ -9,7 +9,7 @@ use DouglasGreen\OptParser\Program;
 
 $optHandler = new OptionHandler();
 
-$program = new Program($argv, $optHandler, 'Test', 'My testing program');
+$optParser = new OptParser($argv, $optHandler, 'Test', 'My testing program');
 
 $optHandler->addCommand(['run'], 'Run it');
 $optHandler->addCommand(['stop'], 'Stop it');
@@ -27,7 +27,7 @@ $optHandler->addParam(['t', 'timeout'], 'INT', 'Timeout in seconds');
 $optHandler->addTerm('command', 'string', 'Command to execute');
 $optHandler->addTerm('arguments', 'string', 'Additional arguments');
 
-$program->addUsage(['run'], ['verbose']);
-$program->addUsage(['stop'], ['timeout']);
+$optParser->addUsage(['run'], ['verbose']);
+$optParser->addUsage(['stop'], ['timeout']);
 
-echo $program->writeHelpBlock();
+echo $optParser->writeHelpBlock();

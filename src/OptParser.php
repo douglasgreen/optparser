@@ -7,7 +7,7 @@ namespace DouglasGreen\OptParser;
 /**
  * Define a program with a series of usage options.
  */
-class Program
+class OptParser
 {
     /**
      * @var ArgumentParser
