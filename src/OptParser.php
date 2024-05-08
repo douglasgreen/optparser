@@ -139,8 +139,29 @@ class OptParser
     }
 
     /**
-     * @todo Finish
+     * Match the usage and return an array whose keys are the name of the
+     * options being match and whose values are:
+     * - true for commands
+     * - value for terms
+     * - true for flags
+     * - value for params.
      */
+    /*
+    protected function tryToMatchUsage(Usage: $usage): ?array
+    {
+        $unmarkedOptions = $this->argumentParser->getUnmarkedOptions();
+        $markedOptions = $this->argumentParser->getMarkedOptions();
+        $nonOptions = $this->argumentParser->getNonOptions();
+
+        $matchedOptions = [];
+
+        $commands = $usage->getOptions('command');
+        if ($this->matchCommands($commands, $unmarkedOptions)) {
+        }
+
+        $terms = $usage->getOptions('term');
+    }
+    */
     protected function tryToMatchUsage(Usage $usage): ?string
     {
         $unmarkedOptions = $this->argumentParser->getUnmarkedOptions();
