@@ -13,7 +13,7 @@ use DouglasGreen\OptParser\Option\Term;
 /**
  * Define and print options.
  */
-class OptionHandler
+class OptHandler
 {
     /**
      * @var array<string, bool>

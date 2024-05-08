@@ -15,9 +15,9 @@ class OptParser
     public $argumentParser;
 
     /**
-     * @var OptionHandler
+     * @var OptHandler
      */
-    public $optionHandler;
+    public $optHandler;
 
     /**
      * @var list<Usage>
@@ -32,7 +32,7 @@ class OptParser
         protected string $name,
         protected string $desc
     ) {
-        $this->optionHandler = new OptionHandler();
+        $this->optHandler = new OptHandler();
         $this->argumentParser = new ArgumentParser($argv);
 
         // Add a default help usage.
@@ -46,7 +46,7 @@ class OptParser
      */
     public function addCommand(array $aliases, string $desc): self
     {
-        $this->optionHandler->addCommand($aliases, $desc);
+        $this->optHandler->addCommand($aliases, $desc);
 
         return $this;
     }
@@ -58,7 +58,7 @@ class OptParser
      */
     public function addFlag(array $aliases, string $desc): self
     {
-        $this->optionHandler->addFlag($aliases, $desc);
+        $this->optHandler->addFlag($aliases, $desc);
 
         return $this;
     }
@@ -70,7 +70,7 @@ class OptParser
      */
     public function addParam(array $aliases, string $type, string $desc): self
     {
-        $this->optionHandler->addParam($aliases, $type, $desc);
+        $this->optHandler->addParam($aliases, $type, $desc);
 
         return $this;
     }
@@ -80,7 +80,7 @@ class OptParser
      */
     public function addTerm(string $name, string $type, string $desc): self
     {
-        $this->optionHandler->addTerm($name, $type, $desc);
+        $this->optHandler->addTerm($name, $type, $desc);
 
         return $this;
     }
@@ -93,7 +93,7 @@ class OptParser
      */
     public function addUsage(array $requiredOptions, array $extraOptions = []): self
     {
-        $this->usages[] = new Usage($this->optionHandler, $requiredOptions, $extraOptions);
+        $this->usages[] = new Usage($this->optHandler, $requiredOptions, $extraOptions);
 
         return $this;
     }
@@ -135,7 +135,7 @@ class OptParser
 
         $output .= "\n";
 
-        return $output . $this->optionHandler->writeOptionBlock();
+        return $output . $this->optHandler->writeOptionBlock();
     }
 
     /**
@@ -150,7 +150,7 @@ class OptParser
 
         $commands = $usage->getOptions('command');
         foreach ($commands as $name => $required) {
-            $command = $this->optionHandler->getOption($name);
+            $command = $this->optHandler->getOption($name);
             $found = false;
             $matches[$name] = false;
             if ($unmarkedOptions !== []) {
@@ -178,7 +178,7 @@ class OptParser
 
         $terms = $usage->getOptions('term');
         foreach ($terms as $name => $required) {
-            $term = $this->optionHandler->getOption($name);
+            $term = $this->optHandler->getOption($name);
             $found = false;
             $matches[$name] = false;
             if ($unmarkedOptions !== []) {

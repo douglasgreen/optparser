@@ -22,19 +22,19 @@ class Usage
     /**
      * Constructor for the Usage class.
      *
-     * @param OptionHandler $optionHandler   The option handler instance
+     * @param OptHandler    $optHandler      The option handler instance
      * @param array<string> $requiredOptions An array of required option names
      * @param array<string> $extraOptions    An array of extra option names
      *
      * @throws OptParserException If multiple commands are defined
      */
     public function __construct(
-        protected OptionHandler $optionHandler,
+        protected OptHandler $optHandler,
         array $requiredOptions,
         array $extraOptions
     ) {
         foreach ($requiredOptions as $requiredOption) {
-            $type = $this->optionHandler->getType($requiredOption);
+            $type = $this->optHandler->getType($requiredOption);
             if ($type === 'command' && $this->options['command']) {
                 throw new OptParserException('Multiple commands defined');
             }
@@ -43,7 +43,7 @@ class Usage
         }
 
         foreach ($extraOptions as $extraOption) {
-            $type = $this->optionHandler->getType($extraOption);
+            $type = $this->optHandler->getType($extraOption);
             $this->options[$type][$extraOption] = false;
         }
     }
@@ -79,9 +79,9 @@ class Usage
         foreach ($this->options as $option) {
             foreach ($option as $name => $required) {
                 if ($required) {
-                    $output .= ' ' . $this->optionHandler->writeOption($name);
+                    $output .= ' ' . $this->optHandler->writeOption($name);
                 } else {
-                    $output .= ' [' . $this->optionHandler->writeOption($name) . ']';
+                    $output .= ' [' . $this->optHandler->writeOption($name) . ']';
                 }
             }
         }
