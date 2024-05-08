@@ -1,0 +1,11 @@
+{
+    "name": "douglasgreen/optparser",
+    "description": "Parser for command-line options in PHP programs",
+    "license": "MIT",
+    "devDependencies": {
+        "husky": "^9.0"
+    },
+    "scripts": {
+        "prepare": "husky"
+    }
+}
