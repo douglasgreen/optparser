@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace DouglasGreen\OptParser\Tests;
+
 use DouglasGreen\OptParser\ArgumentParser;
 use PHPUnit\Framework\TestCase;
 
@@ -80,7 +82,7 @@ class ArgumentParserTest extends TestCase
      */
     protected function invokeMethod(object $object, string $methodName, array $parameters = [])
     {
-        $reflectionClass = new ReflectionClass($object::class);
+        $reflectionClass = new \ReflectionClass($object::class);
         $method = $reflectionClass->getMethod($methodName);
         $method->setAccessible(true);
 

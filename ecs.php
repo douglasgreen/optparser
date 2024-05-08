@@ -61,7 +61,7 @@ if ($useRisky) {
 }
 
 return ECSConfig::configure()
-    ->withPaths([__DIR__ . '/bin', __DIR__ . '/src', __DIR__ . '/tests'])
+    ->withPaths([__DIR__ . '/src', __DIR__ . '/tests'])
     ->withRootFiles()
     ->withPreparedSets(cleanCode: true, common: true, psr12: true, strict: true, symplify: true)
     ->withPhpCsFixerSets(

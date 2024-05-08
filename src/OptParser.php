@@ -15,6 +15,11 @@ class OptParser
     public $argumentParser;
 
     /**
+     * @var OptionHandler
+     */
+    public $optionHandler;
+
+    /**
      * @var list<Usage>
      */
     protected $usages = [];
@@ -24,14 +29,60 @@ class OptParser
      */
     public function __construct(
         protected array $argv,
-        protected OptionHandler $optionHandler,
         protected string $name,
         protected string $desc
     ) {
+        $this->optionHandler = new OptionHandler();
         $this->argumentParser = new ArgumentParser($argv);
 
         // Add a default help usage.
         $this->addUsage(['help']);
+    }
+
+    /**
+     * A command is a predefined list of command words.
+     *
+     * @param list<string> $aliases
+     */
+    public function addCommand(array $aliases, string $desc): self
+    {
+        $this->optionHandler->addCommand($aliases, $desc);
+
+        return $this;
+    }
+
+    /**
+     * A flag has no arguments.
+     *
+     * @param list<string> $aliases
+     */
+    public function addFlag(array $aliases, string $desc): self
+    {
+        $this->optionHandler->addFlag($aliases, $desc);
+
+        return $this;
+    }
+
+    /**
+     * A parameter has a required argument.
+     *
+     * @param list<string> $aliases
+     */
+    public function addParam(array $aliases, string $type, string $desc): self
+    {
+        $this->optionHandler->addParam($aliases, $type, $desc);
+
+        return $this;
+    }
+
+    /**
+     * A term is a positional argument.
+     */
+    public function addTerm(string $name, string $type, string $desc): self
+    {
+        $this->optionHandler->addTerm($name, $type, $desc);
+
+        return $this;
     }
 
     /**
@@ -40,9 +91,11 @@ class OptParser
      * @param list<string> $requiredOptions
      * @param list<string> $extraOptions
      */
-    public function addUsage(array $requiredOptions, array $extraOptions = []): void
+    public function addUsage(array $requiredOptions, array $extraOptions = []): self
     {
         $this->usages[] = new Usage($this->optionHandler, $requiredOptions, $extraOptions);
+
+        return $this;
     }
 
     public function matchUsage(): ?Usage

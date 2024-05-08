@@ -6,7 +6,11 @@
     <!--<rule ref="rulesets/cleancode.xml/ElseExpression" />-->
     <rule ref="rulesets/cleancode.xml/ErrorControlOperator" />
     <rule ref="rulesets/cleancode.xml/IfStatementAssignment" />
-    <rule ref="rulesets/cleancode.xml/MissingImport" />
+    <rule ref="rulesets/cleancode.xml/MissingImport">
+        <properties>
+            <property name="ignore-global" value="true"/>
+        </properties>
+    </rule>
     <rule ref="rulesets/cleancode.xml/StaticAccess" />
     <rule ref="rulesets/cleancode.xml/UndefinedVariable" />
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
@@ -29,7 +33,7 @@
     <rule ref="rulesets/controversial.xml/CamelCaseParameterName" />
     <rule ref="rulesets/controversial.xml/CamelCasePropertyName" />
     <rule ref="rulesets/controversial.xml/CamelCaseVariableName" />
-    <!--<rule ref="rulesets/controversial.xml/Superglobals" />-->
+    <rule ref="rulesets/controversial.xml/Superglobals" />
     <rule ref="rulesets/design.xml/CountInLoopExpression" />
     <rule ref="rulesets/design.xml/CouplingBetweenObjects" />
     <rule ref="rulesets/design.xml/DepthOfInheritance" />

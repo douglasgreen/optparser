@@ -4,7 +4,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "DouglasGreen\\OptParser\\": "src/"
+            "DouglasGreen\\OptParser\\": "src/",
+            "DouglasGreen\\OptParser\\Tests\\": "tests/"
         }
     },
     "require": {
@@ -18,16 +19,16 @@
         "symplify/easy-coding-standard": "^12.1"
     },
     "scripts": {
-        "fix-php": [
-            "ecs --fix",
-            "rector"
-        ],
-        "lint-php": [
+        "lint": [
             "ecs",
             "phpmd src,tests text phpmd.xml",
             "phpstan analyse",
             "rector --dry-run"
         ],
-        "test-php": "phpunit"
+        "lint:fix": [
+            "ecs --fix",
+            "rector"
+        ],
+        "test": "phpunit"
     }
 }

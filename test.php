@@ -4,30 +4,27 @@ declare(strict_types=1);
 
 require_once 'vendor/autoload.php';
 
-use DouglasGreen\OptParser\OptionHandler;
 use DouglasGreen\OptParser\OptParser;
 
-$optHandler = new OptionHandler();
+$optParser = new OptParser($argv, 'Test', 'My testing program');
 
-$optParser = new OptParser($argv, $optHandler, 'Test', 'My testing program');
+$optParser->addCommand(['run'], 'Run it')
+    ->addCommand(['stop'], 'Stop it')
 
-$optHandler->addCommand(['run'], 'Run it');
-$optHandler->addCommand(['stop'], 'Stop it');
+    ->addFlag(['v', 'verbose'], 'Enable verbose output')
+    ->addFlag(['f', 'force'], 'Force operation')
+    ->addFlag(['q', 'quiet'], 'Suppress output')
+    ->addFlag(['d', 'debug'], 'Enable debug mode')
 
-$optHandler->addFlag(['v', 'verbose'], 'Enable verbose output');
-$optHandler->addFlag(['f', 'force'], 'Force operation');
-$optHandler->addFlag(['q', 'quiet'], 'Suppress output');
-$optHandler->addFlag(['d', 'debug'], 'Enable debug mode');
+    ->addParam(['o', 'output'], 'STRING', 'Output file')
+    ->addParam(['c', 'config'], 'STRING', 'Configuration file')
+    ->addParam(['l', 'log'], 'STRING', 'Log file')
+    ->addParam(['t', 'timeout'], 'INT', 'Timeout in seconds')
 
-$optHandler->addParam(['o', 'output'], 'STRING', 'Output file');
-$optHandler->addParam(['c', 'config'], 'STRING', 'Configuration file');
-$optHandler->addParam(['l', 'log'], 'STRING', 'Log file');
-$optHandler->addParam(['t', 'timeout'], 'INT', 'Timeout in seconds');
+    ->addTerm('command', 'string', 'Command to execute')
+    ->addTerm('arguments', 'string', 'Additional arguments')
 
-$optHandler->addTerm('command', 'string', 'Command to execute');
-$optHandler->addTerm('arguments', 'string', 'Additional arguments');
-
-$optParser->addUsage(['run'], ['verbose']);
-$optParser->addUsage(['stop'], ['timeout']);
+    ->addUsage(['run'], ['verbose'])
+    ->addUsage(['stop'], ['timeout']);
 
 echo $optParser->writeHelpBlock();
