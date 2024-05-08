@@ -15,8 +15,8 @@ class Usage
     protected $options = [
         'command' => [],
         'term' => [],
-        'flag' => [],
         'param' => [],
+        'flag' => [],
     ];
 
     public function __construct(

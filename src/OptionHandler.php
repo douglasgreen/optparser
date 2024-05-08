@@ -108,12 +108,12 @@ class OptionHandler
             return $this->commands[$name];
         }
 
-        if (isset($this->params[$name])) {
-            return $this->params[$name];
-        }
-
         if (isset($this->terms[$name])) {
             return $this->terms[$name];
+        }
+
+        if (isset($this->params[$name])) {
+            return $this->params[$name];
         }
 
         if (isset($this->flags[$name])) {

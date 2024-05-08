@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use DouglasGreen\OptParser\ArgumentParser;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 class ArgumentParserTest extends TestCase
 {
