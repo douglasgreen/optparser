@@ -16,17 +16,13 @@ class Term extends Option
         $this->setType($type, $regexp);
     }
 
-    #[\Override]
-    public function matchInput(string $value): bool
+    public function matchInput(string $value): bool|int|float|string|null
     {
         if ($this->getType() === 'BOOL') {
-            $result = $this->castBool($value);
-            if ($result === null) {
-                return false;
-            }
+            return $this->castBool($value);
         }
 
-        return false;
+        return null;
     }
 
     #[\Override]

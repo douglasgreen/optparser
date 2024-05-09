@@ -15,7 +15,6 @@ class Command extends Option
         $this->aliases = $aliases;
     }
 
-    #[\Override]
     public function matchInput(string $value): bool
     {
         if ($this->name === $value) {

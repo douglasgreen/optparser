@@ -36,11 +36,6 @@ abstract class Option
     ) {
     }
 
-    public function castBool(string $value): ?bool
-    {
-        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-    }
-
     /**
      * @return ?list<string>
      */
@@ -78,9 +73,55 @@ abstract class Option
         return '--' . $alias;
     }
 
-    abstract public function matchInput(string $value): bool;
-
     abstract public function write(): string;
+
+    protected function castBool(string $value): ?bool
+    {
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function castFloat(string $value): ?float
+    {
+        return filter_var($value, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function castInt(string $value): ?int
+    {
+        return filter_var($value, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function castRegexp(string $value, string $regexp): ?string
+    {
+        $options = [
+            'options' => [
+                'regexp' => $regexp,
+            ],
+        ];
+
+        $result = filter_var($value, FILTER_VALIDATE_REGEXP, $options);
+
+        return $result !== false ? $result : null;
+    }
+
+    /**
+     * @throws OptParserException
+     */
+    protected function castString(string $value, string $type): ?string
+    {
+        if ($type === 'EMAIL') {
+            return filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
+        }
+
+        if ($type === 'IP') {
+            return filter_var($value, FILTER_VALIDATE_IP, FILTER_NULL_ON_FAILURE);
+        }
+
+        if ($type === 'URL') {
+            return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
+        }
+
+        throw new OptParserException('Unsupported type');
+    }
 
     /**
      * Check for supported types.

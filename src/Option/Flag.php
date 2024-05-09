@@ -21,10 +21,9 @@ class Flag extends Option
     /**
      * @todo Finish
      */
-    #[\Override]
     public function matchInput(string $value): bool
     {
-        return false;
+        return (bool) $value;
     }
 
     #[\Override]
