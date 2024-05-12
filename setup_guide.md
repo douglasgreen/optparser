@@ -2,63 +2,35 @@
 
 ## Setup
 
-Setup uses the [GitLab script
-system](https://github.blog/2015-06-30-scripts-to-rule-them-all/). To get
-started, run:
+This project uses the [GitLab script
+system](https://github.blog/2015-06-30-scripts-to-rule-them-all/). To set up the
+project, run:
 
-```
+```bash
 script/setup
 ```
 
-## Linting, fixing, and testing
+## Linting, Fixing, and Testing
 
 ### PHP
 
-The PHP lint scripts are run with:
-
-```
-composer lint
-```
-
-To apply automatic fixes, run:
-
-```
-composer lint:fix
-```
-
-To execute unit tests, run:
-
-```
-composer test
-```
+- Lint: `composer lint`
+- Fix: `composer lint:fix`
+- Test: `composer test`
 
 ### JavaScript
 
-The JavaScript lint scripts are run with:
+- Lint: `npm run lint`
+- Fix: `npm run lint:fix`
+- Test: `npm test`
 
-```
-npm run lint
-```
+## Pre-commit Hooks
 
-To apply automatic fixes, run:
+Linting and testing are automatically run by `.husky/pre-commit`. Fix any errors
+or use `--no-verify` to bypass the check.
 
-```
-npm run lint:fix
-```
+## Commitlint
 
-To execute unit tests, run:
-
-```
-npm test
-```
-
-### Pre-commit
-
-The lint and tests are also run automatically by `.husky/pre-commit`. You must
-fix any errors or re-run the commit with `--no-verify` to bypass the check.
-
-### Commitlint
-
-Commitlint is run automatically by `.husky/pre-commit` to apply [conventional
-commits](https://www.npmjs.com/package/@commitlint/config-conventional). Fix
-the lint errors before committing.
+[Conventional
+Commits](https://www.npmjs.com/package/@commitlint/config-conventional) are
+enforced by `.husky/pre-commit`. Fix any lint errors before committing.
