@@ -8,6 +8,8 @@ use DouglasGreen\OptParser\OptParser;
 
 $optParser = new OptParser($argv, 'Test', 'My testing program');
 
+// @todo Change types to validated string types like EMAIL or URL
+// @todo Add another t/f/p/c argument for a function call to validate/filter
 $optParser->addCommand(['run'], 'Run it')
     ->addCommand(['stop'], 'Stop it')
 
