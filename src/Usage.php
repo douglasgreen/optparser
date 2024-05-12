@@ -71,7 +71,7 @@ class Usage
      *
      * @return string The options line for the usage
      */
-    public function writeOptionsLine(string $programName): string
+    public function write(string $programName): string
     {
         $output = '  ' . $programName;
         foreach ($this->options as $option) {

@@ -29,4 +29,4 @@ $optParser->addCommand(['run'], 'Run it')
     ->addUsageAll();
 
 // @todo Replace with help usage.
-echo $optParser->writeHelpBlock();
+echo $optParser->writeHelp();

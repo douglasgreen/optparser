@@ -124,14 +124,14 @@ class OptParser
     /**
      * Write the options line for the command.
      */
-    public function writeHelpBlock(): string
+    public function writeHelp(): string
     {
         $output = $this->name . "\n\n";
         $output .= wordwrap($this->desc) . "\n\n";
         $output .= "Usage:\n";
         $programName = $this->argParser->getProgramName();
         foreach ($this->usages as $usage) {
-            $output .= $usage->writeOptionsLine($programName);
+            $output .= $usage->write($programName);
         }
 
         $output .= "\n";
