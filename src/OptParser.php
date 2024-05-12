@@ -10,9 +10,9 @@ namespace DouglasGreen\OptParser;
 class OptParser
 {
     /**
-     * @var ArgumentParser
+     * @var ArgParser
      */
-    public $argumentParser;
+    public $argParser;
 
     /**
      * @var OptHandler
@@ -33,7 +33,7 @@ class OptParser
         protected string $desc
     ) {
         $this->optHandler = new OptHandler();
-        $this->argumentParser = new ArgumentParser($argv);
+        $this->argParser = new ArgParser($argv);
 
         // Add a default help usage.
         $this->addUsage(['help']);
@@ -88,33 +88,34 @@ class OptParser
     /**
      * Add a usage to the command by name.
      *
-     * @param list<string> $requiredOptions
-     * @param list<string> $extraOptions
+     * @param list<string> $optionNames
      */
-    public function addUsage(array $requiredOptions, array $extraOptions = []): self
+    public function addUsage(array $optionNames): self
     {
-        $this->usages[] = new Usage($this->optHandler, $requiredOptions, $extraOptions);
+        $this->usages[] = new Usage($this->optHandler, $optionNames);
 
         return $this;
     }
 
+    public function addUsageAll(): self
+    {
+        $allNames = $this->optHandler->getAllNames();
+        $this->addUsage($allNames);
+
+        return $this;
+    }
+
+    /**
+     * @return ?Usage
+     * @todo Make usage store values?
+     */
     public function matchUsage(): ?Usage
     {
         foreach ($this->usages as $usage) {
-            $matches = $this->tryToMatchUsage($usage);
-            if ($matches === null) {
-                continue;
+            $match = $this->tryToMatchUsage($usage);
+            if ($match !== null) {
+                return $match;
             }
-
-            if ($matches === '') {
-                continue;
-            }
-
-            if ($matches === '0') {
-                continue;
-            }
-
-            return $usage;
         }
 
         return null;
@@ -128,7 +129,7 @@ class OptParser
         $output = $this->name . "\n\n";
         $output .= wordwrap($this->desc) . "\n\n";
         $output .= "Usage:\n";
-        $programName = $this->argumentParser->getProgramName();
+        $programName = $this->argParser->getProgramName();
         foreach ($this->usages as $usage) {
             $output .= $usage->writeOptionsLine($programName);
         }
@@ -141,32 +142,30 @@ class OptParser
     /**
      * Match the usage and return an array whose keys are the name of the
      * options being match and whose values are:
-     * - true for commands
+     * - true|false for commands
      * - value for terms
-     * - true for flags
+     * - true|false for flags
      * - value for params.
      */
-    /*
-    protected function tryToMatchUsage(Usage: $usage): ?array
+    protected function tryToMatchUsage(Usage $usage): ?array
     {
-        $unmarkedOptions = $this->argumentParser->getUnmarkedOptions();
-        $markedOptions = $this->argumentParser->getMarkedOptions();
-        $nonOptions = $this->argumentParser->getNonOptions();
-
-        $matchedOptions = [];
+        $unmarkedOptions = $this->argParser->getUnmarkedOptions();
+        $this->argParser->getMarkedOptions();
+        $this->argParser->getNonOptions();
 
         $commands = $usage->getOptions('command');
         if ($this->matchCommands($commands, $unmarkedOptions)) {
         }
 
-        $terms = $usage->getOptions('term');
+        $usage->getOptions('term');
     }
-    */
+
+    /*
     protected function tryToMatchUsage(Usage $usage): ?string
     {
-        $unmarkedOptions = $this->argumentParser->getUnmarkedOptions();
-        // $markedOptions = $this->argumentParser->getMarkedOptions();
-        // $nonOptions = $this->argumentParser->getNonOptions();
+        $unmarkedOptions = $this->argParser->getUnmarkedOptions();
+        // $markedOptions = $this->argParser->getMarkedOptions();
+        // $nonOptions = $this->argParser->getNonOptions();
         $matches = [];
 
         $commands = $usage->getOptions('command');
@@ -227,4 +226,5 @@ class OptParser
 
         return '';
     }
+    */
 }

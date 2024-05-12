@@ -13,12 +13,12 @@ class Param extends Option
         string $name,
         string $desc,
         array $aliases,
-        string $type,
+        string $argType,
         ?string $regexp = null
     ) {
         parent::__construct($name, $desc);
         $this->aliases = $aliases;
-        $this->setType($type, $regexp);
+        $this->setArgType($argType, $regexp);
     }
 
     /**
@@ -32,6 +32,6 @@ class Param extends Option
     #[\Override]
     public function write(): string
     {
-        return $this->hyphenate($this->name) . '=' . $this->type;
+        return $this->hyphenate($this->name) . '=' . $this->argType;
     }
 }

@@ -88,13 +88,42 @@ class OptHandler
     }
 
     /**
-     * Get the type of a command.
+     * @return list<string>
      */
-    public function getType(string $name): ?string
+    public function getAllNames(): array
     {
-        $option = $this->getOption($name);
+        return array_merge(
+            array_keys($this->commands),
+            array_keys($this->terms),
+            array_keys($this->params),
+            array_keys($this->flags)
+        );
+    }
 
-        return $option->getType();
+    /**
+     * Get the type of an option.
+     *
+     * @throws OptParserException
+     */
+    public function getOptionType(string $name): string
+    {
+        if (isset($this->commands[$name])) {
+            return 'command';
+        }
+
+        if (isset($this->terms[$name])) {
+            return 'term';
+        }
+
+        if (isset($this->params[$name])) {
+            return 'param';
+        }
+
+        if (isset($this->flags[$name])) {
+            return 'flag';
+        }
+
+        throw new OptParserException('Name not found');
     }
 
     /*
@@ -248,7 +277,7 @@ class OptHandler
                 }
             }
 
-            $output .= ' = ' . $param->getType();
+            $output .= ' = ' . $param->getArgType();
             $output .= '  ' . $param->getDesc() . "\n";
         }
 
@@ -259,7 +288,7 @@ class OptHandler
     {
         $output = "Terms:\n";
         foreach ($this->terms as $name => $term) {
-            $output .= sprintf('  %s: ', $name) . $term->getType() . '  ' . $term->getDesc() . "\n";
+            $output .= sprintf('  %s: ', $name) . $term->getArgType() . '  ' . $term->getDesc() . "\n";
         }
 
         return $output . "\n";

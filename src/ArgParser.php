@@ -11,7 +11,7 @@ namespace DouglasGreen\OptParser;
  *
  * @see https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
  */
-class ArgumentParser
+class ArgParser
 {
     /**
      * @var list<string> Non-option arguments
@@ -19,14 +19,14 @@ class ArgumentParser
     protected $nonOptions = [];
 
     /**
-     * @var string Program name
-     */
-    protected string $programName;
-
-    /**
      * @var array<string, string> Marked options (options with leading dash)
      */
     protected $markedOptions = [];
+
+    /**
+     * @var string Program name
+     */
+    protected string $programName;
 
     /**
      * @var list<string> Unmarked options (options without leading dash)

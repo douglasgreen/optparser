@@ -9,8 +9,7 @@ A replacement for getopt. It's better than getopt because:
 
 ## Commands
 
-A program accepts one or more types of usage. A usage is a series of options,
-each of which can be required or extra (not required).
+A program accepts one or more types of usage. A usage is a series of options.
 
 ## Options
 
@@ -27,9 +26,9 @@ If there is a command, there can only be one command and it must come first.
 
 If there are terms, they must follow the command, if any.
 
-Flags and parameters come last.
+Flags and parameters come last. The order is important to avoid ambiguity.
 
-The order is important to avoid ambiguity.
+Commands and terms are required but flags and parameters are optional.
 
 ## Command matching
 
@@ -51,8 +50,8 @@ Every argument must have at least one long alias. The first long alias that is
 specified for that argument is used as the argument name. You must retrieve the
 argument using its name.
 
-A command can have aliases. But a term is not marked so it only has a name, not
-aliases.
+Commands, parameters, and flags can have aliases. But a term is not marked so it
+only has a name, not aliases.
 
 ## Formatting
 
@@ -62,6 +61,7 @@ combined flag can't take arguments.
 A space or equal sign must separate every flag or parameter from its argument.
 
 The argument list can be terminated by --, which can be followed by non-options.
+The program ignores non-options but returns them with the matched usage.
 
 ## Developer setup
 

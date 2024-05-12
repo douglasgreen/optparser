@@ -13,7 +13,7 @@ abstract class Option
      *
      * @todo Validate using https://www.php.net/manual/en/filter.filters.validate.php
      */
-    protected const VALID_TYPES = ['BOOL', 'EMAIL', 'FLOAT', 'INT', 'IP', 'REGEXP', 'STRING', 'URL'];
+    protected const ARG_TYPES = ['BOOL', 'EMAIL', 'FLOAT', 'INT', 'IP', 'REGEXP', 'STRING', 'URL'];
 
     /**
      * @var ?list<string>
@@ -21,14 +21,14 @@ abstract class Option
     protected $aliases;
 
     /**
-     * @var ?string
+     * @var ?string Type of the argument
      */
-    protected $regexp;
+    protected $argType;
 
     /**
      * @var ?string
      */
-    protected $type;
+    protected $regexp;
 
     public function __construct(
         protected string $name,
@@ -43,6 +43,11 @@ abstract class Option
         return $this->aliases;
     }
 
+    public function getArgType(): ?string
+    {
+        return $this->argType;
+    }
+
     public function getDesc(): string
     {
         return $this->desc;
@@ -51,11 +56,6 @@ abstract class Option
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
     }
 
     public function hasAlias(string $alias): bool
@@ -105,39 +105,39 @@ abstract class Option
     /**
      * @throws OptParserException
      */
-    protected function castString(string $value, string $type): ?string
+    protected function castString(string $value, string $argType): ?string
     {
-        if ($type === 'EMAIL') {
+        if ($argType === 'EMAIL') {
             return filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
         }
 
-        if ($type === 'IP') {
+        if ($argType === 'IP') {
             return filter_var($value, FILTER_VALIDATE_IP, FILTER_NULL_ON_FAILURE);
         }
 
-        if ($type === 'URL') {
+        if ($argType === 'URL') {
             return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
         }
 
-        throw new OptParserException('Unsupported type');
+        throw new OptParserException('Unsupported argument type');
     }
 
     /**
      * Check for supported types.
      */
-    protected function checkType(string $type): void
+    protected function checkType(string $argType): void
     {
-        if (! in_array($type, self::VALID_TYPES, true)) {
-            throw new OptParserException('Unsupported type: ' . $type);
+        if (! in_array($argType, self::ARG_TYPES, true)) {
+            throw new OptParserException('Unsupported argument type: ' . $argType);
         }
     }
 
-    protected function setType(string $type, ?string $regexp = null): void
+    protected function setArgType(string $argType, ?string $regexp = null): void
     {
-        $type = strtoupper($type);
-        $this->checkType($type);
-        $this->type = $type;
-        if ($this->type === 'REGEXP') {
+        $argType = strtoupper($argType);
+        $this->checkType($argType);
+        $this->argType = $argType;
+        if ($this->argType === 'REGEXP') {
             $this->regexp = $regexp;
         }
     }

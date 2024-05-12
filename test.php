@@ -11,6 +11,9 @@ $optParser = new OptParser($argv, 'Test', 'My testing program');
 $optParser->addCommand(['run'], 'Run it')
     ->addCommand(['stop'], 'Stop it')
 
+    ->addTerm('command', 'string', 'Command to execute')
+    ->addTerm('arguments', 'string', 'Additional arguments')
+
     ->addFlag(['v', 'verbose'], 'Enable verbose output')
     ->addFlag(['f', 'force'], 'Force operation')
     ->addFlag(['q', 'quiet'], 'Suppress output')
@@ -21,10 +24,9 @@ $optParser->addCommand(['run'], 'Run it')
     ->addParam(['l', 'log'], 'STRING', 'Log file')
     ->addParam(['t', 'timeout'], 'INT', 'Timeout in seconds')
 
-    ->addTerm('command', 'string', 'Command to execute')
-    ->addTerm('arguments', 'string', 'Additional arguments')
+    ->addUsage(['run', 'verbose'])
+    ->addUsage(['stop', 'timeout'])
+    ->addUsageAll();
 
-    ->addUsage(['run'], ['verbose'])
-    ->addUsage(['stop'], ['timeout']);
-
+// @todo Replace with help usage.
 echo $optParser->writeHelpBlock();

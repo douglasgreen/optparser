@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser\Tests;
 
-use DouglasGreen\OptParser\ArgumentParser;
+use DouglasGreen\OptParser\ArgParser;
 use PHPUnit\Framework\TestCase;
 
-class ArgumentParserTest extends TestCase
+class ArgParserTest extends TestCase
 {
     public function testGetMarkedOptions(): void
     {
         $argv = ['script.php', '-a', '-b', 'arg1', '--foo=bar', '--baz', 'arg2', '--', 'non1', 'non2'];
-        $argumentParser = new ArgumentParser($argv);
+        $argParser = new ArgParser($argv);
 
         $expected = [
             'a' => '',
@@ -21,26 +21,26 @@ class ArgumentParserTest extends TestCase
             'baz' => 'arg2',
         ];
 
-        $this->assertSame($expected, $argumentParser->getMarkedOptions());
+        $this->assertSame($expected, $argParser->getMarkedOptions());
     }
 
     public function testGetNonOptions(): void
     {
         $argv = ['script.php', '-a', '-b', 'arg1', '--foo=bar', '--baz', 'arg2', '--', 'non1', 'non2'];
-        $argumentParser = new ArgumentParser($argv);
+        $argParser = new ArgParser($argv);
 
         $expected = ['non1', 'non2'];
 
-        $this->assertSame($expected, $argumentParser->getNonOptions());
+        $this->assertSame($expected, $argParser->getNonOptions());
     }
 
     public function testGetUnmarkedOptions(): void
     {
         $argv = ['script.php', '-a', '-b', 'arg1', '--foo=bar', '--baz', 'arg2', '--', 'non1', 'non2'];
-        $argumentParser = new ArgumentParser($argv);
+        $argParser = new ArgParser($argv);
 
         $expected = [];
 
-        $this->assertSame($expected, $argumentParser->getUnmarkedOptions());
+        $this->assertSame($expected, $argParser->getUnmarkedOptions());
     }
 }

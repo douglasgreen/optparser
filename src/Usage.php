@@ -10,7 +10,7 @@ namespace DouglasGreen\OptParser;
 class Usage
 {
     /**
-     * @var array<string, array<string, bool>>
+     * @var array<string, list<string>>
      */
     protected $options = [
         'command' => [],
@@ -22,45 +22,43 @@ class Usage
     /**
      * Constructor for the Usage class.
      *
-     * @param OptHandler    $optHandler      The option handler instance
-     * @param array<string> $requiredOptions An array of required option names
-     * @param array<string> $extraOptions    An array of extra option names
+     * @param OptHandler    $optHandler  The option handler instance
+     * @param array<string> $optionNames Options of this usage
      *
      * @throws OptParserException If multiple commands are defined
      */
     public function __construct(
         protected OptHandler $optHandler,
-        array $requiredOptions,
-        array $extraOptions
+        array $optionNames
     ) {
-        foreach ($requiredOptions as $requiredOption) {
-            $type = $this->optHandler->getType($requiredOption);
-            if ($type === 'command' && $this->options['command']) {
+        foreach ($optionNames as $optionName) {
+            $optionType = $this->optHandler->getOptionType($optionName);
+            if ($optionType === 'command' && $this->options['command']) {
                 throw new OptParserException('Multiple commands defined');
             }
 
-            $this->options[$type][$requiredOption] = true;
-        }
+            // Eliminate dupes.
+            if (in_array($optionName, $this->options[$optionType], true)) {
+                continue;
+            }
 
-        foreach ($extraOptions as $extraOption) {
-            $type = $this->optHandler->getType($extraOption);
-            $this->options[$type][$extraOption] = false;
+            $this->options[$optionType][] = $optionName;
         }
     }
 
     /**
      * Get the options of a specific type.
      *
-     * @param string $type The type of options to retrieve
+     * @param string $optionType The type of options to retrieve
      *
-     * @return array<string, bool> The options of the specified type
+     * @return list<string> The options of the specified type
      *
      * @throws OptParserException If an invalid type is provided
      */
-    public function getOptions(string $type): array
+    public function getOptions(string $optionType): array
     {
-        if (isset($this->options[$type])) {
-            return $this->options[$type];
+        if (isset($this->options[$optionType])) {
+            return $this->options[$optionType];
         }
 
         throw new OptParserException('Invalid type');
@@ -77,12 +75,8 @@ class Usage
     {
         $output = '  ' . $programName;
         foreach ($this->options as $option) {
-            foreach ($option as $name => $required) {
-                if ($required) {
-                    $output .= ' ' . $this->optHandler->writeOption($name);
-                } else {
-                    $output .= ' [' . $this->optHandler->writeOption($name) . ']';
-                }
+            foreach ($option as $optionName) {
+                $output .= ' ' . $this->optHandler->writeOption($optionName);
             }
         }
 
