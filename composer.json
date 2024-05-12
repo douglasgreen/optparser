@@ -9,9 +9,9 @@
         }
     },
     "require": {
-        "php": ">=8.3.0"
+        "php": ">=8.1.0"
     },
-   "require-dev": {
+    "require-dev": {
         "phpmd/phpmd": "^2.15",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.5",
@@ -21,9 +21,9 @@
     "scripts": {
         "lint": [
             "ecs",
-            "phpmd src,tests text phpmd.xml",
-            "phpstan analyse",
-            "rector --dry-run"
+            "rector --dry-run",
+            "./run_phpmd.sh",
+            "./run_phpstan.sh"
         ],
         "lint:fix": [
             "ecs --fix",

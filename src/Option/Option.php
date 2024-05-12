@@ -33,8 +33,7 @@ abstract class Option
     public function __construct(
         protected string $name,
         protected string $desc
-    ) {
-    }
+    ) {}
 
     /**
      * @return ?list<string>

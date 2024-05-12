@@ -1,9 +1,11 @@
 # optparser
+
 A replacement for getopt. It's better than getopt because:
-- It's object-oriented.
-- It supports multiple types of commands.
-- It checks for unrecognized arguments.
-- It returns arguments as a specific scalar type.
+
+-   It's object-oriented.
+-   It supports multiple types of commands.
+-   It checks for unrecognized arguments.
+-   It returns arguments as a specific scalar type.
 
 ## Commands
 
@@ -13,10 +15,11 @@ each of which can be required or extra (not required).
 ## Options
 
 An option is one of the following:
-- A command, which is the name of a requested operation.
-- A term, which is a positional argument.
-- A flag, with zero arguments.
-- A parameter, with one required argument.
+
+-   A command, which is the name of a requested operation.
+-   A term, which is a positional argument.
+-   A flag, with zero arguments.
+-   A parameter, with one required argument.
 
 Options are processed in the order given.
 
@@ -61,8 +64,9 @@ A space or equal sign must separate every flag or parameter from its argument.
 The argument list can be terminated by --, which can be followed by non-options.
 
 ## References
-- http://docopt.org/
-- https://github.com/nategood/commando
-- https://github.com/getopt-php/getopt-php
-- https://www.php.net/manual/en/function.getopt.php
-- https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
+
+-   http://docopt.org/
+-   https://github.com/nategood/commando
+-   https://github.com/getopt-php/getopt-php
+-   https://www.php.net/manual/en/function.getopt.php
+-   https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html

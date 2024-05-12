@@ -1,13 +1,46 @@
 <?php
 
+/**
+ * Easy Coding Standard (ECS) configuration file
+ *
+ * This file is used to configure the ECS PHP code style and quality tool.
+ *
+ * Usage:
+ * - To perform risky changes, set the environment variable ECS_RISKY to true.
+ *   This should be carefully reviewed to ensure it doesn't break anything.
+ * - The file paths for PHP files to analyze come from a file named 'php_paths' in the top-level directory
+ *   of the repository. This file should contain PHP files in the top-level directory as well as directories
+ *   that contain PHP files. It is shared with other PHP linting utilities so they can all lint the same file list.
+ * - The presence of PHPUnit, Symfony, and Doctrine in the composer.json file is automatically detected,
+ *   and the relevant ECS rule sets are enabled or disabled accordingly based on the $hasPhpUnit,
+ *   $hasSymfony, and $hasDoctrine variables.
+ * - Be cautious when configuring the list of annotations to remove using the GeneralPhpdocAnnotationRemoveFixer.
+ *   ECS removes both the tag and its contents, whereas in many cases, you may only want to remove or modify
+ *   the tag itself without affecting its contents.
+ *
+ * For more information on configuring ECS, see https://github.com/easy-coding-standard/easy-coding-standard
+ */
+
 declare(strict_types=1);
 
-use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
+use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
+
+$hasPhpUnit = false;
+$hasSymfony = false;
+$hasDoctrine = false;
+if (file_exists('composer.json')) {
+    $composer = file_get_contents('composer.json');
+    if ($composer !== false) {
+        $hasPhpUnit = preg_match('/\bphpunit\b/', $composer) === 1;
+        $hasSymfony = preg_match('/\bsymfony\b/', $composer) === 1;
+        $hasDoctrine = preg_match('/\bdoctrine\b/', $composer) === 1;
+    }
+}
 
 // I removed phpCsFixer and phpCsFixerRisky because they conflict with Rector.
 $sets = [
-    'doctrineAnnotation' => true,
+    'doctrineAnnotation' => $hasDoctrine,
     'perCS' => true,
     'perCS10' => true,
     'perCS10Risky' => false,
@@ -48,7 +81,7 @@ $sets = [
     'psr2' => true,
     'psr12' => true,
     'psr12Risky' => false,
-    'symfony' => true,
+    'symfony' => $hasSymfony,
     'symfonyRisky' => false,
 ];
 
@@ -56,12 +89,27 @@ $sets = [
 $useRisky = (bool) getenv('ECS_RISKY');
 if ($useRisky) {
     foreach (array_keys($sets) as $set) {
-        $sets[$set] = true;
+        if (preg_match('/^phpunit/', $set) === 1) {
+            $sets[$set] = $hasPhpUnit;
+        } elseif (preg_match('/^symfony/', $set) === 1) {
+            $sets[$set] = $hasSymfony;
+        } elseif (preg_match('/^doctrine/', $set) === 1) {
+            $sets[$set] = $hasDoctrine;
+        } else {
+            $sets[$set] = true;
+        }
     }
 }
 
+$paths = file('php_paths');
+if ($paths === false) {
+    exit("PHP paths not found\n");
+}
+
+$paths = array_map('trim', $paths);
+
 return ECSConfig::configure()
-    ->withPaths([__DIR__ . '/bin', __DIR__ . '/src', __DIR__ . '/tests'])
+    ->withPaths($paths)
     ->withRootFiles()
     ->withPreparedSets(cleanCode: true, common: true, psr12: true, strict: true, symplify: true)
     ->withPhpCsFixerSets(
@@ -140,9 +188,6 @@ return ECSConfig::configure()
                 // Use license file instead
                 'copyright',
 
-                // Use plain text description without tag
-                'desc',
-
                 // First comment is automatically file comment
                 'file',
 
@@ -151,9 +196,6 @@ return ECSConfig::configure()
 
                 // Use dependency injection instead of globals
                 'global',
-
-                // Use @todo tag instead
-                'hack',
 
                 // Use @inheritdoc instead
                 'inherit',
@@ -178,9 +220,6 @@ return ECSConfig::configure()
 
                 // Use public keyword instead
                 'public',
-
-                // Use plain text description without tag
-                'purpose',
 
                 // Use readonly keyword instead
                 'readonly',

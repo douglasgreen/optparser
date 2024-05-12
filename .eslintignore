@@ -1,0 +1,17 @@
+# bower
+bower/
+
+# composer
+composer.lock
+vendor/
+
+# node
+node_modules/
+package-lock.json
+
+# php
+.php
+
+# text
+LICENSE
+*.txt

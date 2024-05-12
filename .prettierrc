@@ -1,0 +1,23 @@
+{
+    "tabWidth": 4,
+    "printWidth": 80,
+    "htmlWhitespaceSensitivity": "ignore",
+    "overrides": [
+        {
+            "files": ".{bower,prettier}rc",
+            "options": { "parser": "json" }
+        },
+        {
+            "files": "*.xml",
+            "options": { "parser": "xml" }
+        },
+        {
+            "files": "*.xml.dist",
+            "options": { "parser": "xml" }
+        },
+        {
+            "files": "*.xsd",
+            "options": { "parser": "xml" }
+        }
+    ]
+}
