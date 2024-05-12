@@ -63,6 +63,10 @@ A space or equal sign must separate every flag or parameter from its argument.
 
 The argument list can be terminated by --, which can be followed by non-options.
 
+## Developer setup
+
+See [docs/setup_guide.md](Setup Guide) for steps to set up for development.
+
 ## References
 
 -   http://docopt.org/
