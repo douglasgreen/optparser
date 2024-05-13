@@ -69,11 +69,6 @@ abstract class Option
         return $this->name;
     }
 
-    public function hasAlias(string $alias): bool
-    {
-        return $this->aliases && in_array($alias, $this->aliases, true);
-    }
-
     public function hyphenate(string $alias): string
     {
         if (strlen($alias) === 1) {
@@ -171,6 +166,11 @@ abstract class Option
         if (! in_array($argType, self::ARG_TYPES, true)) {
             throw new OptParserException('Unsupported argument type: ' . $argType);
         }
+    }
+
+    protected function hasAlias(string $alias): bool
+    {
+        return $this->aliases && in_array($alias, $this->aliases, true);
     }
 
     protected function setArgType(string $argType, ?string $regexp = null): void
