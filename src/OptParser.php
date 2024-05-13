@@ -140,6 +140,21 @@ class OptParser
     }
 
     /**
+     * Add all options to a single usage except "help".
+     */
+    public function addUsageAll(): self
+    {
+        $optionNames = $this->optHandler->getAllNames();
+        $filteredOptions = array_filter($optionNames, function($option) {
+            return $option !== "help";
+        });
+
+        $this->addUsage($filteredOptions);
+
+        return $this;
+    }
+
+    /**
      * @todo Make usage store values?
      */
     public function matchUsage(): ?Usage
@@ -183,6 +198,9 @@ class OptParser
     protected function tryToMatchUsage(Usage $usage): ?array
     {
         $unmarkedOptions = $this->argParser->getUnmarkedOptions();
+        $markedOptions = $this->argParser->getMarkedOptions();
+        $nonOptions = $this->argParser->getNonOptions();
+
         $this->argParser->getMarkedOptions();
         $this->argParser->getNonOptions();
 
@@ -197,8 +215,6 @@ class OptParser
     protected function tryToMatchUsage(Usage $usage): ?string
     {
         $unmarkedOptions = $this->argParser->getUnmarkedOptions();
-        // $markedOptions = $this->argParser->getMarkedOptions();
-        // $nonOptions = $this->argParser->getNonOptions();
         $matches = [];
 
         $commands = $usage->getOptions('command');
