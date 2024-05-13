@@ -97,16 +97,7 @@ class OptParser
         return $this;
     }
 
-    public function addUsageAll(): self
-    {
-        $allNames = $this->optHandler->getAllNames();
-        $this->addUsage($allNames);
-
-        return $this;
-    }
-
     /**
-     * @return ?Usage
      * @todo Make usage store values?
      */
     public function matchUsage(): ?Usage

@@ -27,8 +27,7 @@ $optParser->addCommand(['run'], 'Run it')
     ->addParam(['t', 'timeout'], 'INT', 'Timeout in seconds')
 
     ->addUsage(['run', 'verbose'])
-    ->addUsage(['stop', 'timeout'])
-    ->addUsageAll();
+    ->addUsage(['stop', 'timeout']);
 
 // @todo Replace with help usage.
 echo $optParser->writeHelp();
