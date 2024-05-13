@@ -16,11 +16,6 @@ class Term extends Option
         $this->setArgType($argType, $regexp);
     }
 
-    public function matchInput(string $value): bool|int|float|string|null
-    {
-        return $this->castValue($value);
-    }
-
     #[\Override]
     public function write(): string
     {

@@ -15,15 +15,6 @@ class Command extends Option
         $this->aliases = $aliases;
     }
 
-    public function matchInput(string $value): bool
-    {
-        if ($this->name === $value) {
-            return true;
-        }
-
-        return $this->hasAlias($value);
-    }
-
     #[\Override]
     public function write(): string
     {

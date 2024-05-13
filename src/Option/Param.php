@@ -21,15 +21,6 @@ class Param extends Option
         $this->setArgType($argType, $regexp);
     }
 
-    public function matchInput(string $name, string $value): string|float|int|bool|null
-    {
-        if ($this->name !== $name && ! $this->hasAlias($name)) {
-            return null;
-        }
-
-        return $this->castValue($value);
-    }
-
     #[\Override]
     public function write(): string
     {

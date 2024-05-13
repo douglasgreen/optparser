@@ -11,7 +11,7 @@ abstract class Option
     /**
      * @var list<string>
      *
-     * @see Validate using https://www.php.net/manual/en/filter.filters.validate.php
+     * @see https://www.php.net/manual/en/filter.filters.validate.php
      */
     protected const ARG_TYPES = [
         'BOOL',
@@ -83,6 +83,27 @@ abstract class Option
         return '--' . $alias;
     }
 
+    public function matchName(string $name): bool
+    {
+        return $this->name === $name || $this->hasAlias($name);
+    }
+
+    public function matchValue(string $value): bool|int|float|string|null
+    {
+        return match ($this->argType) {
+            'BOOL' => $this->castBool($value),
+            'DOMAIN' => $this->castDomain($value),
+            'EMAIL' => $this->castEmail($value),
+            'FLOAT' => $this->castFloat($value),
+            'INT' => $this->castInt($value),
+            'IP_ADDR' => $this->castIpAddress($value),
+            'MAC_ADDR' => $this->castMacAddress($value),
+            'REGEXP' => $this->castRegexp($value, $this->regexp),
+            'URL' => $this->castUrl($value),
+            default => null,
+        };
+    }
+
     abstract public function write(): string;
 
     protected function castBool(string $value): ?bool
@@ -140,22 +161,6 @@ abstract class Option
     protected function castUrl(string $value): ?string
     {
         return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
-    }
-
-    protected function castValue(string $value): string|float|int|bool|null
-    {
-        return match ($this->argType) {
-            'BOOL' => $this->castBool($value),
-            'DOMAIN' => $this->castDomain($value),
-            'EMAIL' => $this->castEmail($value),
-            'FLOAT' => $this->castFloat($value),
-            'INT' => $this->castInt($value),
-            'IP_ADDR' => $this->castIpAddress($value),
-            'MAC_ADDR' => $this->castMacAddress($value),
-            'REGEXP' => $this->castRegexp($value, $this->regexp),
-            'URL' => $this->castUrl($value),
-            default => null,
-        };
     }
 
     /**
