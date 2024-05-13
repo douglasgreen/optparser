@@ -18,12 +18,9 @@ class Flag extends Option
         $this->aliases = $aliases;
     }
 
-    /**
-     * @todo Finish
-     */
-    public function matchInput(string $value): bool
+    public function matchInput(string $name): bool
     {
-        return (bool) $value;
+        return $this->name === $name || $this->hasAlias($name);
     }
 
     #[\Override]

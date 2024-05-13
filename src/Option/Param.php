@@ -21,12 +21,13 @@ class Param extends Option
         $this->setArgType($argType, $regexp);
     }
 
-    /**
-     * @todo Finish
-     */
-    public function matchInput(string $value): bool
+    public function matchInput(string $name, string $value): string|float|int|bool|null
     {
-        return (bool) $value;
+        if ($this->name !== $name && ! $this->hasAlias($name)) {
+            return null;
+        }
+
+        return $this->castValue($value);
     }
 
     #[\Override]

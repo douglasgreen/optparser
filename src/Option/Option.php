@@ -11,9 +11,20 @@ abstract class Option
     /**
      * @var list<string>
      *
-     * @todo Validate using https://www.php.net/manual/en/filter.filters.validate.php
+     * @see Validate using https://www.php.net/manual/en/filter.filters.validate.php
      */
-    protected const ARG_TYPES = ['BOOL', 'EMAIL', 'FLOAT', 'INT', 'IP', 'REGEXP', 'STRING', 'URL'];
+    protected const ARG_TYPES = [
+        'BOOL',
+        'DOMAIN',
+        'EMAIL',
+        'FLOAT',
+        'INT',
+        'IP_ADDR',
+        'MAC_ADDR',
+        'REGEXP',
+        'STRING',
+        'URL',
+    ];
 
     /**
      * @var ?list<string>
@@ -79,6 +90,16 @@ abstract class Option
         return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
+    protected function castDomain(string $value): ?string
+    {
+        return filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function castEmail(string $value): ?string
+    {
+        return filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
+    }
+
     protected function castFloat(string $value): ?float
     {
         return filter_var($value, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
@@ -89,8 +110,22 @@ abstract class Option
         return filter_var($value, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
     }
 
-    protected function castRegexp(string $value, string $regexp): ?string
+    protected function castIpAddress(string $value): ?string
     {
+        return filter_var($value, FILTER_VALIDATE_IP, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function castMacAddress(string $value): ?string
+    {
+        return filter_var($value, FILTER_VALIDATE_MAC, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function castRegexp(string $value, ?string $regexp): ?string
+    {
+        if ($regexp === null) {
+            return null;
+        }
+
         $options = [
             'options' => [
                 'regexp' => $regexp,
@@ -102,24 +137,25 @@ abstract class Option
         return $result !== false ? $result : null;
     }
 
-    /**
-     * @throws OptParserException
-     */
-    protected function castString(string $value, string $argType): ?string
+    protected function castUrl(string $value): ?string
     {
-        if ($argType === 'EMAIL') {
-            return filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
-        }
+        return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
+    }
 
-        if ($argType === 'IP') {
-            return filter_var($value, FILTER_VALIDATE_IP, FILTER_NULL_ON_FAILURE);
-        }
-
-        if ($argType === 'URL') {
-            return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
-        }
-
-        throw new OptParserException('Unsupported argument type');
+    protected function castValue(string $value): string|float|int|bool|null
+    {
+        return match ($this->argType) {
+            'BOOL' => $this->castBool($value),
+            'DOMAIN' => $this->castDomain($value),
+            'EMAIL' => $this->castEmail($value),
+            'FLOAT' => $this->castFloat($value),
+            'INT' => $this->castInt($value),
+            'IP_ADDR' => $this->castIpAddress($value),
+            'MAC_ADDR' => $this->castMacAddress($value),
+            'REGEXP' => $this->castRegexp($value, $this->regexp),
+            'URL' => $this->castUrl($value),
+            default => null,
+        };
     }
 
     /**

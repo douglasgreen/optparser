@@ -18,11 +18,7 @@ class Term extends Option
 
     public function matchInput(string $value): bool|int|float|string|null
     {
-        if ($this->getArgType() === 'BOOL') {
-            return $this->castBool($value);
-        }
-
-        return null;
+        return $this->castValue($value);
     }
 
     #[\Override]
