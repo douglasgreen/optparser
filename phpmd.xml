@@ -102,12 +102,7 @@
 
     <rule ref="rulesets/naming.xml/LongClassName" />
 
-    <!-- This rule was triggering too often with typical names at 20 -->
-    <rule ref="rulesets/naming.xml/LongVariable">
-        <properties>
-            <property name="maximum" value="25" />
-        </properties>
-    </rule>
+    <rule ref="rulesets/naming.xml/LongVariable" />
 
     <rule ref="rulesets/naming.xml/ShortClassName" />
 

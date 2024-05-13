@@ -1,6 +1,6 @@
-# Sample README
+# Project Setup Guide
 
-## Setup
+## Setup Scripts
 
 This project uses the [GitLab script
 system](https://github.blog/2015-06-30-scripts-to-rule-them-all/). To set up the
