@@ -205,12 +205,19 @@ class OptHandler
     }
 
     /**
-     * Check alias for uniqueness.
+     * Check alias for uniqueness and format.
+     *
+     * @throws OptParserException
      */
     protected function checkAlias(string $alias): void
     {
         if (isset($this->allAliases[$alias])) {
             throw new OptParserException('Duplicate alias: ' . $alias);
+        }
+
+        // Only matches lower case separated by hyphens
+        if (preg_match('/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/', $alias) === 0) {
+            throw new OptParserException('Alias is not hyphenated lower case: ' . $alias);
         }
 
         $this->allAliases[$alias] = true;

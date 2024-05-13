@@ -31,6 +31,15 @@ Flags and parameters come last. The order is important to avoid ambiguity.
 
 Commands and terms are required but flags and parameters are optional.
 
+## Naming convention
+
+Commands, flags, and parameters must all follow the Unix convention:
+
+-   All lowercase
+-   Start with a letter
+-   Contain letters, digits, and hyphens but no underscores
+-   End in a letter or digit
+
 ## Command matching
 
 To find a match, each command is tried in order. The first command that

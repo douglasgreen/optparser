@@ -14,15 +14,15 @@ script/setup
 
 ### PHP
 
-- Lint: `composer lint`
-- Fix: `composer lint:fix`
-- Test: `composer test`
+-   Lint: `composer lint`
+-   Fix: `composer lint:fix`
+-   Test: `composer test`
 
 ### JavaScript
 
-- Lint: `npm run lint`
-- Fix: `npm run lint:fix`
-- Test: `npm test`
+-   Lint: `npm run lint`
+-   Fix: `npm run lint:fix`
+-   Test: `npm test`
 
 ## Pre-commit Hooks
 

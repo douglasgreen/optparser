@@ -145,9 +145,7 @@ class OptParser
     public function addUsageAll(): self
     {
         $optionNames = $this->optHandler->getAllNames();
-        $filteredOptions = array_filter($optionNames, function($option) {
-            return $option !== "help";
-        });
+        $filteredOptions = array_filter($optionNames, static fn($option): bool => $option !== 'help');
 
         $this->addUsage($filteredOptions);
 
@@ -198,8 +196,8 @@ class OptParser
     protected function tryToMatchUsage(Usage $usage): ?array
     {
         $unmarkedOptions = $this->argParser->getUnmarkedOptions();
-        $markedOptions = $this->argParser->getMarkedOptions();
-        $nonOptions = $this->argParser->getNonOptions();
+        $this->argParser->getMarkedOptions();
+        $this->argParser->getNonOptions();
 
         $this->argParser->getMarkedOptions();
         $this->argParser->getNonOptions();
