@@ -22,7 +22,8 @@ An option is one of the following:
 
 Options are processed in the order given.
 
-If there is a command, there can only be one command and it must come first.
+If there is a command, there can only be one command and it must come first. And
+every usage must have a command to distinguish them.
 
 If there are terms, they must follow the command, if any.
 

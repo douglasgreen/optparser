@@ -43,9 +43,15 @@ class OptParser
      * A command is a predefined list of command words.
      *
      * @param list<string> $aliases
+     *
+     * @throws OptParserException
      */
     public function addCommand(array $aliases, string $desc): self
     {
+        if (count($this->usages) > 1) {
+            throw new OptParserException('Cannot add commands after usages');
+        }
+
         $this->optHandler->addCommand($aliases, $desc);
 
         return $this;
@@ -55,9 +61,15 @@ class OptParser
      * A flag has no arguments.
      *
      * @param list<string> $aliases
+     *
+     * @throws OptParserException
      */
     public function addFlag(array $aliases, string $desc): self
     {
+        if (count($this->usages) > 1) {
+            throw new OptParserException('Cannot add flags after usages');
+        }
+
         $this->optHandler->addFlag($aliases, $desc);
 
         return $this;
@@ -67,9 +79,15 @@ class OptParser
      * A parameter has a required argument.
      *
      * @param list<string> $aliases
+     *
+     * @throws OptParserException
      */
     public function addParam(array $aliases, string $type, string $desc): self
     {
+        if (count($this->usages) > 1) {
+            throw new OptParserException('Cannot add params after usages');
+        }
+
         $this->optHandler->addParam($aliases, $type, $desc);
 
         return $this;
@@ -77,9 +95,15 @@ class OptParser
 
     /**
      * A term is a positional argument.
+     *
+     * @throws OptParserException
      */
     public function addTerm(string $name, string $type, string $desc): self
     {
+        if (count($this->usages) > 1) {
+            throw new OptParserException('Cannot add terms after usages');
+        }
+
         $this->optHandler->addTerm($name, $type, $desc);
 
         return $this;
@@ -92,6 +116,24 @@ class OptParser
      */
     public function addUsage(array $optionNames): self
     {
+        // If a command is defined, all usages must have a command.
+        if ($this->optHandler->hasOptionType('command')) {
+            $hasCommand = false;
+            foreach ($optionNames as $optionName) {
+                if ($this->optHandler->getOptionType($optionName) === 'command') {
+                    $hasCommand = true;
+                    break;
+                }
+            }
+
+            if (! $hasCommand) {
+                throw new OptParserException('Must define command for each usage');
+            }
+        } elseif (count($this->usages) > 2) {
+            // Multiple usages besides help must define a command.
+            throw new OptParserException('Must define command for each usage');
+        }
+
         $this->usages[] = new Usage($this->optHandler, $optionNames);
 
         return $this;

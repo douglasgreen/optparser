@@ -126,7 +126,7 @@ class OptHandler
         throw new OptParserException('Name not found');
     }
 
-    /*
+    /**
      * Get an option by name.
      *
      * @throws OptParserException
@@ -150,6 +150,22 @@ class OptHandler
         }
 
         throw new OptParserException('Name not found');
+    }
+
+    /**
+     * Check if it has the option type.
+     *
+     * @throws OptParserException
+     */
+    public function hasOptionType(string $type): bool
+    {
+        return match ($type) {
+            'command' => $this->commands !== [],
+            'term' => $this->terms !== [],
+            'param' => $this->params !== [],
+            'flag' => $this->flags !== [],
+            default => throw new OptParserException('Type not found'),
+        };
     }
 
     /**
