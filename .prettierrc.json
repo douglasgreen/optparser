@@ -3,22 +3,5 @@
     "printWidth": 80,
     "proseWrap": "always",
     "htmlWhitespaceSensitivity": "ignore",
-    "overrides": [
-        {
-            "files": ".{bower,prettier}rc",
-            "options": { "parser": "json" }
-        },
-        {
-            "files": "*.xml",
-            "options": { "parser": "xml" }
-        },
-        {
-            "files": "*.xml.dist",
-            "options": { "parser": "xml" }
-        },
-        {
-            "files": "*.xsd",
-            "options": { "parser": "xml" }
-        }
-    ]
+    "plugins": ["@prettier/plugin-xml", "prettier-plugin-sh"]
 }

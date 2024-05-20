@@ -14,6 +14,7 @@
  * - The presence of PHPUnit, Symfony, and Doctrine in the composer.json file is automatically detected,
  *   and the relevant Rector rule sets are enabled or disabled accordingly based on the $hasPhpUnit,
  *   $hasSymfony, and $hasDoctrine variables.
+ * The PHP version in composer.json is detected and set as $upToPhp for upgrades.
  *
  * For more information on configuring Rector, see https://getrector.com/
  */
@@ -33,21 +34,64 @@ use Rector\Symfony\Set\SymfonySetList;
 $hasPhpUnit = false;
 $hasSymfony = false;
 $hasDoctrine = false;
+$phpVersion = null;
+
 if (file_exists('composer.json')) {
-    $composer = file_get_contents('composer.json');
-    if ($composer !== false) {
-        $hasPhpUnit = preg_match('/\bphpunit\b/', $composer) === 1;
-        $hasSymfony = preg_match('/\bsymfony\b/', $composer) === 1;
-        $hasDoctrine = preg_match('/\bdoctrine\b/', $composer) === 1;
+    $composerContent = file_get_contents('composer.json');
+    if ($composerContent !== false) {
+        $composerData = json_decode($composerContent, true);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            // Check for PHPUnit, Symfony, and Doctrine
+            $requires = $composerData['require'] ?? [];
+            $requiresDev = $composerData['require-dev'] ?? [];
+
+            $allDependencies = array_merge($requires, $requiresDev);
+
+            $hasPhpUnit = isset($allDependencies['phpunit/phpunit']);
+            foreach ($allDependencies as $name => $value) {
+                if (preg_match('#^phpunit/#', $name) === 1) {
+                    $hasPhpUnit = true;
+                }
+
+                if (preg_match('#^symfony/#', $name) === 1) {
+                    $hasSymfony = true;
+                }
+
+                if (preg_match('#^doctrine/#', $name) === 1) {
+                    $hasDoctrine = true;
+                }
+
+                if ($name !== 'php') {
+                    continue;
+                }
+
+                if (! is_string($value)) {
+                    continue;
+                }
+
+                if (preg_match('/\d+\.\d+/', $value, $match) !== 1) {
+                    continue;
+                }
+
+                $phpVersion = $match[0];
+            }
+        }
     }
 }
+
+$upToPhp = match ($phpVersion) {
+    '8.2' => LevelSetList::UP_TO_PHP_82,
+    '8.3' => LevelSetList::UP_TO_PHP_83,
+    default => LevelSetList::UP_TO_PHP_81,
+};
 
 // To do upgrades, set RECTOR_UPGRADE to true in the environment.
 // @see https://getrector.com/blog/5-common-mistakes-in-rector-config-and-how-to-avoid-them
 $upgrading = (bool) getenv('RECTOR_UPGRADE');
 $baseSets = [];
 if ($upgrading) {
-    $baseSets[] = LevelSetList::UP_TO_PHP_83;
+    $baseSets[] = $upToPhp;
     if ($hasPhpUnit) {
         $baseSets[] = PHPUnitLevelSetList::UP_TO_PHPUNIT_100;
     }

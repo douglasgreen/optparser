@@ -14,6 +14,7 @@
  * - The presence of PHPUnit, Symfony, and Doctrine in the composer.json file is automatically detected,
  *   and the relevant ECS rule sets are enabled or disabled accordingly based on the $hasPhpUnit,
  *   $hasSymfony, and $hasDoctrine variables.
+ * - The PHP version in composer.json is detected and set as $phpVersion.
  * - Be cautious when configuring the list of annotations to remove using the GeneralPhpdocAnnotationRemoveFixer.
  *   ECS removes both the tag and its contents, whereas in many cases, you may only want to remove or modify
  *   the tag itself without affecting its contents.
@@ -29,13 +30,65 @@ use Symplify\EasyCodingStandard\Config\ECSConfig;
 $hasPhpUnit = false;
 $hasSymfony = false;
 $hasDoctrine = false;
+$phpVersion = null;
+
 if (file_exists('composer.json')) {
-    $composer = file_get_contents('composer.json');
-    if ($composer !== false) {
-        $hasPhpUnit = preg_match('/\bphpunit\b/', $composer) === 1;
-        $hasSymfony = preg_match('/\bsymfony\b/', $composer) === 1;
-        $hasDoctrine = preg_match('/\bdoctrine\b/', $composer) === 1;
+    $composerContent = file_get_contents('composer.json');
+    if ($composerContent !== false) {
+        $composerData = json_decode($composerContent, true);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            // Check for PHPUnit, Symfony, and Doctrine
+            $requires = $composerData['require'] ?? [];
+            $requiresDev = $composerData['require-dev'] ?? [];
+
+            $allDependencies = array_merge($requires, $requiresDev);
+
+            $hasPhpUnit = isset($allDependencies['phpunit/phpunit']);
+            foreach ($allDependencies as $name => $value) {
+                if (preg_match('#^phpunit/#', $name) === 1) {
+                    $hasPhpUnit = true;
+                }
+
+                if (preg_match('#^symfony/#', $name) === 1) {
+                    $hasSymfony = true;
+                }
+
+                if (preg_match('#^doctrine/#', $name) === 1) {
+                    $hasDoctrine = true;
+                }
+
+                if ($name !== 'php') {
+                    continue;
+                }
+
+                if (! is_string($value)) {
+                    continue;
+                }
+
+                if (preg_match('/\d+\.\d+/', $value, $match) !== 1) {
+                    continue;
+                }
+
+                $phpVersion = $match[0];
+            }
+        }
     }
+}
+
+$php81Migration = false;
+$php82Migration = false;
+$php83Migration = false;
+switch ($phpVersion) {
+    case '8.2':
+        $php82Migration = true;
+        break;
+    case '8.3':
+        $php83Migration = true;
+        break;
+    default:
+        $php81Migration = true;
+        break;
 }
 
 // I removed phpCsFixer and phpCsFixerRisky because they conflict with Rector.
@@ -44,7 +97,9 @@ $sets = [
     'perCS' => true,
     'perCSRisky' => false,
     'php80MigrationRisky' => false,
-    'php83Migration' => true,
+    'php81Migration' => $php81Migration,
+    'php82Migration' => $php82Migration,
+    'php83Migration' => $php83Migration,
     'phpunit100MigrationRisky' => false,
     'symfony' => $hasSymfony,
     'symfonyRisky' => false,
@@ -82,6 +137,8 @@ return ECSConfig::configure()
         perCS: $sets['perCS'],
         perCSRisky: $sets['perCSRisky'],
         php80MigrationRisky: $sets['php80MigrationRisky'],
+        php81Migration: $sets['php81Migration'],
+        php82Migration: $sets['php82Migration'],
         php83Migration: $sets['php83Migration'],
         phpunit100MigrationRisky: $sets['phpunit100MigrationRisky'],
         symfony: $sets['symfony'],

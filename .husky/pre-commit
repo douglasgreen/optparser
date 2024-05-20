@@ -1,3 +1,2 @@
 composer lint
 composer test
-npm run lint

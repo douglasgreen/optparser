@@ -1,6 +1,6 @@
-# Project Setup Guide
+# Sample README
 
-## Setup Scripts
+## Setup
 
 This project uses the [GitLab script
 system](https://github.blog/2015-06-30-scripts-to-rule-them-all/). To set up the
@@ -20,9 +20,7 @@ script/setup
 
 ### JavaScript
 
--   Lint: `npm run lint`
 -   Fix: `npm run lint:fix`
--   Test: `npm test`
 
 ## Pre-commit Hooks
 
