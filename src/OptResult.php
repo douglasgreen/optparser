@@ -9,6 +9,8 @@ namespace DouglasGreen\OptParser;
  */
 class OptResult
 {
+    protected ?string $command = null;
+
     /**
      * Errors, an array of error strings denoting missing, wrongly typed, or unrecognized arguments.
      *
@@ -49,6 +51,14 @@ class OptResult
     }
 
     /**
+     * Get the command name, if any (there can only be one).
+     */
+    public function getCommand(): ?string
+    {
+        return $this->command;
+    }
+
+    /**
      * Get the errors.
      *
      * @return list<string>
@@ -63,7 +73,7 @@ class OptResult
      *
      * @return array<string, null|bool|float|int|string>
      */
-    public function getMatchResults()
+    public function getMatchResults(): array
     {
         return $this->matchResults;
     }
@@ -83,6 +93,7 @@ class OptResult
      */
     public function setCommand(string $command, bool $value): void
     {
+        $this->command = $command;
         $this->matchResults[$command] = $value;
     }
 

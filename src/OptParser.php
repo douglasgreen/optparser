@@ -161,6 +161,7 @@ class OptParser
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function matchUsage(): ?OptResult
@@ -305,6 +306,25 @@ class OptParser
 
         if (! $matchFound) {
             $optResult->addError('Matching usage not found');
+        }
+
+        $errors = $optResult->getErrors();
+        if ($errors !== []) {
+            $message = 'Errors found in matching usage';
+            $command = $optResult->getCommand();
+            if ($command !== null) {
+                $message .= 'for command ' . $command;
+            }
+
+            $message .= ":\n";
+            foreach ($errors as $error) {
+                $message .= sprintf('* %s%s', $error, PHP_EOL);
+            }
+
+            $message .= "\n";
+            $message .= 'Program terminating. Run again with -h for help.';
+            error_log($message);
+            exit;
         }
 
         return $optResult;
