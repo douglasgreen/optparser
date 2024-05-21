@@ -39,8 +39,6 @@ $optParser = new OptParser($argv, 'My Program', 'An example program');
 $optParser->addParam(['f', 'file'], 'STRING', 'File name')
     ->addUsageAll();
 
-echo $optParser->writeHelp();
-
 $usage = $optParser->matchUsage();
 
 var_dump($usage);

@@ -156,13 +156,36 @@ class OptParser
      * @todo Make usage store values?
      * @todo Only try to match the correct command.
      */
-    public function matchUsage(): OptResult
+    public function matchUsage(): ?OptResult
     {
-        foreach ($this->usages as $usage) {
-            return $this->tryToMatchUsage($usage);
+        $unmarkedOptions = $this->argParser->getUnmarkedOptions();
+        $markedOptions = $this->argParser->getMarkedOptions();
+        $nonOptions = $this->argParser->getNonOptions();
+
+        // Get options except for help.
+        $usages = $this->usages;
+        array_shift($usages);
+
+        // Check for help option and handle if found.
+        $helpOption = $this->optHandler->getOption('help');
+
+        foreach (array_keys($markedOptions) as $name) {
+            if ($helpOption->matchName($name)) {
+                echo $this->writeHelp();
+                return null;
+            }
         }
 
-        return null;
+        var_dump($unmarkedOptions, $nonOptions);
+        $optResult = null;
+        foreach ($usages as $usage) {
+            $optResult = new OptResult($nonOptions);
+
+            $params = $usage->getOptions('param');
+            var_dump($markedOptions, $unmarkedOptions, $params);
+        }
+
+        return $optResult;
     }
 
     /**
@@ -181,27 +204,6 @@ class OptParser
         $output .= "\n";
 
         return $output . $this->optHandler->writeOptionBlock();
-    }
-
-    /**
-     * Match the usage and return a result.
-     */
-    protected function tryToMatchUsage(Usage $usage): OptResult
-    {
-        $unmarkedOptions = $this->argParser->getUnmarkedOptions();
-        $markedOptions = $this->argParser->getMarkedOptions();
-        $nonOptions = $this->argParser->getNonOptions();
-
-        $optResult = new OptResult($nonOptions);
-
-        $params = $usage->getOptions('param');
-        var_dump($markedOptions, $unmarkedOptions, $params);
-
-        if (mt_rand(0, 1) !== 0) {
-            return null;
-        }
-
-        return $optResult;
     }
 
     /*

@@ -7,7 +7,7 @@ namespace DouglasGreen\OptParser;
 /**
  * Represent data from matching a usage.
  */
-class OptionResult
+class OptResult
 {
     /**
      * Errors, an array of error strings denoting missing, wrongly typed, or unrecognized arguments.
