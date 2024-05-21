@@ -154,14 +154,12 @@ class OptParser
 
     /**
      * @todo Make usage store values?
+     * @todo Only try to match the correct command.
      */
-    public function matchUsage(): ?Usage
+    public function matchUsage(): OptResult
     {
         foreach ($this->usages as $usage) {
-            $match = $this->tryToMatchUsage($usage);
-            if ($match !== null) {
-                return $match;
-            }
+            return $this->tryToMatchUsage($usage);
         }
 
         return null;
@@ -186,27 +184,24 @@ class OptParser
     }
 
     /**
-     * Match the usage and return an array whose keys are the name of the
-     * options being match and whose values are:
-     * - true|false for commands
-     * - value for terms
-     * - true|false for flags
-     * - value for params.
+     * Match the usage and return a result.
      */
-    protected function tryToMatchUsage(Usage $usage): ?array
+    protected function tryToMatchUsage(Usage $usage): OptResult
     {
         $unmarkedOptions = $this->argParser->getUnmarkedOptions();
-        $this->argParser->getMarkedOptions();
-        $this->argParser->getNonOptions();
+        $markedOptions = $this->argParser->getMarkedOptions();
+        $nonOptions = $this->argParser->getNonOptions();
 
-        $this->argParser->getMarkedOptions();
-        $this->argParser->getNonOptions();
+        $optResult = new OptResult($nonOptions);
 
-        $commands = $usage->getOptions('command');
-        if ($this->matchCommands($commands, $unmarkedOptions)) {
+        $params = $usage->getOptions('param');
+        var_dump($markedOptions, $unmarkedOptions, $params);
+
+        if (mt_rand(0, 1) !== 0) {
+            return null;
         }
 
-        $usage->getOptions('term');
+        return $optResult;
     }
 
     /*

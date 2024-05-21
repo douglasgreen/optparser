@@ -6,6 +6,7 @@ require_once 'vendor/autoload.php';
 
 use DouglasGreen\OptParser\OptParser;
 
+/*
 $optParser = new OptParser($argv, 'Test', 'My testing program');
 
 // @todo Change types to validated string types like EMAIL or URL
@@ -31,3 +32,15 @@ $optParser->addCommand(['run'], 'Run it')
 
 // @todo Replace with help usage.
 echo $optParser->writeHelp();
+
+*/
+$optParser = new OptParser($argv, 'My Program', 'An example program');
+
+$optParser->addParam(['f', 'file'], 'STRING', 'File name')
+    ->addUsageAll();
+
+echo $optParser->writeHelp();
+
+$usage = $optParser->matchUsage();
+
+var_dump($usage);

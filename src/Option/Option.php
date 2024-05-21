@@ -94,6 +94,7 @@ abstract class Option
             'IP_ADDR' => $this->castIpAddress($value),
             'MAC_ADDR' => $this->castMacAddress($value),
             'REGEXP' => $this->castRegexp($value, $this->regexp),
+            'STRING' => $value,
             'URL' => $this->castUrl($value),
             default => null,
         };
