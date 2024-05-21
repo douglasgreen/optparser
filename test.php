@@ -36,8 +36,12 @@ echo $optParser->writeHelp();
 */
 $optParser = new OptParser($argv, 'My Program', 'An example program');
 
-$optParser->addParam(['f', 'file'], 'STRING', 'File name')
-    ->addUsageAll();
+$optParser->addCommand(['save', 's'], 'Save file')
+    ->addCommand(['delete', 'd'], 'Delete file')
+    ->addTerm('name', 'string', 'Term of file name')
+    ->addParam(['f', 'file'], 'STRING', 'File name')
+    ->addUsage(['save', 'name', 'file'])
+    ->addUsage(['delete', 'name', 'file']);
 
 $usage = $optParser->matchUsage();
 

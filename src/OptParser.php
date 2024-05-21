@@ -20,7 +20,9 @@ class OptParser
     public $optHandler;
 
     /**
-     * @var bool All non-help usages have commands.
+     * @var bool All non-help usages have commands. If allCommands is false,
+     * that means there are no commands because a program with only one usage
+     * that has a command would also be allCommands = true.
      */
     protected $allCommands = true;
 
@@ -157,8 +159,9 @@ class OptParser
     }
 
     /**
-     * @todo Make usage store values?
-     * @todo Only try to match the correct command.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function matchUsage(): ?OptResult
     {
@@ -180,13 +183,128 @@ class OptParser
             }
         }
 
-        var_dump($unmarkedOptions, $nonOptions);
-        $optResult = null;
-        foreach ($usages as $usage) {
-            $optResult = new OptResult($nonOptions);
+        $optResult = new OptResult($nonOptions);
 
-            $params = $usage->getOptions('param');
-            var_dump($markedOptions, $unmarkedOptions, $params);
+        // The first unmarked input must be the command name.
+        $inputName = null;
+        if ($this->allCommands) {
+            $inputName = array_shift($unmarkedOptions);
+            if ($inputName === null) {
+                $optResult->addError('Command name not provided');
+                return $optResult;
+            }
+        }
+
+        $matchFound = false;
+        foreach ($usages as $usage) {
+            // Match commands
+            if ($this->allCommands && $inputName !== null) {
+                $commandNames = $usage->getOptions('command');
+
+                // There is only one command per usage.
+                $commandName = $commandNames[0];
+                $command = $this->optHandler->getOption($commandName);
+
+                if ($command->matchName($inputName)) {
+                    $optResult->setCommand($commandName, true);
+                } else {
+                    continue;
+                }
+            }
+
+            // Match terms
+            $termNames = $usage->getOptions('term');
+            foreach ($termNames as $termName) {
+                $inputValue = array_shift($unmarkedOptions);
+                if ($inputValue === null) {
+                    $optResult->addError('Missing term: ' . $termName);
+                    continue;
+                }
+
+                $term = $this->optHandler->getOption($termName);
+                $matchedValue = $term->matchValue($inputValue);
+                if ($matchedValue !== null) {
+                    $optResult->setTerm($termName, $matchedValue);
+                } else {
+                    $optResult->addError(sprintf('Unable to match value of term %s: %s', $termName, $inputValue));
+                }
+            }
+
+            // Command and terms are all that is required to match.
+            $matchFound = true;
+
+            // Warn about unused unmarked options
+            foreach ($unmarkedOptions as $optionName) {
+                $optResult->addError('Unused input: ' . $optionName);
+            }
+
+            // Match flags
+            $flagNames = $usage->getOptions('flag');
+            foreach ($flagNames as $flagName) {
+                $flag = $this->optHandler->getOption($flagName);
+                $found = false;
+                $savedName = null;
+                $savedValue = null;
+                foreach ($markedOptions as $inputName => $inputValue) {
+                    if ($flag->matchName($inputName)) {
+                        $savedName = $inputName;
+                        $savedValue = $inputValue;
+                        $found = true;
+                        break;
+                    }
+                }
+
+                $optResult->setFlag($flagName, $found);
+
+                if ($found) {
+                    unset($markedOptions[$savedName]);
+                    if ($savedValue !== null) {
+                        $optResult->addError(sprintf('Argument passed to flag %s: %s', $flagName, $savedValue));
+                    }
+                }
+            }
+
+            // Match params
+            $paramNames = $usage->getOptions('param');
+            foreach ($paramNames as $paramName) {
+                $param = $this->optHandler->getOption($paramName);
+                $found = false;
+                $savedName = null;
+                $savedValue = null;
+                foreach ($markedOptions as $inputName => $inputValue) {
+                    if ($param->matchName($inputName)) {
+                        $savedName = $inputName;
+                        $savedValue = $inputValue;
+                        $found = true;
+                        break;
+                    }
+                }
+
+                if ($found) {
+                    unset($markedOptions[$savedName]);
+                    if ($savedValue === null) {
+                        $optResult->addError('No value passed to param ' . $paramName);
+                    } else {
+                        $matchedValue = $param->matchValue($savedValue);
+                        if ($matchedValue !== null) {
+                            $optResult->setParam($paramName, $matchedValue);
+                        } else {
+                            $optResult->addError(
+                                sprintf('Unable to match value of param %s: %s', $paramName, $savedValue)
+                            );
+                        }
+                    }
+                }
+            }
+
+            // Warn about unused marked options
+            foreach ($markedOptions as $optionName => $optionValue) {
+                $optResult->addError(sprintf('Unused input for %s: %s', $optionName, $optionValue));
+            }
+        }
+
+        if (! $matchFound) {
+            $optResult->addError('Matching usage not found');
         }
 
         return $optResult;
@@ -209,70 +327,4 @@ class OptParser
 
         return $output . $this->optHandler->writeOptionBlock();
     }
-
-    /*
-    protected function tryToMatchUsage(Usage $usage): ?string
-    {
-        $unmarkedOptions = $this->argParser->getUnmarkedOptions();
-        $matches = [];
-
-        $commands = $usage->getOptions('command');
-        foreach ($commands as $name => $required) {
-            $command = $this->optHandler->getOption($name);
-            $found = false;
-            $matches[$name] = false;
-            if ($unmarkedOptions !== []) {
-                $value = array_shift($unmarkedOptions);
-                $isMatch = $command->matchInput($value);
-                if ($isMatch) {
-                    $matches[$name] = true;
-                    $found = true;
-                } else {
-                    array_unshift($unmarkedOptions, $value);
-                    $found = false;
-                }
-            }
-
-            if (! $required) {
-                continue;
-            }
-
-            if ($found) {
-                continue;
-            }
-
-            return null;
-        }
-
-        $terms = $usage->getOptions('term');
-        foreach ($terms as $name => $required) {
-            $term = $this->optHandler->getOption($name);
-            $found = false;
-            $matches[$name] = false;
-            if ($unmarkedOptions !== []) {
-                $value = array_shift($unmarkedOptions);
-                $isMatch = $term->matchInput($value);
-                if ($isMatch) {
-                    $matches[$name] = true;
-                    $found = true;
-                } else {
-                    array_unshift($unmarkedOptions, $value);
-                    $found = false;
-                }
-            }
-
-            if (! $required) {
-                continue;
-            }
-
-            if ($found) {
-                continue;
-            }
-
-            return null;
-        }
-
-        return '';
-    }
-    */
 }

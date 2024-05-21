@@ -61,7 +61,7 @@ class Usage
             return $this->options[$optionType];
         }
 
-        throw new OptParserException('Invalid type');
+        throw new OptParserException('Invalid type: ' . $optionType);
     }
 
     /**
