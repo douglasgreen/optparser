@@ -20,6 +20,11 @@ class OptParser
     public $optHandler;
 
     /**
+     * @var bool All non-help usages have commands.
+     */
+    protected $allCommands = true;
+
+    /**
      * @var list<Usage>
      */
     protected $usages = [];
@@ -36,7 +41,7 @@ class OptParser
         $this->argParser = new ArgParser($argv);
 
         // Add a default help usage.
-        $this->addUsage(['help']);
+        $this->usages[] = new Usage($this->optHandler, ['help']);
     }
 
     /**
@@ -116,21 +121,20 @@ class OptParser
      */
     public function addUsage(array $optionNames): self
     {
-        // If a command is defined, all usages must have a command.
-        if ($this->optHandler->hasOptionType('command')) {
-            $hasCommand = false;
-            foreach ($optionNames as $optionName) {
-                if ($this->optHandler->getOptionType($optionName) === 'command') {
-                    $hasCommand = true;
-                    break;
-                }
+        $hasCommand = false;
+        foreach ($optionNames as $optionName) {
+            if ($this->optHandler->getOptionType($optionName) === 'command') {
+                $hasCommand = true;
+                break;
             }
+        }
 
-            if (! $hasCommand) {
-                throw new OptParserException('Must define command for each usage');
-            }
-        } elseif (count($this->usages) > 2) {
-            // Multiple usages besides help must define a command.
+        if (! $hasCommand) {
+            $this->allCommands = false;
+        }
+
+        // Multiple usages besides help must define a command.
+        if (count($this->usages) > 2 && ! $this->allCommands) {
             throw new OptParserException('Must define command for each usage');
         }
 
