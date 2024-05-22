@@ -118,19 +118,79 @@ attributes with `$input->$name`. Camel case in the attribute names is mapped to
 kebab case in option names. For example, `$result->filePath` would map to the
 `file-path` option name.
 
-## Developer setup
+## Program interface
 
-See [Setup Guide](docs/setup_guide.md) for steps to set up for development.
+To use OptParser:
+
+1. Create an `OptParser` instance with the name and description of the program.
+   This is used when displaying program help.
+2. Use chained calls on `$optParser` to `addCommand()`, `addTerm()`,
+   `addParam()`, and `addFlag()` to define those types of options.
+3. Combine the options together into usages by calling `$optParser->addUsage()`
+   to add a specific combination of option names. If there is only one usage,
+   you can call the simpler `$optParser->addUsageAll()` to add all the options
+   at once.
+4. Parse the arguments with `$input = $optParser->parse();`.
+5. Get the command executed with `$command = $input->getCommand();` to determine
+   how to interpret output.
+6. Fetch each option name with `$input->get($name)` or the more concise
+   `$input->$name`.
 
 ## Sample usage
 
-There is a [sample usage](bin/sample_usage.php) in a file. This usage shows an
-example of adding three separate commands. The terms, flags, and params used by
-the command are defined next. Then the usages that combine relevant commands and
-options are defined next.
+There is a [sample usage](bin/sample_usage.php) in a file. You can also run the
+program with `-h` to see sample help output.
 
-After matching the right usage, the inputs are dumped using attribute syntax.
-They could also be dumped using `$input->get()`.
+## Sample help
+
+The sample help output looks like this:
+
+```
+User Manager
+
+A program to manage user accounts
+
+Usage:
+  sample_usage.php --help
+  sample_usage.php add username:STRING email:STRING --password=STRING --role=STRING
+  sample_usage.php delete username:STRING
+  sample_usage.php list --output=STRING --verbose
+
+Commands:
+  add | a  Add a new user
+  delete | d  Delete an existing user
+  list | l  List all users
+
+Terms:
+  username: STRING  Username of the user
+  email: STRING  Email of the user
+
+Parameters:
+  --password | -p = STRING  Password for the user
+  --role | -r = STRING  Role of the user
+  --output | -o = STRING  Output file for the list command
+
+Flags:
+  --help | -h  Display program help
+  --verbose | -v  Enable verbose output
+  --quiet | -q  Suppress output
+```
+
+This shows:
+
+-   Program name
+-   Proram desc
+-   List of usages, including the always-available --help. Each usage is broken
+    into sections just like file itself: command, terms, paramaters, and flags.
+-   Term types are marked with a colon and paramater types are marked with an
+    equals sign which may be used in passing the argument. Type names are in all
+    caps.
+-   Each section shows its aliases alternating by pipes with the primary name
+    first. Then it's followed by a description.
+
+## Developer setup
+
+See [Setup Guide](docs/setup_guide.md) for steps to set up for development.
 
 ## References
 
