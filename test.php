@@ -46,3 +46,5 @@ $optParser->addCommand(['save', 's'], 'Save file')
 $result = $optParser->matchUsage();
 
 var_dump($result);
+var_dump($result->save);
+var_dump($result->name);

@@ -51,6 +51,16 @@ class OptResult
     }
 
     /**
+     * Get the value of a match result, if any.
+     *
+     * @todo Change to throw an exception once all values have been set.
+     */
+    public function __get(string $name): null|bool|float|int|string
+    {
+        return $this->matchResults[$name] ?? null;
+    }
+
+    /**
      * Get the command name, if any (there can only be one).
      */
     public function getCommand(): ?string
