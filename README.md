@@ -4,10 +4,10 @@ OptParser is a replacement for using the built-in
 [`getopt()`](https://www.php.net/manual/en/function.getopt.php) to get
 command-line options in PHP programs. It's better than getopt because:
 
--   It supports multiple command usages.
+-   It supports defining multiple parameter types and aliases.
+-   It allows defining separate commands, each with its own usage.
 -   It automatically prints formatted program help.
--   It checks for unrecognized arguments.
--   It returns arguments as a specific scalar type.
+-   It checks for unrecognized arguments to prevent invalid program execution.
 
 ## Commands
 
