@@ -53,13 +53,13 @@ class OptParser
      *
      * @throws OptParserException
      */
-    public function addCommand(array $aliases, string $desc, ?callable $callback = null): self
+    public function addCommand(array $aliases, string $desc): self
     {
         if (count($this->usages) > 1) {
             throw new OptParserException('Cannot add commands after usages');
         }
 
-        $this->optHandler->addCommand($aliases, $desc, $callback);
+        $this->optHandler->addCommand($aliases, $desc);
 
         return $this;
     }
@@ -71,13 +71,13 @@ class OptParser
      *
      * @throws OptParserException
      */
-    public function addFlag(array $aliases, string $desc, ?callable $callback = null): self
+    public function addFlag(array $aliases, string $desc): self
     {
         if (count($this->usages) > 1) {
             throw new OptParserException('Cannot add flags after usages');
         }
 
-        $this->optHandler->addFlag($aliases, $desc, $callback);
+        $this->optHandler->addFlag($aliases, $desc);
 
         return $this;
     }

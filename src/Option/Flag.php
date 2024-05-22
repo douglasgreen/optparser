@@ -12,10 +12,9 @@ class Flag extends Option
     public function __construct(
         string $name,
         string $desc,
-        array $aliases,
-        ?callable $callback = null
+        array $aliases
     ) {
-        parent::__construct($name, $desc, $callback);
+        parent::__construct($name, $desc);
         $this->aliases = $aliases;
     }
 

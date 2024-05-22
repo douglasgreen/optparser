@@ -28,7 +28,13 @@ $optParser->addCommand(['add', 'a'], 'Add a new user')
         ['r', 'role'],
         'string',
         'Role of the user',
-        static fn($role): bool => in_array($role, ['admin', 'manager', 'user'], true)
+        static function ($role): ?string {
+            if (in_array($role, ['admin', 'manager', 'user'], true)) {
+                return $role;
+            }
+
+            return null;
+        }
     )
     ->addParam(['o', 'output'], 'string', 'Output file for the list command')
 

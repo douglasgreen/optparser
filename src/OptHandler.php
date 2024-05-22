@@ -50,10 +50,10 @@ class OptHandler
      *
      * @param list<string> $aliases
      */
-    public function addCommand(array $aliases, string $desc, ?callable $callback = null): void
+    public function addCommand(array $aliases, string $desc): void
     {
         [$name, $others] = $this->pickName($aliases);
-        $this->commands[$name] = new Command($name, $desc, $others, $callback);
+        $this->commands[$name] = new Command($name, $desc, $others);
     }
 
     /**
@@ -61,10 +61,10 @@ class OptHandler
      *
      * @param list<string> $aliases
      */
-    public function addFlag(array $aliases, string $desc, ?callable $callback = null): void
+    public function addFlag(array $aliases, string $desc): void
     {
         [$name, $others] = $this->pickName($aliases);
-        $this->flags[$name] = new Flag($name, $desc, $others, $callback);
+        $this->flags[$name] = new Flag($name, $desc, $others);
     }
 
     /**
