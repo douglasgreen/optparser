@@ -108,7 +108,6 @@ abstract class Option
         }
 
         // Apply callback to validate if available
-        var_dump('v', $this->name, $value);
         if ($this->callback instanceof \Closure) {
             return ($this->callback)($filtered);
         }
