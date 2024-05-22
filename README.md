@@ -40,6 +40,8 @@ Commands, flags, and parameters must all follow the Unix convention:
 -   Contain letters, digits, and hyphens but no underscores
 -   End in a letter or digit
 
+That is also known as kebab case.
+
 ## Command matching
 
 To find a match, each command is tried in order. The first command that
@@ -72,6 +74,13 @@ A space or equal sign must separate every flag or parameter from its argument.
 
 The argument list can be terminated by --, which can be followed by non-options.
 The program ignores non-options but returns them with the matched usage.
+
+## Fetching results
+
+Results are returned by OptParser::matchUsage() as an OptResult object. Options
+are returned as attributes of the object. Camel case in attribute names is
+mapped to kebab case in option names. For example, `$result->filePath` would map
+to the `file-path` option.
 
 ## Developer setup
 
