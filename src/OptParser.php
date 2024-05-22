@@ -258,7 +258,7 @@ class OptParser
 
                 if ($found) {
                     unset($markedOptions[$savedName]);
-                    if ($savedValue !== null) {
+                    if ($savedValue !== '') {
                         $optResult->addError(sprintf('Argument passed to flag "%s": %s', $flagName, $savedValue));
                     }
                 }
