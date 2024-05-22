@@ -3,7 +3,7 @@
 A replacement for getopt. It's better than getopt because:
 
 -   It's object-oriented.
--   It supports multiple types of commands.
+-   It supports multiple command usages.
 -   It checks for unrecognized arguments.
 -   It returns arguments as a specific scalar type.
 
@@ -22,31 +22,32 @@ An option is one of the following:
 
 Options are processed in the order given.
 
-If there is a command, there can only be one command and it must come first. And
-every usage must have a command to distinguish them.
+If there is a command, there can only be one command and it must come first. If
+there are more than one usage, each usage must have a command to distinguish it.
 
-If there are terms, they must follow the command, if any.
+If there are terms, they are required and must follow the command, if any.
 
 Flags and parameters come last. The order is important to avoid ambiguity.
 
-Commands and terms are required but flags and parameters are optional.
+Commands and terms are required, because they are positional, but flags and
+parameters are optional, because they are named.
 
 ## Naming convention
 
-Commands, flags, and parameters must all follow the Unix convention:
+Commands, flags, and parameters must all follow the Unix convention for their
+names:
 
 -   All lowercase
 -   Start with a letter
 -   Contain letters, digits, and hyphens but no underscores
 -   End in a letter or digit
 
-That is also known as kebab case.
+That is also known as kebab case. An example name is `file-path`.
 
 ## Command matching
 
-To find a match, each command is tried in order. The first command that
-completely matches with no leftover arguments is used. If no match is found, an
-error code is returned and the help message is printed.
+Each usage is distinguished by its command. Each command is different and so
+only one usage can possibly match at runtime.
 
 ## Argument aliases
 
@@ -65,6 +66,36 @@ argument using its name.
 Commands, parameters, and flags can have aliases. But a term is not marked so it
 only has a name, not aliases.
 
+## Argument types
+
+The list of permitted argument types is taken from the list of
+[PHP validation filters](https://www.php.net/manual/en/filter.filters.validate.php).
+Permitted types include:
+
+-   `bool`
+-   `domain`
+-   `email`
+-   `float`
+-   `int`
+-   `ip_addr`
+-   `mac_addr`
+-   `string`
+-   `url`
+
+These are specified as the second argument of `OptParser::addParam()` and
+`OptParser::addTerm()`, because parameters and terms accept arguments and
+therefore have type. These types are printed in program help and applied
+automatically during argument processing, resulting in program error and
+termination on failure to validate.
+
+## Argument filters
+
+You can define your own filter callback as the last argument of
+`OptParser::addParam()` and `OptParser::addTerm()` also. The filter can do
+custom validation. If validation succeeds, you can return the original value or
+a filtered version of it. If validation fails, return null, and the program will
+error and terminate.
+
 ## Formatting
 
 Flags can be combined, for example -a -b -c can be written as -abc. However a
@@ -77,10 +108,14 @@ The program ignores non-options but returns them with the matched usage.
 
 ## Fetching results
 
-Results are returned by OptParser::matchUsage() as an OptResult object. Options
-are returned as attributes of the object. Camel case in attribute names is
-mapped to kebab case in option names. For example, `$result->filePath` would map
-to the `file-path` option.
+Results are returned by `OptParser::matchUsage()` as an `OptResult` object which
+I call `$input` as it represents user input.
+
+You can retrieve matched arguments from the user with `$input->get($name)`,
+where name was the option name. You can also retrieve arguments with as
+attributes with `$input->$name`. Camel case in the attribute names is mapped to
+kebab case in option names. For example, `$result->filePath` would map to the
+`file-path` option name.
 
 ## Developer setup
 
