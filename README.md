@@ -104,7 +104,8 @@ combined flag can't take arguments.
 A space or equal sign must separate every flag or parameter from its argument.
 
 The argument list can be terminated by --, which can be followed by non-options.
-The program ignores non-options but returns them with the matched usage.
+The program ignores non-options but returns them with the matched usage. You can
+retrieve them using `OptResult::getNonoptions()`.
 
 ## Fetching results
 
