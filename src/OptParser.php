@@ -161,7 +161,6 @@ class OptParser
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function matchUsage(): ?OptResult
@@ -192,7 +191,7 @@ class OptParser
             $inputName = array_shift($unmarkedOptions);
             if ($inputName === null) {
                 $optResult->addError('Command name not provided');
-                return $optResult;
+                $this->checkResult($optResult);
             }
         }
 
@@ -308,32 +307,44 @@ class OptParser
             $optResult->addError('Matching usage not found');
         }
 
-        $errors = $optResult->getErrors();
-        if ($errors !== []) {
-            $message = 'Errors found in matching usage';
-            $command = $optResult->getCommand();
-            if ($command !== null) {
-                $message .= 'for command ' . $command;
-            }
-
-            $message .= ":\n";
-            foreach ($errors as $error) {
-                $message .= sprintf('* %s%s', $error, PHP_EOL);
-            }
-
-            $message .= "\n";
-            $message .= 'Program terminating. Run again with -h for help.';
-            error_log($message);
-            exit;
-        }
+        $this->checkResult($optResult);
 
         return $optResult;
     }
 
     /**
+     * Check for errors then write them and exit.
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    protected function checkResult(OptResult $optResult): void
+    {
+        $errors = $optResult->getErrors();
+        if ($errors === []) {
+            return;
+        }
+
+        $message = 'Errors found in matching usage';
+        $command = $optResult->getCommand();
+        if ($command !== null) {
+            $message .= 'for command ' . $command;
+        }
+
+        $message .= ":\n";
+        foreach ($errors as $error) {
+            $message .= sprintf('* %s%s', $error, PHP_EOL);
+        }
+
+        $message .= "\n";
+        $message .= 'Program terminating. Run again with -h for help.';
+        error_log($message);
+        exit;
+    }
+
+    /**
      * Write the options line for the command.
      */
-    public function writeHelp(): string
+    protected function writeHelp(): string
     {
         $output = $this->name . "\n\n";
         $output .= wordwrap($this->desc) . "\n\n";

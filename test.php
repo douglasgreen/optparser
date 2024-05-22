@@ -43,6 +43,6 @@ $optParser->addCommand(['save', 's'], 'Save file')
     ->addUsage(['save', 'name', 'file'])
     ->addUsage(['delete', 'name', 'file']);
 
-$usage = $optParser->matchUsage();
+$result = $optParser->matchUsage();
 
-var_dump($usage);
+var_dump($result);
