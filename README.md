@@ -1,6 +1,6 @@
 # optparser
 
-A replacement for getopt. It's better than getopt because:
+A replacement for getopt in PHP programs. It's better than getopt because:
 
 -   It supports multiple command usages.
 -   It automatically prints formatted program help.
