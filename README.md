@@ -86,6 +86,16 @@ to the `file-path` option.
 
 See [Setup Guide](docs/setup_guide.md) for steps to set up for development.
 
+## Sample usage
+
+There is a [sample usage](bin/sample_usage.php) in a file. This usage shows an
+example of adding three separate commands. The terms, flags, and params used by
+the command are defined next. Then the usages that combine relevant commands and
+options are defined next.
+
+After matching the right usage, the inputs are dumped using attribute syntax.
+They could also be dumped using `$input->get()`.
+
 ## References
 
 -   http://docopt.org/
