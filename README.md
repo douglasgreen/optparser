@@ -2,8 +2,8 @@
 
 A replacement for getopt. It's better than getopt because:
 
--   It's object-oriented.
 -   It supports multiple command usages.
+-   It automatically prints formatted program help.
 -   It checks for unrecognized arguments.
 -   It returns arguments as a specific scalar type.
 
