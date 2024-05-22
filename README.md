@@ -4,7 +4,8 @@ OptParser is a replacement for using the built-in
 [`getopt()`](https://www.php.net/manual/en/function.getopt.php) to get
 command-line options in PHP programs. It's better than getopt because:
 
--   It supports defining multiple parameter types and aliases.
+-   It supports defining multiple option types and aliases.
+-   It allows mixing positional and named options.
 -   It allows defining separate commands, each with its own usage.
 -   It automatically prints formatted program help.
 -   It checks for unrecognized arguments to prevent invalid program execution.
@@ -19,10 +20,8 @@ An option is one of the following:
 
 -   A command, which is the name of a requested operation.
 -   A term, which is a positional argument.
--   A parameter, with one required argument.
--   A flag, with zero arguments.
-
-Options are processed in the order given.
+-   A parameter, which is a hyphen-prefixed name with one required argument.
+-   A flag, which is a hyphen-prefixed name with zero arguments.
 
 If there is a command, there can only be one command per usage and it must come
 first. If there are more than one usage, each usage must have a command to
