@@ -31,16 +31,11 @@ class OptParser
      */
     protected $usages = [];
 
-    /**
-     * @param string[] $argv
-     */
     public function __construct(
-        protected array $argv,
         protected string $name,
         protected string $desc
     ) {
         $this->optHandler = new OptHandler();
-        $this->argParser = new ArgParser($argv);
 
         // Add a default help usage.
         $this->usages[] = new Usage($this->optHandler, ['help']);
@@ -159,12 +154,20 @@ class OptParser
     }
 
     /**
+     * @param ?string[] $args
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function parse(): OptResult
+    public function parse(?array $args = null): OptResult
     {
+        global $argv;
+        if ($args === null) {
+            $args = $argv;
+        }
+
+        $this->argParser = new ArgParser($args);
         $unmarkedOptions = $this->argParser->getUnmarkedOptions();
         $markedOptions = $this->argParser->getMarkedOptions();
         $nonOptions = $this->argParser->getNonOptions();

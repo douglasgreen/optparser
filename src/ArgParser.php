@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DouglasGreen\OptParser;
 
 /**
- * Parse command-line arguments from $argv.
+ * Parse command-line arguments from $args.
  *
  * This class parses command-line arguments according to the GNU argument syntax.
  *
@@ -36,19 +36,19 @@ class ArgParser
     /**
      * Constructor.
      *
-     * @param list<string> $argv Command-line arguments
+     * @param list<string> $args Command-line arguments
      *
      * @throws OptParserException If no program name is provided
      */
-    public function __construct(array $argv)
+    public function __construct(array $args)
     {
-        $programName = array_shift($argv);
+        $programName = array_shift($args);
         if (! $programName) {
             throw new OptParserException('No program name');
         }
 
         $this->programName = basename($programName);
-        [$options, $this->nonOptions] = $this->splitArrayAroundDash($argv);
+        [$options, $this->nonOptions] = $this->splitArrayAroundDash($args);
         $options = $this->joinArguments($options);
         foreach ($options as $option) {
             if (preg_match('/^--?(\w+)(=(.*))?/', $option, $match)) {
