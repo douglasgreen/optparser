@@ -2,9 +2,9 @@
 
 ## Setup
 
-This project uses the [GitLab script
-system](https://github.blog/2015-06-30-scripts-to-rule-them-all/). To set up the
-project, run:
+This project uses the
+[GitLab script system](https://github.blog/2015-06-30-scripts-to-rule-them-all/).
+To set up the project, run:
 
 ```bash
 script/setup
@@ -29,6 +29,5 @@ or use `--no-verify` to bypass the check.
 
 ## Commitlint
 
-[Conventional
-Commits](https://www.npmjs.com/package/@commitlint/config-conventional) are
-enforced by `.husky/pre-commit`. Fix any lint errors before committing.
+[Conventional Commits](https://www.npmjs.com/package/@commitlint/config-conventional)
+are enforced by `.husky/pre-commit`. Fix any lint errors before committing.

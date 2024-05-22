@@ -19,5 +19,4 @@
         "lint:fix": "prettier --write .",
         "prepare": "husky"
     }
-
 }
