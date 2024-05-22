@@ -217,7 +217,7 @@ class OptParser
             foreach ($termNames as $termName) {
                 $inputValue = array_shift($unmarkedOptions);
                 if ($inputValue === null) {
-                    $optResult->addError('Missing term: ' . $termName);
+                    $optResult->addError('Missing term: "' . $termName . '"');
                     continue;
                 }
 
@@ -226,7 +226,7 @@ class OptParser
                 if ($matchedValue !== null) {
                     $optResult->setTerm($termName, $matchedValue);
                 } else {
-                    $optResult->addError(sprintf('Unable to match value of term %s: %s', $termName, $inputValue));
+                    $optResult->addError(sprintf('Unable to match value of term "%s": %s', $termName, $inputValue));
                 }
             }
 
@@ -235,7 +235,7 @@ class OptParser
 
             // Warn about unused unmarked options
             foreach ($unmarkedOptions as $optionName) {
-                $optResult->addError('Unused input: ' . $optionName);
+                $optResult->addError('Unused input: "' . $optionName . '"');
             }
 
             // Match flags
@@ -259,7 +259,7 @@ class OptParser
                 if ($found) {
                     unset($markedOptions[$savedName]);
                     if ($savedValue !== null) {
-                        $optResult->addError(sprintf('Argument passed to flag %s: %s', $flagName, $savedValue));
+                        $optResult->addError(sprintf('Argument passed to flag "%s": %s', $flagName, $savedValue));
                     }
                 }
             }
@@ -283,14 +283,14 @@ class OptParser
                 if ($found) {
                     unset($markedOptions[$savedName]);
                     if ($savedValue === null) {
-                        $optResult->addError('No value passed to param ' . $paramName);
+                        $optResult->addError('No value passed to param "' . $paramName . '"');
                     } else {
                         $matchedValue = $param->matchValue($savedValue);
                         if ($matchedValue !== null) {
                             $optResult->setParam($paramName, $matchedValue);
                         } else {
                             $optResult->addError(
-                                sprintf('Unable to match value of param %s: %s', $paramName, $savedValue)
+                                sprintf('Unable to match value of param "%s": %s', $paramName, $savedValue)
                             );
                         }
                     }
@@ -299,7 +299,7 @@ class OptParser
 
             // Warn about unused marked options
             foreach ($markedOptions as $optionName => $optionValue) {
-                $optResult->addError(sprintf('Unused input for %s: %s', $optionName, $optionValue));
+                $optResult->addError(sprintf('Unused input for "%s": %s', $optionName, $optionValue));
             }
         }
 
@@ -327,7 +327,7 @@ class OptParser
         $message = 'Errors found in matching usage';
         $command = $optResult->getCommand();
         if ($command !== null) {
-            $message .= ' for command ' . $command;
+            $message .= ' for command "' . $command . '"';
         }
 
         $message .= ":\n";
