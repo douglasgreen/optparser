@@ -50,10 +50,10 @@ class OptHandler
      *
      * @param list<string> $aliases
      */
-    public function addCommand(array $aliases, string $desc): void
+    public function addCommand(array $aliases, string $desc, ?callable $callback = null): void
     {
         [$name, $others] = $this->pickName($aliases);
-        $this->commands[$name] = new Command($name, $desc, $others);
+        $this->commands[$name] = new Command($name, $desc, $others, $callback);
     }
 
     /**
@@ -61,10 +61,10 @@ class OptHandler
      *
      * @param list<string> $aliases
      */
-    public function addFlag(array $aliases, string $desc): void
+    public function addFlag(array $aliases, string $desc, ?callable $callback = null): void
     {
         [$name, $others] = $this->pickName($aliases);
-        $this->flags[$name] = new Flag($name, $desc, $others);
+        $this->flags[$name] = new Flag($name, $desc, $others, $callback);
     }
 
     /**
@@ -72,19 +72,19 @@ class OptHandler
      *
      * @param list<string> $aliases
      */
-    public function addParam(array $aliases, string $type, string $desc): void
+    public function addParam(array $aliases, string $type, string $desc, ?callable $callback = null): void
     {
         [$name, $others] = $this->pickName($aliases);
-        $this->params[$name] = new Param($name, $desc, $others, $type);
+        $this->params[$name] = new Param($name, $desc, $others, $type, $callback);
     }
 
     /**
      * A term is a positional argument.
      */
-    public function addTerm(string $name, string $type, string $desc): void
+    public function addTerm(string $name, string $type, string $desc, ?callable $callback = null): void
     {
         $this->checkAlias($name);
-        $this->terms[$name] = new Term($name, $desc, $type);
+        $this->terms[$name] = new Term($name, $desc, $type, $callback);
     }
 
     /**

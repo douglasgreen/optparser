@@ -24,7 +24,12 @@ $optParser->addCommand(['add', 'a'], 'Add a new user')
 
     // Adding parameters
     ->addParam(['p', 'password'], 'string', 'Password for the user')
-    ->addParam(['r', 'role'], 'string', 'Role of the user')
+    ->addParam(
+        ['r', 'role'],
+        'string',
+        'Role of the user',
+        static fn($role): bool => in_array($role, ['admin', 'manager', 'user'], true)
+    )
     ->addParam(['o', 'output'], 'string', 'Output file for the list command')
 
     // Adding usage examples

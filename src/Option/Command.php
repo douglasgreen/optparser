@@ -9,9 +9,9 @@ class Command extends Option
     /**
      * @param list<string> $aliases
      */
-    public function __construct(string $name, string $desc, array $aliases)
+    public function __construct(string $name, string $desc, array $aliases, ?callable $callback = null)
     {
-        parent::__construct($name, $desc);
+        parent::__construct($name, $desc, $callback);
         $this->aliases = $aliases;
     }
 

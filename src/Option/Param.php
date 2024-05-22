@@ -14,11 +14,11 @@ class Param extends Option
         string $desc,
         array $aliases,
         string $argType,
-        ?string $regexp = null
+        ?callable $callback = null
     ) {
-        parent::__construct($name, $desc);
+        parent::__construct($name, $desc, $callback);
         $this->aliases = $aliases;
-        $this->setArgType($argType, $regexp);
+        $this->setArgType($argType);
     }
 
     #[\Override]

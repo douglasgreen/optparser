@@ -53,13 +53,13 @@ class OptParser
      *
      * @throws OptParserException
      */
-    public function addCommand(array $aliases, string $desc): self
+    public function addCommand(array $aliases, string $desc, ?callable $callback = null): self
     {
         if (count($this->usages) > 1) {
             throw new OptParserException('Cannot add commands after usages');
         }
 
-        $this->optHandler->addCommand($aliases, $desc);
+        $this->optHandler->addCommand($aliases, $desc, $callback);
 
         return $this;
     }
@@ -71,13 +71,13 @@ class OptParser
      *
      * @throws OptParserException
      */
-    public function addFlag(array $aliases, string $desc): self
+    public function addFlag(array $aliases, string $desc, ?callable $callback = null): self
     {
         if (count($this->usages) > 1) {
             throw new OptParserException('Cannot add flags after usages');
         }
 
-        $this->optHandler->addFlag($aliases, $desc);
+        $this->optHandler->addFlag($aliases, $desc, $callback);
 
         return $this;
     }
@@ -89,13 +89,13 @@ class OptParser
      *
      * @throws OptParserException
      */
-    public function addParam(array $aliases, string $type, string $desc): self
+    public function addParam(array $aliases, string $type, string $desc, ?callable $callback = null): self
     {
         if (count($this->usages) > 1) {
             throw new OptParserException('Cannot add params after usages');
         }
 
-        $this->optHandler->addParam($aliases, $type, $desc);
+        $this->optHandler->addParam($aliases, $type, $desc, $callback);
 
         return $this;
     }
@@ -105,13 +105,13 @@ class OptParser
      *
      * @throws OptParserException
      */
-    public function addTerm(string $name, string $type, string $desc): self
+    public function addTerm(string $name, string $type, string $desc, ?callable $callback = null): self
     {
         if (count($this->usages) > 1) {
             throw new OptParserException('Cannot add terms after usages');
         }
 
-        $this->optHandler->addTerm($name, $type, $desc);
+        $this->optHandler->addTerm($name, $type, $desc, $callback);
 
         return $this;
     }

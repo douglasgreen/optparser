@@ -21,7 +21,6 @@ abstract class Option
         'INT',
         'IP_ADDR',
         'MAC_ADDR',
-        'REGEXP',
         'STRING',
         'URL',
     ];
@@ -36,15 +35,20 @@ abstract class Option
      */
     protected $argType;
 
-    /**
-     * @var ?string
-     */
-    protected $regexp;
+    protected ?\Closure $callback = null;
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function __construct(
         protected string $name,
-        protected string $desc
-    ) {}
+        protected string $desc,
+        ?callable $callback = null
+    ) {
+        if ($callback !== null) {
+            $this->callback = \Closure::fromCallable($callback);
+        }
+    }
 
     /**
      * @return ?list<string>
@@ -85,7 +89,7 @@ abstract class Option
 
     public function matchValue(string $value): bool|int|float|string|null
     {
-        return match ($this->argType) {
+        $filtered = match ($this->argType) {
             'BOOL' => $this->castBool($value),
             'DOMAIN' => $this->castDomain($value),
             'EMAIL' => $this->castEmail($value),
@@ -93,11 +97,23 @@ abstract class Option
             'INT' => $this->castInt($value),
             'IP_ADDR' => $this->castIpAddress($value),
             'MAC_ADDR' => $this->castMacAddress($value),
-            'REGEXP' => $this->castRegexp($value, $this->regexp),
             'STRING' => $value,
             'URL' => $this->castUrl($value),
             default => null,
         };
+
+        // Check for failure of basic type
+        if ($filtered === null) {
+            return $filtered;
+        }
+
+        // Apply callback to validate if available
+        var_dump('v', $this->name, $value);
+        if ($this->callback instanceof \Closure) {
+            return ($this->callback)($filtered);
+        }
+
+        return $filtered;
     }
 
     abstract public function write(): string;
@@ -137,23 +153,6 @@ abstract class Option
         return filter_var($value, FILTER_VALIDATE_MAC, FILTER_NULL_ON_FAILURE);
     }
 
-    protected function castRegexp(string $value, ?string $regexp): ?string
-    {
-        if ($regexp === null) {
-            return null;
-        }
-
-        $options = [
-            'options' => [
-                'regexp' => $regexp,
-            ],
-        ];
-
-        $result = filter_var($value, FILTER_VALIDATE_REGEXP, $options);
-
-        return $result !== false ? $result : null;
-    }
-
     protected function castUrl(string $value): ?string
     {
         return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
@@ -174,13 +173,10 @@ abstract class Option
         return $this->aliases && in_array($alias, $this->aliases, true);
     }
 
-    protected function setArgType(string $argType, ?string $regexp = null): void
+    protected function setArgType(string $argType): void
     {
         $argType = strtoupper($argType);
         $this->checkType($argType);
         $this->argType = $argType;
-        if ($this->argType === 'REGEXP') {
-            $this->regexp = $regexp;
-        }
     }
 }
