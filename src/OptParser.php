@@ -225,7 +225,7 @@ class OptParser
                 if ($matchedValue !== null) {
                     $optResult->setTerm($termName, $matchedValue);
                 } else {
-                    $optResult->addError(sprintf('Unable to match value of term "%s": %s', $termName, $inputValue));
+                    $optResult->addError(sprintf('Unable to match value of term "%s": "%s"', $termName, $inputValue));
                 }
             }
 
@@ -258,7 +258,7 @@ class OptParser
                 if ($found) {
                     unset($markedOptions[$savedName]);
                     if ($savedValue !== '') {
-                        $optResult->addError(sprintf('Argument passed to flag "%s": %s', $flagName, $savedValue));
+                        $optResult->addError(sprintf('Argument passed to flag "%s": "%s"', $flagName, $savedValue));
                     }
                 }
             }
@@ -289,7 +289,7 @@ class OptParser
                             $optResult->setParam($paramName, $matchedValue);
                         } else {
                             $optResult->addError(
-                                sprintf('Unable to match value of param "%s": %s', $paramName, $savedValue)
+                                sprintf('Unable to match value of param "%s": "%s"', $paramName, $savedValue)
                             );
                         }
                     }
@@ -298,7 +298,7 @@ class OptParser
 
             // Warn about unused marked options
             foreach ($markedOptions as $optionName => $optionValue) {
-                $optResult->addError(sprintf('Unused input for "%s": %s', $optionName, $optionValue));
+                $optResult->addError(sprintf('Unused input for "%s": "%s"', $optionName, $optionValue));
             }
         }
 
