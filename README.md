@@ -75,7 +75,7 @@ The program ignores non-options but returns them with the matched usage.
 
 ## Developer setup
 
-See [Setup Guide](docs/setup_guide.md] for steps to set up for development.
+See [Setup Guide](docs/setup_guide.md) for steps to set up for development.
 
 ## References
 
