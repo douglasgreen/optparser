@@ -19,20 +19,21 @@ An option is one of the following:
 
 -   A command, which is the name of a requested operation.
 -   A term, which is a positional argument.
--   A flag, with zero arguments.
 -   A parameter, with one required argument.
+-   A flag, with zero arguments.
 
 Options are processed in the order given.
 
-If there is a command, there can only be one command and it must come first. If
-there are more than one usage, each usage must have a command to distinguish it.
+If there is a command, there can only be one command per usage and it must come
+first. If there are more than one usage, each usage must have a command to
+distinguish it.
 
 If there are terms, they are required and must follow the command, if any.
 
-Flags and parameters come last. The order is important to avoid ambiguity.
+Parameters and flags come last. The order is important to avoid ambiguity.
 
-Commands and terms are required, because they are positional, but flags and
-parameters are optional, because they are named.
+Commands and terms are required, because they are positional, but parameters and
+flags are optional, because they are named.
 
 ## Naming convention
 
