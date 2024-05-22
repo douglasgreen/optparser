@@ -28,6 +28,7 @@ $optParser->addCommand(['add', 'a'], 'Add a new user')
         ['r', 'role'],
         'string',
         'Role of the user',
+        // An example callback function that limits role to enumerated values
         static function ($role): ?string {
             if (in_array($role, ['admin', 'manager', 'user'], true)) {
                 return $role;
