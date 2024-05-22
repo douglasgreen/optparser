@@ -163,7 +163,7 @@ class OptParser
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function matchUsage(): OptResult
+    public function parse(): OptResult
     {
         $unmarkedOptions = $this->argParser->getUnmarkedOptions();
         $markedOptions = $this->argParser->getMarkedOptions();

@@ -109,8 +109,8 @@ retrieve them using `OptResult::getNonoptions()`.
 
 ## Fetching results
 
-Results are returned by `OptParser::matchUsage()` as an `OptResult` object which
-I call `$input` as it represents user input.
+Results are returned by `OptParser::parse()` as an `OptResult` object which I
+call `$input` as it represents user input.
 
 You can retrieve matched arguments from the user with `$input->get($name)`,
 where name was the option name. You can also retrieve arguments with as

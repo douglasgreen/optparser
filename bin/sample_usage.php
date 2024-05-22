@@ -45,7 +45,7 @@ $optParser->addCommand(['add', 'a'], 'Add a new user')
     ->addUsage(['list', 'output', 'verbose']);
 
 // Matching usage
-$input = $optParser->matchUsage();
+$input = $optParser->parse();
 
 // Get command executed
 $command = $input->getCommand();
