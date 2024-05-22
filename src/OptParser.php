@@ -327,7 +327,7 @@ class OptParser
         $message = 'Errors found in matching usage';
         $command = $optResult->getCommand();
         if ($command !== null) {
-            $message .= 'for command ' . $command;
+            $message .= ' for command ' . $command;
         }
 
         $message .= ":\n";
