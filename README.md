@@ -135,8 +135,8 @@ To use OptParser:
 4. Parse the arguments with `$input = $optParser->parse();`.
 5. Get the command executed with `$command = $input->getCommand();` to determine
    how to interpret output.
-6. Fetch each option name with `$input->get($name)` or the more concise
-   `$input->$name`.
+6. Fetch each option name for the current command with `$input->get($name)` or
+   the more concise `$input->$name`.
 
 ## Sample usage
 
