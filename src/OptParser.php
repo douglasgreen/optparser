@@ -163,7 +163,7 @@ class OptParser
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function matchUsage(): ?OptResult
+    public function matchUsage(): OptResult
     {
         $unmarkedOptions = $this->argParser->getUnmarkedOptions();
         $markedOptions = $this->argParser->getMarkedOptions();
@@ -178,8 +178,7 @@ class OptParser
 
         foreach (array_keys($markedOptions) as $name) {
             if ($helpOption->matchName($name)) {
-                echo $this->writeHelp();
-                return null;
+                $this->writeHelp();
             }
         }
 
@@ -343,6 +342,8 @@ class OptParser
 
     /**
      * Write the options line for the command.
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function writeHelp(): string
     {
@@ -356,6 +357,7 @@ class OptParser
 
         $output .= "\n";
 
-        return $output . $this->optHandler->writeOptionBlock();
+        echo $output . $this->optHandler->writeOptionBlock();
+        exit;
     }
 }
