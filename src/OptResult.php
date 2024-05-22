@@ -57,7 +57,10 @@ class OptResult
      */
     public function __get(string $name): null|bool|float|int|string
     {
-        return $this->matchResults[$name] ?? null;
+        // Convert camel case to kebab case
+        $kebabCaseName = strtolower((string) preg_replace('/([a-z])([A-Z])/', '$1-$2', $name));
+
+        return $this->matchResults[$kebabCaseName] ?? null;
     }
 
     /**
