@@ -137,7 +137,7 @@ abstract class Option
 
     protected function castDomain(string $value): ?string
     {
-        return filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_NULL_ON_FAILURE);
+        return filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME | FILTER_NULL_ON_FAILURE);
     }
 
     protected function castEmail(string $value): ?string
