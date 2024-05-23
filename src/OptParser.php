@@ -6,6 +6,8 @@ namespace DouglasGreen\OptParser;
 
 /**
  * Define a program with a series of usage options.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class OptParser
 {
@@ -20,20 +22,21 @@ class OptParser
     public $optHandler;
 
     /**
+     * @var list<Usage>
+     */
+    public $usages = [];
+
+    /**
      * @var bool All non-help usages have commands. If allCommands is false,
      * that means there are no commands because a program with only one usage
      * that has a command would also be allCommands = true.
      */
     protected $allCommands = true;
 
-    /**
-     * @var list<Usage>
-     */
-    protected $usages = [];
-
     public function __construct(
         protected string $name,
-        protected string $desc
+        protected string $desc,
+        protected bool $debugMode = false
     ) {
         $this->optHandler = new OptHandler();
 
@@ -154,13 +157,44 @@ class OptParser
     }
 
     /**
+     * Check for errors then write them and exit.
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    public function checkResult(OptResult $optResult): void
+    {
+        $errors = $optResult->getErrors();
+        if ($errors === []) {
+            return;
+        }
+
+        $message = 'Errors found in matching usage';
+        $command = $optResult->getCommand();
+        if ($command !== null) {
+            $message .= ' for command "' . $command . '"';
+        }
+
+        $message .= ":\n";
+        foreach ($errors as $error) {
+            $message .= sprintf('* %s%s', $error, PHP_EOL);
+        }
+
+        $message .= "\n";
+        $message .= 'Program terminating. Run again with -h for help.';
+        error_log($message);
+        if (! $this->debugMode) {
+            exit;
+        }
+    }
+
+    /**
      * @param ?string[] $args
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function parse(?array $args = null): OptResult
+    public function parse(?array $args = null, bool $doResultCheck = true): OptResult
     {
         global $argv;
         if ($args === null) {
@@ -181,7 +215,7 @@ class OptParser
 
         foreach (array_keys($markedOptions) as $name) {
             if ($helpOption->matchName($name)) {
-                $this->writeHelp();
+                $this->printHelp();
             }
         }
 
@@ -309,58 +343,37 @@ class OptParser
             $optResult->addError('Matching usage not found');
         }
 
-        $this->checkResult($optResult);
+        if ($doResultCheck) {
+            $this->checkResult($optResult);
+        }
 
         return $optResult;
     }
 
     /**
-     * Check for errors then write them and exit.
+     * Print the program help, including:
+     * - name
+     * - description
+     * - usage
+     * - options
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    protected function checkResult(OptResult $optResult): void
+    protected function printHelp(): void
     {
-        $errors = $optResult->getErrors();
-        if ($errors === []) {
-            return;
-        }
-
-        $message = 'Errors found in matching usage';
-        $command = $optResult->getCommand();
-        if ($command !== null) {
-            $message .= ' for command "' . $command . '"';
-        }
-
-        $message .= ":\n";
-        foreach ($errors as $error) {
-            $message .= sprintf('* %s%s', $error, PHP_EOL);
-        }
-
-        $message .= "\n";
-        $message .= 'Program terminating. Run again with -h for help.';
-        error_log($message);
-        exit;
-    }
-
-    /**
-     * Write the options line for the command.
-     *
-     * @SuppressWarnings(PHPMD.ExitExpression)
-     */
-    protected function writeHelp(): string
-    {
-        $output = $this->name . "\n\n";
-        $output .= wordwrap($this->desc) . "\n\n";
-        $output .= "Usage:\n";
+        echo $this->name . "\n\n";
+        echo wordwrap($this->desc) . "\n\n";
+        echo "Usage:\n";
         $programName = $this->argParser->getProgramName();
         foreach ($this->usages as $usage) {
-            $output .= $usage->write($programName);
+            echo $usage->write($programName);
         }
 
-        $output .= "\n";
+        echo "\n";
 
-        echo $output . $this->optHandler->writeOptionBlock();
-        exit;
+        echo $this->optHandler->writeOptionBlock();
+        if (! $this->debugMode) {
+            exit;
+        }
     }
 }

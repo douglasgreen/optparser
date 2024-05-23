@@ -60,7 +60,7 @@ class UsageTest extends TestCase
 
         $this->assertStringContainsString('test_program', $output);
         $this->assertStringContainsString('add', $output);
-        $this->assertStringContainsString('username: STRING', $output);
+        $this->assertStringContainsString('username:STRING', $output);
         $this->assertStringContainsString('--password=STRING', $output);
         $this->assertStringContainsString('--verbose', $output);
     }

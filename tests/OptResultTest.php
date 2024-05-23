@@ -79,6 +79,7 @@ class OptResultTest extends TestCase
         $optResult = new OptResult([]);
         $optResult->setParam('file-path', '/path/to/file');
 
+        /** @phpstan-ignore-next-line Magic getter */
         $this->assertSame('/path/to/file', $optResult->filePath);
     }
 }

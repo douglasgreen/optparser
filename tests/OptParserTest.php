@@ -87,16 +87,15 @@ class OptParserTest extends TestCase
         $optParser->addParam(['password', 'p'], 'STRING', 'Password for the user');
         $optParser->addUsage(['add', 'username', 'password']);
 
-        $input = $optParser->parse(['test', 'remove', 'john']);
+        $input = $optParser->parse(['test', 'remove', 'john'], false);
 
         $this->assertNotNull($input->getErrors());
     }
 
     public function testHelp(): void
     {
-        $optParser = new OptParser('test', 'Test program');
+        $optParser = new OptParser('test', 'Test program', true);
         $optParser->addCommand(['add', 'a'], 'Add a new user');
-        $optParser->addFlag(['help', 'h'], 'Display help');
 
         $this->expectOutputRegex('/Usage:/');
         $optParser->parse(['test', '--help']);
