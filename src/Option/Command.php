@@ -12,7 +12,9 @@ class Command extends Option
     public function __construct(string $name, string $desc, array $aliases)
     {
         parent::__construct($name, $desc);
-        $this->aliases = $aliases;
+        foreach ($aliases as $alias) {
+            $this->addAlias($alias);
+        }
     }
 
     #[\Override]

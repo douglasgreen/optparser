@@ -15,7 +15,9 @@ class Flag extends Option
         array $aliases
     ) {
         parent::__construct($name, $desc);
-        $this->aliases = $aliases;
+        foreach ($aliases as $alias) {
+            $this->addAlias($alias);
+        }
     }
 
     #[\Override]

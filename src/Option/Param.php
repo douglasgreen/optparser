@@ -17,7 +17,10 @@ class Param extends Option
         ?callable $callback = null
     ) {
         parent::__construct($name, $desc, $callback);
-        $this->aliases = $aliases;
+        foreach ($aliases as $alias) {
+            $this->addAlias($alias);
+        }
+
         $this->setArgType($argType);
     }
 

@@ -117,6 +117,19 @@ abstract class Option
 
     abstract public function write(): string;
 
+    /**
+     * @throws OptParserException
+     */
+    protected function addAlias(string $alias): void
+    {
+        // Only matches lower case separated by hyphens
+        if (preg_match('/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/', $alias) === 0) {
+            throw new OptParserException('Alias is not hyphenated lower case: ' . $alias);
+        }
+
+        $this->aliases[] = $alias;
+    }
+
     protected function castBool(string $value): ?bool
     {
         return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
