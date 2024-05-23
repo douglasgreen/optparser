@@ -90,6 +90,24 @@ class OptionTest extends TestCase
         $this->assertNull($param->matchValue('notabool'));
     }
 
+    public function testDateType(): void
+    {
+        $param = new Param('date', 'Date', ['d'], 'DATE');
+        $this->assertSame('2024-05-23', $param->matchValue('2024-05-23'));
+        $this->assertSame('2024-05-23', $param->matchValue('May 23, 2024'));
+        $this->assertSame('2024-05-23', $param->matchValue('23rd May 2024'));
+        $this->assertNull($param->matchValue('invalid-date'));
+    }
+
+    public function testDatetimeType(): void
+    {
+        $param = new Param('datetime', 'Datetime', ['d'], 'DATETIME');
+        $this->assertSame('2024-05-23 15:30:45', $param->matchValue('2024-05-23 15:30:45'));
+        $this->assertSame('2024-05-23 15:30:45', $param->matchValue('May 23, 2024 15:30:45'));
+        $this->assertSame('2024-05-23 15:30:45', $param->matchValue('23rd May 2024 15:30:45'));
+        $this->assertNull($param->matchValue('invalid-datetime'));
+    }
+
     public function testDomainArgType(): void
     {
         $param = new Param('domain', 'Domain name', ['d'], 'DOMAIN');
@@ -102,6 +120,17 @@ class OptionTest extends TestCase
         $param = new Param('email', 'User email', ['e'], 'EMAIL');
         $this->assertSame('test@example.com', $param->matchValue('test@example.com'));
         $this->assertNull($param->matchValue('invalid-email'));
+    }
+
+    public function testFixedType(): void
+    {
+        $param = new Param('fixed', 'Fixed', ['f'], 'FIXED');
+        $this->assertSame('123.45', $param->matchValue('123.45'));
+        $this->assertSame('-123.45', $param->matchValue('-123.45'));
+        $this->assertSame('0.123', $param->matchValue('0.123'));
+        $this->assertSame('123', $param->matchValue('123'));
+        $this->assertNull($param->matchValue('123.45.67'));
+        $this->assertNull($param->matchValue('invalid-number'));
     }
 
     public function testFloatArgType(): void
@@ -140,10 +169,41 @@ class OptionTest extends TestCase
         $this->assertSame('12345', $param->matchValue('12345'));
     }
 
+    public function testTimeType(): void
+    {
+        $param = new Param('time', 'Time', ['t'], 'TIME');
+        $this->assertSame('15:30:45', $param->matchValue('15:30:45'));
+        $this->assertSame('15:30:00', $param->matchValue('3:30 PM'));
+        $this->assertSame('00:00:00', $param->matchValue('midnight'));
+        $this->assertNull($param->matchValue('invalid-time'));
+    }
+
     public function testUrlArgType(): void
     {
         $param = new Param('website', 'Website URL', ['w'], 'URL');
         $this->assertSame('https://www.example.com', $param->matchValue('https://www.example.com'));
         $this->assertNull($param->matchValue('invalid-url'));
+    }
+
+    public function testDirType(): void
+    {
+        $param = new Param('dirname', 'Directory name', ['d'], 'DIR');
+        $this->assertNotNull($param->matchValue('tests'));
+        $this->assertNull($param->matchValue('/path/to/invalid/directory'));
+    }
+
+    public function testInfileType(): void
+    {
+        $param = new Param('input', 'Input file name', ['i'], 'INFILE');
+        $this->assertNotNull($param->matchValue('composer.json'));
+        $this->assertNull($param->matchValue('cat /etc/shadow'));
+        $this->assertNull($param->matchValue('/path/to/unreadable/file.txt'));
+    }
+
+    public function testOutfileType(): void
+    {
+        $param = new Param('output', 'Output file name', ['o'], 'OUTFILE');
+        $this->assertNotNull($param->matchValue('var/file.txt'));
+        $this->assertNull($param->matchValue('/path/to/unwritable/directory/file.txt'));
     }
 }

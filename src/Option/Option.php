@@ -12,17 +12,24 @@ abstract class Option
      * @var list<string>
      *
      * Most types are just filters. Other types include:
+     * - DATE - date in YYYY-MM-DD format
+     * - DATETIME - datetime in YYYY-MM-DD HH:MM:SS format
      * - DIR - directory that must exist and be readable
+     * - FIXED - fixed-point number
      * - INFILE - input file that must exist and be readable
      * - OUTFILE - output file that must not exist and be writable
+     * - TIME - time in HH:MM:SS format
      *
      * @see https://www.php.net/manual/en/filter.filters.validate.php
      */
     protected const ARG_TYPES = [
         'BOOL',
+        'DATE',
+        'DATETIME',
         'DIR',
         'DOMAIN',
         'EMAIL',
+        'FIXED',
         'FLOAT',
         'INFILE',
         'INT',
@@ -30,6 +37,7 @@ abstract class Option
         'MAC_ADDR',
         'OUTFILE',
         'STRING',
+        'TIME',
         'URL',
     ];
 
@@ -99,9 +107,12 @@ abstract class Option
     {
         $filtered = match ($this->argType) {
             'BOOL' => $this->castBool($value),
+            'DATE' => $this->castDate($value),
+            'DATETIME' => $this->castDatetime($value),
             'DIR' => $this->checkDir($value),
             'DOMAIN' => $this->castDomain($value),
             'EMAIL' => $this->castEmail($value),
+            'FIXED' => $this->castFixed($value),
             'FLOAT' => $this->castFloat($value),
             'INFILE' => $this->checkInputFile($value),
             'INT' => $this->castInt($value),
@@ -109,6 +120,7 @@ abstract class Option
             'MAC_ADDR' => $this->castMacAddress($value),
             'OUTFILE' => $this->checkOutputFile($value),
             'STRING' => $value,
+            'TIME' => $this->castTime($value),
             'URL' => $this->castUrl($value),
             default => null,
         };
@@ -146,6 +158,26 @@ abstract class Option
         return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
+    protected function castDate(string $value): ?string
+    {
+        $timestamp = strtotime($value);
+        if ($timestamp !== false) {
+            return date('Y-m-d', $timestamp);
+        }
+
+        return null;
+    }
+
+    protected function castDatetime(string $value): ?string
+    {
+        $timestamp = strtotime($value);
+        if ($timestamp !== false) {
+            return date('Y-m-d H:i:s', $timestamp);
+        }
+
+        return null;
+    }
+
     protected function castDomain(string $value): ?string
     {
         return filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME | FILTER_NULL_ON_FAILURE);
@@ -154,6 +186,16 @@ abstract class Option
     protected function castEmail(string $value): ?string
     {
         return filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function castFixed(string $value): ?string
+    {
+        // Adjust the regular expression based on the desired fixed-point format
+        if (preg_match('/^-?\d+(\.\d+)?$/', $value)) {
+            return $value;
+        }
+
+        return null;
     }
 
     protected function castFloat(string $value): ?float
@@ -174,6 +216,16 @@ abstract class Option
     protected function castMacAddress(string $value): ?string
     {
         return filter_var($value, FILTER_VALIDATE_MAC, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function castTime(string $value): ?string
+    {
+        $timestamp = strtotime($value);
+        if ($timestamp !== false) {
+            return date('H:i:s', $timestamp);
+        }
+
+        return null;
     }
 
     protected function castUrl(string $value): ?string

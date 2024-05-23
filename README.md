@@ -75,18 +75,22 @@ The list of permitted argument types is taken from the list of
 filters](https://www.php.net/manual/en/filter.filters.validate.php). Some
 custom types were added. Permitted types include:
 
--   `bool` - Valid Boolean value (true for "1", "true", "on", and "yes")
--   `dir` - Readable directory path
--   `domain` - Valid domain name length and value
--   `email` - Valid email address
--   `float` - Valid floating point value
--   `infile` - Readable file path
--   `int` - Valid integer value
--   `ip_addr` - Valid IP address
--   `mac_addr` - Valid MAC address
--   `outfile` - File path with writable parent dir, may or may not exist
--   `string` - Any string
--   `url` - Valid URL
+-   `BOOL` - Valid Boolean value (true for "1", "true", "on", and "yes")
+-   `DATE` - Valid date value
+-   `DATETIME` - Valid date and time value
+-   `DIR` - Readable directory path
+-   `DOMAIN` - Valid domain name length and value
+-   `EMAIL` - Valid email address
+-   `FIXED` - Valid fixed-point value
+-   `FLOAT` - Valid floating-point value
+-   `INFILE` - Readable file path
+-   `INT` - Valid integer value
+-   `IP_ADDR` - Valid IP address
+-   `MAC_ADDR` - Valid MAC address
+-   `OUTFILE` - File path with writable parent dir, may or may not exist
+-   `STRING` - Any string
+-   `TIME` - Valid time value
+-   `URL` - Valid URL
 
 These are specified as the second argument of `OptParser::addParam()` and
 `OptParser::addTerm()`, because parameters and terms accept arguments and
