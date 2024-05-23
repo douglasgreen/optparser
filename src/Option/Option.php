@@ -11,16 +11,24 @@ abstract class Option
     /**
      * @var list<string>
      *
+     * Most types are just filters. Other types include:
+     * - DIR - directory that must exist and be readable
+     * - INFILE - input file that must exist and be readable
+     * - OUTFILE - output file that must not exist and be writable
+     *
      * @see https://www.php.net/manual/en/filter.filters.validate.php
      */
     protected const ARG_TYPES = [
         'BOOL',
+        'DIR',
         'DOMAIN',
         'EMAIL',
         'FLOAT',
+        'INFILE',
         'INT',
         'IP_ADDR',
         'MAC_ADDR',
+        'OUTFILE',
         'STRING',
         'URL',
     ];
@@ -91,12 +99,15 @@ abstract class Option
     {
         $filtered = match ($this->argType) {
             'BOOL' => $this->castBool($value),
+            'DIR' => $this->checkDir($value),
             'DOMAIN' => $this->castDomain($value),
             'EMAIL' => $this->castEmail($value),
             'FLOAT' => $this->castFloat($value),
+            'INFILE' => $this->checkInputFile($value),
             'INT' => $this->castInt($value),
             'IP_ADDR' => $this->castIpAddress($value),
             'MAC_ADDR' => $this->castMacAddress($value),
+            'OUTFILE' => $this->checkOutputFile($value),
             'STRING' => $value,
             'URL' => $this->castUrl($value),
             default => null,
@@ -168,6 +179,53 @@ abstract class Option
     protected function castUrl(string $value): ?string
     {
         return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
+    }
+
+    /**
+     * Check that the dir is readable then form the dir path.
+     */
+    protected function checkDir(string $value): ?string
+    {
+        if (is_dir($value) && is_readable($value)) {
+            $path = realpath($value);
+            if ($path !== false) {
+                return $path;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Check that the input file is readable then form the file path.
+     */
+    protected function checkInputFile(string $value): ?string
+    {
+        if (file_exists($value) && is_readable($value)) {
+            $path = realpath($value);
+            if ($path !== false) {
+                return $path;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Check that the parent directory is writable then form the new file path.
+     */
+    protected function checkOutputFile(string $value): ?string
+    {
+        $directory = dirname($value);
+        if (is_writable($directory)) {
+            $path = realpath($directory);
+            if ($path !== false) {
+                return $path . (DIRECTORY_SEPARATOR . basename($value));
+            }
+        }
+
+        // If the file exists or the location is not writable, return null
+        return null;
     }
 
     /**
