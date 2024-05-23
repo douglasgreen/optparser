@@ -206,12 +206,20 @@ abstract class Option
 
     protected function castFloat(string $value): ?float
     {
-        return filter_var($value, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+        return filter_var(
+            $value,
+            FILTER_VALIDATE_FLOAT,
+            FILTER_FLAG_ALLOW_THOUSAND | FILTER_FLAG_ALLOW_SCIENTIFIC | FILTER_NULL_ON_FAILURE
+        );
     }
 
     protected function castInt(string $value): ?int
     {
-        return filter_var($value, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+        return filter_var(
+            $value,
+            FILTER_VALIDATE_INT,
+            FILTER_FLAG_ALLOW_OCTAL | FILTER_FLAG_ALLOW_HEX | FILTER_NULL_ON_FAILURE
+        );
     }
 
     protected function castIpAddress(string $value): ?string

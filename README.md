@@ -70,7 +70,7 @@ only has a name, not aliases.
 
 ## Argument types
 
-The list of permitted argument types is taken from the list of
+Most of the list of permitted argument types was taken from the list of
 [PHP validation
 filters](https://www.php.net/manual/en/filter.filters.validate.php). Some
 custom types were added. Permitted types include:
@@ -82,16 +82,16 @@ custom types were added. Permitted types include:
 -   `DOMAIN` - Valid domain name length and value
 -   `EMAIL` - Valid email address
 -   `FIXED` - Valid fixed-point value
--   `FLOAT` - Valid floating-point value
+-   `FLOAT` - Valid floating-point value, allowing commas and scientific
 -   `INFILE` - Readable file path
--   `INT` - Valid integer value
+-   `INT` - Valid integer value, allowing octal and hex notations
 -   `IP_ADDR` - Valid IP address
 -   `MAC_ADDR` - Valid MAC address
 -   `OUTFILE` - File path with writable parent dir, may or may not exist
 -   `STRING` - Any string
 -   `TIME` - Valid time value
 -   `URL` - Valid URL
--   `UUID` - Valid Universal Unique ID
+-   `UUID` - Valid Universal Unique ID, with or without hyphens
 
 These are specified as the second argument of `OptParser::addParam()` and
 `OptParser::addTerm()`, because parameters and terms accept arguments and
