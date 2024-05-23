@@ -91,6 +91,7 @@ custom types were added. Permitted types include:
 -   `STRING` - Any string
 -   `TIME` - Valid time value
 -   `URL` - Valid URL
+-   `UUID` - Valid Universal Unique ID
 
 These are specified as the second argument of `OptParser::addParam()` and
 `OptParser::addTerm()`, because parameters and terms accept arguments and

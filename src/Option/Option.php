@@ -6,6 +6,9 @@ namespace DouglasGreen\OptParser\Option;
 
 use DouglasGreen\OptParser\OptParserException;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 abstract class Option
 {
     /**
@@ -19,6 +22,7 @@ abstract class Option
      * - INFILE - input file that must exist and be readable
      * - OUTFILE - output file that must not exist and be writable
      * - TIME - time in HH:MM:SS format
+     * - UUID - UUID with or without hyphens
      *
      * @see https://www.php.net/manual/en/filter.filters.validate.php
      */
@@ -39,6 +43,7 @@ abstract class Option
         'STRING',
         'TIME',
         'URL',
+        'UUID',
     ];
 
     /**
@@ -122,6 +127,7 @@ abstract class Option
             'STRING' => $value,
             'TIME' => $this->castTime($value),
             'URL' => $this->castUrl($value),
+            'UUID' => $this->castUuid($value),
             default => null,
         };
 
@@ -231,6 +237,26 @@ abstract class Option
     protected function castUrl(string $value): ?string
     {
         return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
+    }
+
+    protected function castUuid(string $value): ?string
+    {
+        // Remove any hyphens from the input value
+        $value = str_replace('-', '', $value);
+
+        // Check if the length is 32 characters and if it contains only hexadecimal characters
+        if (strlen($value) !== 32 || ! ctype_xdigit($value)) {
+            return null;
+        }
+
+        // Insert hyphens at the appropriate positions
+        $uuid = substr($value, 0, 8) . '-' .
+                substr($value, 8, 4) . '-' .
+                substr($value, 12, 4) . '-' .
+                substr($value, 16, 4) . '-' .
+                substr($value, 20);
+
+        return $uuid;
     }
 
     /**

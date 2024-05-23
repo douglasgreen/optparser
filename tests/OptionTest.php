@@ -90,7 +90,7 @@ class OptionTest extends TestCase
         $this->assertNull($param->matchValue('notabool'));
     }
 
-    public function testDateType(): void
+    public function testDateArgType(): void
     {
         $param = new Param('date', 'Date', ['d'], 'DATE');
         $this->assertSame('2024-05-23', $param->matchValue('2024-05-23'));
@@ -99,13 +99,20 @@ class OptionTest extends TestCase
         $this->assertNull($param->matchValue('invalid-date'));
     }
 
-    public function testDatetimeType(): void
+    public function testDatetimeArgType(): void
     {
         $param = new Param('datetime', 'Datetime', ['d'], 'DATETIME');
         $this->assertSame('2024-05-23 15:30:45', $param->matchValue('2024-05-23 15:30:45'));
         $this->assertSame('2024-05-23 15:30:45', $param->matchValue('May 23, 2024 15:30:45'));
         $this->assertSame('2024-05-23 15:30:45', $param->matchValue('23rd May 2024 15:30:45'));
         $this->assertNull($param->matchValue('invalid-datetime'));
+    }
+
+    public function testDirType(): void
+    {
+        $param = new Param('dirname', 'Directory name', ['d'], 'DIR');
+        $this->assertNotNull($param->matchValue('tests'));
+        $this->assertNull($param->matchValue('/path/to/invalid/directory'));
     }
 
     public function testDomainArgType(): void
@@ -122,7 +129,7 @@ class OptionTest extends TestCase
         $this->assertNull($param->matchValue('invalid-email'));
     }
 
-    public function testFixedType(): void
+    public function testFixedArgType(): void
     {
         $param = new Param('fixed', 'Fixed', ['f'], 'FIXED');
         $this->assertSame('123.45', $param->matchValue('123.45'));
@@ -138,6 +145,14 @@ class OptionTest extends TestCase
         $param = new Param('price', 'Item price', ['p'], 'FLOAT');
         $this->assertEqualsWithDelta(19.99, $param->matchValue('19.99'), PHP_FLOAT_EPSILON);
         $this->assertNull($param->matchValue('notafloat'));
+    }
+
+    public function testInfileType(): void
+    {
+        $param = new Param('input', 'Input file name', ['i'], 'INFILE');
+        $this->assertNotNull($param->matchValue('composer.json'));
+        $this->assertNull($param->matchValue('cat /etc/shadow'));
+        $this->assertNull($param->matchValue('/path/to/unreadable/file.txt'));
     }
 
     public function testIntArgType(): void
@@ -161,6 +176,13 @@ class OptionTest extends TestCase
         $this->assertNull($param->matchValue('notamac'));
     }
 
+    public function testOutfileType(): void
+    {
+        $param = new Param('output', 'Output file name', ['o'], 'OUTFILE');
+        $this->assertNotNull($param->matchValue('var/file.txt'));
+        $this->assertNull($param->matchValue('/path/to/unwritable/directory/file.txt'));
+    }
+
     public function testStringArgType(): void
     {
         $param = new Param('name', 'User name', ['n'], 'STRING');
@@ -169,7 +191,7 @@ class OptionTest extends TestCase
         $this->assertSame('12345', $param->matchValue('12345'));
     }
 
-    public function testTimeType(): void
+    public function testTimeArgType(): void
     {
         $param = new Param('time', 'Time', ['t'], 'TIME');
         $this->assertSame('15:30:45', $param->matchValue('15:30:45'));
@@ -185,25 +207,24 @@ class OptionTest extends TestCase
         $this->assertNull($param->matchValue('invalid-url'));
     }
 
-    public function testDirType(): void
+    public function testUuidArgType(): void
     {
-        $param = new Param('dirname', 'Directory name', ['d'], 'DIR');
-        $this->assertNotNull($param->matchValue('tests'));
-        $this->assertNull($param->matchValue('/path/to/invalid/directory'));
-    }
+        $param = new Param('uuid', 'UUID', ['u'], 'UUID');
 
-    public function testInfileType(): void
-    {
-        $param = new Param('input', 'Input file name', ['i'], 'INFILE');
-        $this->assertNotNull($param->matchValue('composer.json'));
-        $this->assertNull($param->matchValue('cat /etc/shadow'));
-        $this->assertNull($param->matchValue('/path/to/unreadable/file.txt'));
-    }
+        // Valid UUIDs
+        $this->assertSame(
+            '123e4567-e89b-12d3-a456-426614174000',
+            $param->matchValue('123e4567e89b12d3a456426614174000')
+        );
+        $this->assertSame(
+            '123e4567-e89b-12d3-a456-426614174000',
+            $param->matchValue('123e4567-e89b-12d3-a456-426614174000')
+        );
 
-    public function testOutfileType(): void
-    {
-        $param = new Param('output', 'Output file name', ['o'], 'OUTFILE');
-        $this->assertNotNull($param->matchValue('var/file.txt'));
-        $this->assertNull($param->matchValue('/path/to/unwritable/directory/file.txt'));
+        // Invalid UUIDs
+        $this->assertNull($param->matchValue('123e4567e89b12d3a45642661417400z')); // Invalid character 'z'
+        $this->assertNull($param->matchValue('123e4567e89b12d3a45642661417400'));  // Too short
+        $this->assertNull($param->matchValue('123e4567-e89b-12d3-a456-4266141740001')); // Too long
+        $this->assertNull($param->matchValue('not-a-uuid')); // Not a UUID format
     }
 }
