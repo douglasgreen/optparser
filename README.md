@@ -111,14 +111,14 @@ will error and terminate.
 
 ## Formatting
 
-Flags can be combined, for example -a -b -c can be written as -abc. However a
-combined flag can't take arguments.
+Flags can be combined, for example `-a -b -c` can be written as `-abc`. However
+a combined flag can't take arguments.
 
 A space or equal sign must separate every flag or parameter from its argument.
 
-The argument list can be terminated by --, which can be followed by non-options.
-The program ignores non-options but returns them with the matched usage. You can
-retrieve them using `OptResult::getNonoptions()`.
+The argument list can be terminated by `--`, which can be followed by
+non-options.  The program ignores non-options but returns them with the matched
+usage. You can retrieve them using `OptResult::getNonoptions()`.
 
 ## Fetching results
 
@@ -193,7 +193,7 @@ This shows:
 
 -   Program name
 -   Proram description
--   List of usages, including the always-available --help. Each usage is
+-   List of usages, including the always-available `--help`. Each usage is
     presented in order: command, terms, paramaters, and flags.
 -   Term types are marked with a colon and paramater types are marked with an
     equals sign which may be used in passing the argument. Type names are in all
