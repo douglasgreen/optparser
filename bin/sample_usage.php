@@ -29,13 +29,14 @@ $optParser->addCommand(['add', 'a'], 'Add a new user')
         ['r', 'role'],
         'string',
         'Role of the user',
-        // An example callback function that limits role to enumerated values
-        static function ($role): ?string {
+        // An example callback function that limits role to enumerated values.
+        // Throw an \InvalidArgumentException on failure to describe the reason.
+        static function ($role): string {
             if (in_array($role, ['admin', 'manager', 'user'], true)) {
                 return $role;
             }
 
-            return null;
+            throw new \InvalidArgumentException('Role must be admin, manager, or user');
         }
     )
     ->addParam(['o', 'output'], 'string', 'Output file for the list command')

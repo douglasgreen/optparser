@@ -136,7 +136,7 @@ abstract class Option
 
         // Check for failure of basic type
         if ($filtered === null) {
-            return $filtered;
+            throw new \InvalidArgumentException('Unrecognized type');
         }
 
         // Apply callback to validate if available
@@ -162,35 +162,40 @@ abstract class Option
         $this->aliases[] = $alias;
     }
 
-    protected function castBool(string $value): ?bool
+    protected function castBool(string $value): bool
     {
-        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if ($valid === null) {
+            throw new \InvalidArgumentException('Not a valid Boolean');
+        }
+
+        return $valid;
     }
 
-    protected function castDate(string $value): ?string
+    protected function castDate(string $value): string
     {
         $timestamp = strtotime($value);
         if ($timestamp !== false) {
             return date('Y-m-d', $timestamp);
         }
 
-        return null;
+        throw new \InvalidArgumentException('Not a valid date');
     }
 
     /**
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function castDateInterval(string $input): ?string
+    protected function castDateInterval(string $input): string
     {
         try {
             $interval = \DateInterval::createFromDateString($input);
         } catch (\DateMalformedIntervalStringException) {
-            return null;
+            throw new \InvalidArgumentException('Not a valid date interval');
         }
 
         if ($interval === false) {
-            return null;
+            throw new \InvalidArgumentException('Not a valid date interval');
         }
 
         $formatted = [];
@@ -252,79 +257,119 @@ abstract class Option
             return date('Y-m-d H:i:s', $timestamp);
         }
 
-        return null;
+        throw new \InvalidArgumentException('Not a valid datetime');
     }
 
-    protected function castDomain(string $value): ?string
+    protected function castDomain(string $value): string
     {
-        return filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME | FILTER_NULL_ON_FAILURE);
-    }
-
-    protected function castEmail(string $value): ?string
-    {
-        return filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
-    }
-
-    protected function castFixed(string $value): ?string
-    {
-        if (preg_match('/^[+-]?\d+([,_]\d{3})*(\.\d+)?$/', $value)) {
-            return preg_replace('/[,_]/', '', $value);
+        $valid = filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME | FILTER_NULL_ON_FAILURE);
+        if ($valid === null) {
+            throw new \InvalidArgumentException('Not a valid domain');
         }
 
-        return null;
+        return $valid;
     }
 
-    protected function castFloat(string $value): ?float
+    protected function castEmail(string $value): string
     {
-        return filter_var(
+        $valid = filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
+        if ($valid === null) {
+            throw new \InvalidArgumentException('Not a valid email');
+        }
+
+        return $valid;
+    }
+
+    protected function castFixed(string $value): string
+    {
+        if (preg_match('/^[+-]?\d+([,_]\d{3})*(\.\d+)?$/', $value)) {
+            return (string) preg_replace('/[,_]/', '', $value);
+        }
+
+        throw new \InvalidArgumentException('Not a valid fixed-point number');
+    }
+
+    protected function castFloat(string $value): float
+    {
+        $valid = filter_var(
             $value,
             FILTER_VALIDATE_FLOAT,
             FILTER_FLAG_ALLOW_THOUSAND | FILTER_FLAG_ALLOW_SCIENTIFIC | FILTER_NULL_ON_FAILURE
         );
+        if ($valid === null) {
+            throw new \InvalidArgumentException('Not a valid floating-point number');
+        }
+
+        return $valid;
     }
 
-    protected function castInt(string $value): ?int
+    protected function castInt(string $value): int
     {
-        return filter_var(
+        $valid = filter_var(
             $value,
             FILTER_VALIDATE_INT,
             FILTER_FLAG_ALLOW_OCTAL | FILTER_FLAG_ALLOW_HEX | FILTER_NULL_ON_FAILURE
         );
+        if ($valid === null) {
+            throw new \InvalidArgumentException('Not a valid integer');
+        }
+
+        return $valid;
     }
 
-    protected function castIpAddress(string $value): ?string
+    protected function castIpAddress(string $value): string
     {
-        return filter_var($value, FILTER_VALIDATE_IP, FILTER_NULL_ON_FAILURE);
+        $valid = filter_var($value, FILTER_VALIDATE_IP, FILTER_NULL_ON_FAILURE);
+        if ($valid === null) {
+            throw new \InvalidArgumentException('Not a valid IP address');
+        }
+
+        return $valid;
     }
 
-    protected function castMacAddress(string $value): ?string
+    protected function castMacAddress(string $value): string
     {
-        return filter_var($value, FILTER_VALIDATE_MAC, FILTER_NULL_ON_FAILURE);
+        $valid = filter_var($value, FILTER_VALIDATE_MAC, FILTER_NULL_ON_FAILURE);
+        if ($valid === null) {
+            throw new \InvalidArgumentException('Not a valid MAC address');
+        }
+
+        return $valid;
     }
 
-    protected function castTime(string $value): ?string
+    protected function castTime(string $value): string
     {
         $timestamp = strtotime($value);
         if ($timestamp !== false) {
             return date('H:i:s', $timestamp);
         }
 
-        return null;
+        throw new \InvalidArgumentException('Not a valid time');
     }
 
-    protected function castUrl(string $value): ?string
+    protected function castUrl(string $value): string
     {
-        return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
+        $valid = filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
+        if ($valid === null) {
+            throw new \InvalidArgumentException('Not a valid URL');
+        }
+
+        return $valid;
     }
 
-    protected function castUuid(string $value): ?string
+    protected function castUuid(string $value): string
     {
         // Remove any hyphens from the input value
         $value = str_replace('-', '', $value);
 
-        // Check if the length is 32 characters and if it contains only hexadecimal characters
-        if (strlen($value) !== 32 || ! ctype_xdigit($value)) {
-            return null;
+        // Check if the length is 32 characters
+        if (strlen($value) !== 32) {
+            throw new \InvalidArgumentException('UUID is not 32 characters');
+        }
+
+        // Check if it contains only hexadecimal characters
+        if (! ctype_xdigit($value)) {
+            throw new \InvalidArgumentException('UUID contains invalid characters');
         }
 
         // Insert hyphens at the appropriate positions
@@ -340,48 +385,61 @@ abstract class Option
     /**
      * Check that the dir is readable then form the dir path.
      */
-    protected function checkDir(string $value): ?string
+    protected function checkDir(string $value): string
     {
-        if (is_dir($value) && is_readable($value)) {
-            $path = realpath($value);
-            if ($path !== false) {
-                return $path;
-            }
+        if (! is_dir($value)) {
+            throw new \InvalidArgumentException('Path is not a directory');
         }
 
-        return null;
+        if (! is_readable($value)) {
+            throw new \InvalidArgumentException('Directory is not readable');
+        }
+
+        $path = realpath($value);
+        if ($path === false) {
+            throw new \InvalidArgumentException('Directory is invalid');
+        }
+
+        return $path;
     }
 
     /**
      * Check that the input file is readable then form the file path.
      */
-    protected function checkInputFile(string $value): ?string
+    protected function checkInputFile(string $value): string
     {
-        if (file_exists($value) && is_readable($value)) {
-            $path = realpath($value);
-            if ($path !== false) {
-                return $path;
-            }
+        if (! file_exists($value)) {
+            throw new \InvalidArgumentException('Path is not a file');
         }
 
-        return null;
+        if (! is_readable($value)) {
+            throw new \InvalidArgumentException('File is not readable');
+        }
+
+        $path = realpath($value);
+        if ($path === false) {
+            throw new \InvalidArgumentException('Path is invalid');
+        }
+
+        return $path;
     }
 
     /**
      * Check that the parent directory is writable then form the new file path.
      */
-    protected function checkOutputFile(string $value): ?string
+    protected function checkOutputFile(string $value): string
     {
         $directory = dirname($value);
-        if (is_writable($directory)) {
-            $path = realpath($directory);
-            if ($path !== false) {
-                return $path . (DIRECTORY_SEPARATOR . basename($value));
-            }
+        if (! is_writable($directory)) {
+            throw new \InvalidArgumentException('File directory is not writable');
         }
 
-        // If the file exists or the location is not writable, return null
-        return null;
+        $path = realpath($directory);
+        if ($path === false) {
+            throw new \InvalidArgumentException('Directory path is invalid');
+        }
+
+        return $path . (DIRECTORY_SEPARATOR . basename($value));
     }
 
     /**

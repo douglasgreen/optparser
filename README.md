@@ -105,8 +105,9 @@ termination on failure to validate.
 You can define your own filter callback as the last argument of
 `OptParser::addParam()` and `OptParser::addTerm()` also. The filter can do
 custom validation. If validation succeeds, you can return the original value or
-a filtered version of it. If validation fails, return null, and the program will
-error and terminate.
+a filtered version of it. If validation fails, throw an
+`\InvalidArgumentException` with a descriptive error message, and the program
+will error and terminate.
 
 ## Formatting
 

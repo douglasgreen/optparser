@@ -72,7 +72,9 @@ class OptionTest extends TestCase
     {
         $param = new Param('email', 'User email', ['e'], 'EMAIL');
         $this->assertSame('test@example.com', $param->matchValue('test@example.com'));
-        $this->assertNull($param->matchValue('invalid-email'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('invalid-email');
     }
 
     public function testOptionInvalidType(): void
@@ -88,7 +90,9 @@ class OptionTest extends TestCase
         $this->assertTrue($param->matchValue('1'));
         $this->assertFalse($param->matchValue('false'));
         $this->assertFalse($param->matchValue('0'));
-        $this->assertNull($param->matchValue('notabool'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('notabool');
     }
 
     public function testDateArgType(): void
@@ -97,7 +101,9 @@ class OptionTest extends TestCase
         $this->assertSame('2024-05-23', $param->matchValue('2024-05-23'));
         $this->assertSame('2024-05-23', $param->matchValue('May 23, 2024'));
         $this->assertSame('2024-05-23', $param->matchValue('23rd May 2024'));
-        $this->assertNull($param->matchValue('invalid-date'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('invalid-date');
     }
 
     public function testDatetimeArgType(): void
@@ -106,7 +112,9 @@ class OptionTest extends TestCase
         $this->assertSame('2024-05-23 15:30:45', $param->matchValue('2024-05-23 15:30:45'));
         $this->assertSame('2024-05-23 15:30:45', $param->matchValue('May 23, 2024 15:30:45'));
         $this->assertSame('2024-05-23 15:30:45', $param->matchValue('23rd May 2024 15:30:45'));
-        $this->assertNull($param->matchValue('invalid-datetime'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('invalid-datetime');
     }
 
     public function testDateIntervalArgType(): void
@@ -124,28 +132,36 @@ class OptionTest extends TestCase
         $this->assertSame('1 minute', $param->matchValue('60 seconds'));
         $this->assertSame('2 minutes', $param->matchValue('2 minutes'));
         $this->assertSame('10 minutes', $param->matchValue('600 seconds'));
-        $this->assertNull($param->matchValue('invalid-datetime'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('invalid-datetime');
     }
 
     public function testDirType(): void
     {
         $param = new Param('dirname', 'Directory name', ['d'], 'DIR');
         $this->assertNotNull($param->matchValue('tests'));
-        $this->assertNull($param->matchValue('/path/to/invalid/directory'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('/path/to/invalid/directory');
     }
 
     public function testDomainArgType(): void
     {
         $param = new Param('domain', 'Domain name', ['d'], 'DOMAIN');
         $this->assertSame('example.com', $param->matchValue('example.com'));
-        $this->assertNull($param->matchValue('invalid-.domain'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('invalid-.domain');
     }
 
     public function testEmailArgType(): void
     {
         $param = new Param('email', 'User email', ['e'], 'EMAIL');
         $this->assertSame('test@example.com', $param->matchValue('test@example.com'));
-        $this->assertNull($param->matchValue('invalid-email'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('invalid-email');
     }
 
     public function testFixedArgType(): void
@@ -158,51 +174,69 @@ class OptionTest extends TestCase
         $this->assertSame('123', $param->matchValue('123'));
         $this->assertSame('123456789', $param->matchValue('123,456,789'));
         $this->assertSame('123456789', $param->matchValue('123_456_789'));
-        $this->assertNull($param->matchValue('123.45.67'));
-        $this->assertNull($param->matchValue('invalid-number'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('123.45.67');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('invalid-number');
     }
 
     public function testFloatArgType(): void
     {
         $param = new Param('price', 'Item price', ['p'], 'FLOAT');
         $this->assertEqualsWithDelta(19.99, $param->matchValue('19.99'), PHP_FLOAT_EPSILON);
-        $this->assertNull($param->matchValue('notafloat'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('notafloat');
     }
 
     public function testInfileType(): void
     {
         $param = new Param('input', 'Input file name', ['i'], 'INFILE');
         $this->assertNotNull($param->matchValue('composer.json'));
-        $this->assertNull($param->matchValue('cat /etc/shadow'));
-        $this->assertNull($param->matchValue('/path/to/unreadable/file.txt'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('cat /etc/shadow');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('/path/to/unreadable/file.txt');
     }
 
     public function testIntArgType(): void
     {
         $param = new Param('age', 'User age', ['a'], 'INT');
         $this->assertSame(25, $param->matchValue('25'));
-        $this->assertNull($param->matchValue('notanint'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('notanint');
     }
 
     public function testIpAddrArgType(): void
     {
         $param = new Param('ip', 'IP address', ['i'], 'IP_ADDR');
         $this->assertSame('192.168.1.1', $param->matchValue('192.168.1.1'));
-        $this->assertNull($param->matchValue('notanip'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('notanip');
     }
 
     public function testMacAddrArgType(): void
     {
         $param = new Param('mac', 'MAC address', ['m'], 'MAC_ADDR');
         $this->assertSame('00:1A:2B:3C:4D:5E', $param->matchValue('00:1A:2B:3C:4D:5E'));
-        $this->assertNull($param->matchValue('notamac'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('notamac');
     }
 
     public function testOutfileType(): void
     {
         $param = new Param('output', 'Output file name', ['o'], 'OUTFILE');
         $this->assertNotNull($param->matchValue('var/file.txt'));
-        $this->assertNull($param->matchValue('/path/to/unwritable/directory/file.txt'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('/path/to/unwritable/directory/file.txt');
     }
 
     public function testStringArgType(): void
@@ -219,14 +253,18 @@ class OptionTest extends TestCase
         $this->assertSame('15:30:45', $param->matchValue('15:30:45'));
         $this->assertSame('15:30:00', $param->matchValue('3:30 PM'));
         $this->assertSame('00:00:00', $param->matchValue('midnight'));
-        $this->assertNull($param->matchValue('invalid-time'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('invalid-time');
     }
 
     public function testUrlArgType(): void
     {
         $param = new Param('website', 'Website URL', ['w'], 'URL');
         $this->assertSame('https://www.example.com', $param->matchValue('https://www.example.com'));
-        $this->assertNull($param->matchValue('invalid-url'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('invalid-url');
     }
 
     public function testUuidArgType(): void
@@ -244,9 +282,16 @@ class OptionTest extends TestCase
         );
 
         // Invalid UUIDs
-        $this->assertNull($param->matchValue('123e4567e89b12d3a45642661417400z')); // Invalid character 'z'
-        $this->assertNull($param->matchValue('123e4567e89b12d3a45642661417400'));  // Too short
-        $this->assertNull($param->matchValue('123e4567-e89b-12d3-a456-4266141740001')); // Too long
-        $this->assertNull($param->matchValue('not-a-uuid')); // Not a UUID format
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('123e4567e89b12d3a45642661417400z'); // Invalid character 'z'
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('123e4567e89b12d3a45642661417400');  // Too short
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('123e4567-e89b-12d3-a456-4266141740001'); // Too long
+
+        $this->expectException(\InvalidArgumentException::class);
+        $param->matchValue('not-a-uuid'); // Not a UUID format
     }
 }

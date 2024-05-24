@@ -258,11 +258,18 @@ class OptParser
                 }
 
                 $term = $this->optHandler->getOption($termName);
-                $matchedValue = $term->matchValue($inputValue);
-                if ($matchedValue !== null) {
+                try {
+                    $matchedValue = $term->matchValue($inputValue);
                     $optResult->setTerm($termName, $matchedValue);
-                } else {
-                    $optResult->addError(sprintf('Unable to match value of term "%s": "%s"', $termName, $inputValue));
+                } catch (\InvalidArgumentException $exception) {
+                    $optResult->addError(
+                        sprintf(
+                            'Term "%s" has invalid argument "%s": %s',
+                            $termName,
+                            $inputValue,
+                            $exception->getMessage()
+                        )
+                    );
                 }
             }
 
@@ -321,12 +328,17 @@ class OptParser
                     if ($savedValue === null) {
                         $optResult->addError('No value passed to param "' . $paramName . '"');
                     } else {
-                        $matchedValue = $param->matchValue($savedValue);
-                        if ($matchedValue !== null) {
+                        try {
+                            $matchedValue = $param->matchValue($savedValue);
                             $optResult->setParam($paramName, $matchedValue);
-                        } else {
+                        } catch (\InvalidArgumentException $exception) {
                             $optResult->addError(
-                                sprintf('Unable to match value of param "%s": "%s"', $paramName, $savedValue)
+                                sprintf(
+                                    'Param "%s" has invalid argument "%s": %s',
+                                    $paramName,
+                                    $savedValue,
+                                    $exception->getMessage()
+                                )
                             );
                         }
                     }
