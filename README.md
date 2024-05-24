@@ -192,7 +192,7 @@ Flags:
 This shows:
 
 -   Program name
--   Proram desc
+-   Proram description
 -   List of usages, including the always-available --help. Each usage is
     presented in order: command, terms, paramaters, and flags.
 -   Term types are marked with a colon and paramater types are marked with an
