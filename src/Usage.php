@@ -25,7 +25,7 @@ class Usage
      * @param OptHandler    $optHandler  The option handler instance
      * @param array<string> $optionNames Options of this usage
      *
-     * @throws OptParserException If multiple commands are defined
+     * @throws ValidationException If multiple commands are defined
      */
     public function __construct(
         protected OptHandler $optHandler,
@@ -34,7 +34,7 @@ class Usage
         foreach ($optionNames as $optionName) {
             $optionType = $this->optHandler->getOptionType($optionName);
             if ($optionType === 'command' && $this->options['command']) {
-                throw new OptParserException('Multiple commands defined');
+                throw new ValidationException('Multiple commands defined');
             }
 
             // Eliminate dupes.
@@ -53,7 +53,7 @@ class Usage
      *
      * @return list<string> The options of the specified type
      *
-     * @throws OptParserException If an invalid type is provided
+     * @throws ValidationException If an invalid type is provided
      */
     public function getOptions(string $optionType): array
     {
@@ -61,7 +61,7 @@ class Usage
             return $this->options[$optionType];
         }
 
-        throw new OptParserException('Invalid type: ' . $optionType);
+        throw new ValidationException('Invalid type: ' . $optionType);
     }
 
     /**

@@ -49,12 +49,12 @@ class OptParser
      *
      * @param list<string> $aliases
      *
-     * @throws OptParserException
+     * @throws ValidationException
      */
     public function addCommand(array $aliases, string $desc): self
     {
         if (count($this->usages) > 1) {
-            throw new OptParserException('Cannot add commands after usages');
+            throw new ValidationException('Cannot add commands after usages');
         }
 
         $this->optHandler->addCommand($aliases, $desc);
@@ -67,12 +67,12 @@ class OptParser
      *
      * @param list<string> $aliases
      *
-     * @throws OptParserException
+     * @throws ValidationException
      */
     public function addFlag(array $aliases, string $desc): self
     {
         if (count($this->usages) > 1) {
-            throw new OptParserException('Cannot add flags after usages');
+            throw new ValidationException('Cannot add flags after usages');
         }
 
         $this->optHandler->addFlag($aliases, $desc);
@@ -85,12 +85,12 @@ class OptParser
      *
      * @param list<string> $aliases
      *
-     * @throws OptParserException
+     * @throws ValidationException
      */
     public function addParam(array $aliases, string $type, string $desc, ?callable $callback = null): self
     {
         if (count($this->usages) > 1) {
-            throw new OptParserException('Cannot add params after usages');
+            throw new ValidationException('Cannot add params after usages');
         }
 
         $this->optHandler->addParam($aliases, $type, $desc, $callback);
@@ -101,12 +101,12 @@ class OptParser
     /**
      * A term is a positional argument.
      *
-     * @throws OptParserException
+     * @throws ValidationException
      */
     public function addTerm(string $name, string $type, string $desc, ?callable $callback = null): self
     {
         if (count($this->usages) > 1) {
-            throw new OptParserException('Cannot add terms after usages');
+            throw new ValidationException('Cannot add terms after usages');
         }
 
         $this->optHandler->addTerm($name, $type, $desc, $callback);
@@ -135,7 +135,7 @@ class OptParser
 
         // Multiple usages besides help must define a command.
         if (count($this->usages) > 2 && ! $this->allCommands) {
-            throw new OptParserException('Must define command for each usage');
+            throw new ValidationException('Must define command for each usage');
         }
 
         $this->usages[] = new Usage($this->optHandler, $optionNames);

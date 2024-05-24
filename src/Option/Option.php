@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser\Option;
 
-use DouglasGreen\OptParser\OptParserException;
+use DouglasGreen\OptParser\ValidationException;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -150,13 +150,13 @@ abstract class Option
     abstract public function write(): string;
 
     /**
-     * @throws OptParserException
+     * @throws ValidationException
      */
     protected function addAlias(string $alias): void
     {
         // Only matches lower case separated by hyphens
         if (preg_match('/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/', $alias) === 0) {
-            throw new OptParserException('Alias is not hyphenated lower case: ' . $alias);
+            throw new ValidationException('Alias is not hyphenated lower case: ' . $alias);
         }
 
         $this->aliases[] = $alias;
@@ -390,7 +390,7 @@ abstract class Option
     protected function checkType(string $argType): void
     {
         if (! in_array($argType, self::ARG_TYPES, true)) {
-            throw new OptParserException('Unsupported argument type: ' . $argType);
+            throw new ValidationException('Unsupported argument type: ' . $argType);
         }
     }
 

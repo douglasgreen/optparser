@@ -38,13 +38,13 @@ class ArgParser
      *
      * @param list<string> $args Command-line arguments
      *
-     * @throws OptParserException If no program name is provided
+     * @throws ValidationException If no program name is provided
      */
     public function __construct(array $args)
     {
         $programName = array_shift($args);
         if (! $programName) {
-            throw new OptParserException('No program name');
+            throw new ValidationException('No program name');
         }
 
         $this->programName = basename($programName);

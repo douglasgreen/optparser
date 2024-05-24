@@ -103,7 +103,7 @@ class OptHandler
     /**
      * Get the type of an option.
      *
-     * @throws OptParserException
+     * @throws ValidationException
      */
     public function getOptionType(string $name): string
     {
@@ -123,13 +123,13 @@ class OptHandler
             return 'flag';
         }
 
-        throw new OptParserException('Name not found');
+        throw new ValidationException('Name not found');
     }
 
     /**
      * Get an option by name.
      *
-     * @throws OptParserException
+     * @throws ValidationException
      */
     public function getOption(string $name): Option
     {
@@ -149,13 +149,13 @@ class OptHandler
             return $this->flags[$name];
         }
 
-        throw new OptParserException('Name not found');
+        throw new ValidationException('Name not found');
     }
 
     /**
      * Check if it has the option type.
      *
-     * @throws OptParserException
+     * @throws ValidationException
      */
     public function hasOptionType(string $type): bool
     {
@@ -164,7 +164,7 @@ class OptHandler
             'term' => $this->terms !== [],
             'param' => $this->params !== [],
             'flag' => $this->flags !== [],
-            default => throw new OptParserException('Type not found'),
+            default => throw new ValidationException('Type not found'),
         };
     }
 
@@ -207,12 +207,12 @@ class OptHandler
     /**
      * Check alias for uniqueness.
      *
-     * @throws OptParserException
+     * @throws ValidationException
      */
     protected function checkAlias(string $alias): void
     {
         if (isset($this->allAliases[$alias])) {
-            throw new OptParserException('Duplicate alias: ' . $alias);
+            throw new ValidationException('Duplicate alias: ' . $alias);
         }
 
         $this->allAliases[$alias] = true;
@@ -237,7 +237,7 @@ class OptHandler
         }
 
         if ($name === null) {
-            throw new OptParserException('Missing required long name');
+            throw new ValidationException('Missing required long name');
         }
 
         return [$name, $others];

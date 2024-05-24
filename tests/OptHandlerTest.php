@@ -6,7 +6,7 @@ namespace DouglasGreen\OptParser\Tests;
 
 use PHPUnit\Framework\TestCase;
 use DouglasGreen\OptParser\OptHandler;
-use DouglasGreen\OptParser\OptParserException;
+use DouglasGreen\OptParser\ValidationException;
 
 class OptHandlerTest extends TestCase
 {
@@ -95,7 +95,7 @@ class OptHandlerTest extends TestCase
 
     public function testDuplicateAliasException(): void
     {
-        $this->expectException(OptParserException::class);
+        $this->expectException(ValidationException::class);
 
         $optHandler = new OptHandler();
         $optHandler->addFlag(['verbose', 'v'], 'Enable verbose output');
@@ -104,7 +104,7 @@ class OptHandlerTest extends TestCase
 
     public function testInvalidOptionTypeException(): void
     {
-        $this->expectException(OptParserException::class);
+        $this->expectException(ValidationException::class);
 
         $optHandler = new OptHandler();
         $optHandler->getOptionType('nonexistent');

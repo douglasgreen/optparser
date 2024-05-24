@@ -9,7 +9,7 @@ use DouglasGreen\OptParser\Option\Command;
 use DouglasGreen\OptParser\Option\Term;
 use DouglasGreen\OptParser\Option\Param;
 use DouglasGreen\OptParser\Option\Flag;
-use DouglasGreen\OptParser\OptParserException;
+use DouglasGreen\OptParser\ValidationException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -56,7 +56,7 @@ class OptionTest extends TestCase
 
     public function testInvalidAlias(): void
     {
-        $this->expectException(OptParserException::class);
+        $this->expectException(ValidationException::class);
         new Command('invalid_command', 'Invalid Command', ['bad_alias']);
     }
 
@@ -77,7 +77,7 @@ class OptionTest extends TestCase
 
     public function testOptionInvalidType(): void
     {
-        $this->expectException(OptParserException::class);
+        $this->expectException(ValidationException::class);
         new Param('invalid', 'Invalid Param', ['i'], 'INVALID_TYPE');
     }
 
