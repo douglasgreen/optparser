@@ -202,11 +202,3 @@ This shows:
 ## Developer setup
 
 See [Setup Guide](docs/setup_guide.md) for steps to set up for development.
-
-## References
-
--   http://docopt.org/
--   https://github.com/nategood/commando
--   https://github.com/getopt-php/getopt-php
--   https://www.php.net/manual/en/function.getopt.php
--   https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
