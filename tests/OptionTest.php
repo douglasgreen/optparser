@@ -134,8 +134,11 @@ class OptionTest extends TestCase
         $param = new Param('fixed', 'Fixed', ['f'], 'FIXED');
         $this->assertSame('123.45', $param->matchValue('123.45'));
         $this->assertSame('-123.45', $param->matchValue('-123.45'));
+        $this->assertSame('+123.45', $param->matchValue('+123.45'));
         $this->assertSame('0.123', $param->matchValue('0.123'));
         $this->assertSame('123', $param->matchValue('123'));
+        $this->assertSame('123456789', $param->matchValue('123,456,789'));
+        $this->assertSame('123456789', $param->matchValue('123_456_789'));
         $this->assertNull($param->matchValue('123.45.67'));
         $this->assertNull($param->matchValue('invalid-number'));
     }

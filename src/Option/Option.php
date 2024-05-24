@@ -196,9 +196,8 @@ abstract class Option
 
     protected function castFixed(string $value): ?string
     {
-        // Adjust the regular expression based on the desired fixed-point format
-        if (preg_match('/^-?\d+(\.\d+)?$/', $value)) {
-            return $value;
+        if (preg_match('/^[+-]?\d+([,_]\d{3})*(\.\d+)?$/', $value)) {
+            return preg_replace('/[,_]/', '', $value);
         }
 
         return null;
