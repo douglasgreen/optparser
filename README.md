@@ -193,13 +193,13 @@ This shows:
 
 -   Program name
 -   Proram desc
--   List of usages, including the always-available --help. Each usage is broken
-    into sections just like file itself: command, terms, paramaters, and flags.
+-   List of usages, including the always-available --help. Each usage is
+    presented in order: command, terms, paramaters, and flags.
 -   Term types are marked with a colon and paramater types are marked with an
     equals sign which may be used in passing the argument. Type names are in all
     caps.
 -   Each section shows its aliases alternating by pipes with the primary name
-    first. Then it's followed by a description.
+    first, followed by a description.
 
 ## Developer setup
 
