@@ -167,7 +167,7 @@ Usage:
   sample_usage.php --help
   sample_usage.php add username:STRING email:STRING --password=STRING --role=STRING
   sample_usage.php delete username:STRING
-  sample_usage.php list --output=STRING --verbose
+  sample_usage.php list --output=OUTFILE --verbose
 
 Commands:
   add | a  Add a new user
