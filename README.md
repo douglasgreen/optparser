@@ -181,7 +181,7 @@ Terms:
 Parameters:
   --password | -p = STRING  Password for the user
   --role | -r = STRING  Role of the user
-  --output | -o = STRING  Output file for the list command
+  --output | -o = OUTFILE  Output file for the list command
 
 Flags:
   --help | -h  Display program help
