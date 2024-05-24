@@ -128,7 +128,7 @@ call `$input` as it represents user input.
 You can retrieve matched arguments from the user with `$input->get($name)`,
 where name was the option name. You can also retrieve arguments with as
 attributes with `$input->$name`. Camel case in the attribute names is mapped to
-kebab case in option names. For example, `$result->filePath` would map to the
+kebab case in option names. For example, `$input->filePath` would map to the
 `file-path` option name.
 
 ## Program interface
