@@ -12,6 +12,7 @@ use DouglasGreen\OptParser\Option\Flag;
 use DouglasGreen\OptParser\OptParserException;
 
 /**
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class OptionTest extends TestCase
@@ -105,6 +106,24 @@ class OptionTest extends TestCase
         $this->assertSame('2024-05-23 15:30:45', $param->matchValue('2024-05-23 15:30:45'));
         $this->assertSame('2024-05-23 15:30:45', $param->matchValue('May 23, 2024 15:30:45'));
         $this->assertSame('2024-05-23 15:30:45', $param->matchValue('23rd May 2024 15:30:45'));
+        $this->assertNull($param->matchValue('invalid-datetime'));
+    }
+
+    public function testDateIntervalArgType(): void
+    {
+        $param = new Param('interval', 'Interval', ['i'], 'INTERVAL');
+        $this->assertSame('1 year', $param->matchValue('365 days'));
+        $this->assertSame('1 year', $param->matchValue('1 year'));
+        $this->assertSame('2 years', $param->matchValue('2 years'));
+        $this->assertSame('1 month, 1 day', $param->matchValue('1 month'));
+        $this->assertSame('2 months, 1 day', $param->matchValue('2 months'));
+        $this->assertSame('1 day', $param->matchValue('24 hours'));
+        $this->assertSame('2 days', $param->matchValue('2 days'));
+        $this->assertSame('1 hour', $param->matchValue('60 minutes'));
+        $this->assertSame('2 hours', $param->matchValue('2 hours'));
+        $this->assertSame('1 minute', $param->matchValue('60 seconds'));
+        $this->assertSame('2 minutes', $param->matchValue('2 minutes'));
+        $this->assertSame('10 minutes', $param->matchValue('600 seconds'));
         $this->assertNull($param->matchValue('invalid-datetime'));
     }
 

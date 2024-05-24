@@ -84,6 +84,7 @@ custom types were added. Permitted types include:
 -   `FIXED` - Valid fixed-point value
 -   `FLOAT` - Valid floating-point value, allowing commas and scientific
 -   `INFILE` - Readable file path
+-   `INTERVAL` - Valid DateInterval string description
 -   `INT` - Valid integer value, allowing octal and hex notations
 -   `IP_ADDR` - Valid IP address
 -   `MAC_ADDR` - Valid MAC address

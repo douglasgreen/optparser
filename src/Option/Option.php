@@ -20,6 +20,7 @@ abstract class Option
      * - DIR - directory that must exist and be readable
      * - FIXED - fixed-point number
      * - INFILE - input file that must exist and be readable
+     * - INTERVAL - time interval
      * - OUTFILE - output file that must not exist and be writable
      * - TIME - time in HH:MM:SS format
      * - UUID - UUID with or without hyphens
@@ -36,6 +37,7 @@ abstract class Option
         'FIXED',
         'FLOAT',
         'INFILE',
+        'INTERVAL',
         'INT',
         'IP_ADDR',
         'MAC_ADDR',
@@ -121,6 +123,7 @@ abstract class Option
             'FLOAT' => $this->castFloat($value),
             'INFILE' => $this->checkInputFile($value),
             'INT' => $this->castInt($value),
+            'INTERVAL' => $this->castDateInterval($value),
             'IP_ADDR' => $this->castIpAddress($value),
             'MAC_ADDR' => $this->castMacAddress($value),
             'OUTFILE' => $this->checkOutputFile($value),
@@ -172,6 +175,74 @@ abstract class Option
         }
 
         return null;
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    protected function castDateInterval(string $input): ?string
+    {
+        try {
+            $interval = \DateInterval::createFromDateString($input);
+        } catch (\DateMalformedIntervalStringException) {
+            return null;
+        }
+
+        if ($interval === false) {
+            return null;
+        }
+
+        $formatted = [];
+
+        // Convert DateInterval to total seconds
+        $start = new \DateTimeImmutable();
+        $end = $start->add($interval);
+        $seconds = $end->getTimestamp() - $start->getTimestamp();
+
+        // Break down the total seconds into years, months, days, hours, and minutes
+        $years = (int) floor($seconds / (365 * 24 * 60 * 60));
+        $seconds -= $years * (365 * 24 * 60 * 60);
+
+        $months = (int) floor($seconds / (30 * 24 * 60 * 60));
+        $seconds -= $months * (30 * 24 * 60 * 60);
+
+        $days = (int) floor($seconds / (24 * 60 * 60));
+        $seconds -= $days * (24 * 60 * 60);
+
+        $hours = (int) floor($seconds / (60 * 60));
+        $seconds -= $hours * (60 * 60);
+
+        $minutes = (int) floor($seconds / 60);
+        $seconds -= $minutes * 60;
+
+        $formatted = [];
+
+        if ($years !== 0) {
+            $formatted[] = $years . ' year' . ($years > 1 ? 's' : '');
+        }
+
+        if ($months !== 0) {
+            $formatted[] = $months . ' month' . ($months > 1 ? 's' : '');
+        }
+
+        if ($days !== 0) {
+            $formatted[] = $days . ' day' . ($days > 1 ? 's' : '');
+        }
+
+        if ($hours !== 0) {
+            $formatted[] = $hours . ' hour' . ($hours > 1 ? 's' : '');
+        }
+
+        if ($minutes !== 0) {
+            $formatted[] = $minutes . ' minute' . ($minutes > 1 ? 's' : '');
+        }
+
+        if ($seconds !== 0) {
+            $formatted[] = $seconds . ' second' . ($seconds > 1 ? 's' : '');
+        }
+
+        return $formatted === [] ? '0 seconds' : implode(', ', $formatted);
     }
 
     protected function castDatetime(string $value): ?string
