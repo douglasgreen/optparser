@@ -201,6 +201,28 @@ This shows:
 -   Each section shows its aliases alternating by pipes with the primary name
     first, followed by a description.
 
+## Frequently Asked Questions
+
+### Why use OptParser instead of getopt()?
+
+OptParser supports positional arguments, does error checking, and prints a
+well-formatted help message. `getopt()` doesn't do these things.
+
+### What option type should I use?
+
+Commands are just there to distinguish between usages. If you have two or three
+arguments of different type that you won't confuse, then you can make them
+terms. But mostly you should give options names like parameters, which take an
+argument, and flags, which don't. Named options are harder to confuse.
+
+### What's the difference between addUsage() and addUsageAll()?
+
+`OptParser::addUsageAll()` is for the simple case when you only have one usage.
+Call this function to add all terms, parameters, and flags without having to
+repeat their names. `OptParser::addUsage()` is for the case when you have
+multiple commands. Call this function to add each command with its associated
+terms, parameters, and flags by name.
+
 ## Developer setup
 
 See [Setup Guide](docs/setup_guide.md) for steps to set up for development.
