@@ -11,14 +11,14 @@ class ArgParserTest extends TestCase
 {
     public function testGetMarkedOptions(): void
     {
-        $argv = ['script.php', 'file', '-a', '-b', 'arg1', '--foo=bar', '--baz-fez', 'arg2', '--', 'non1', 'non2'];
+        $argv = ['script.php', 'file', '-1', '-a', '-b', 'arg1', '--foo=bar', '--baz-fez', '-2', '--', 'non1', 'non2'];
         $argParser = new ArgParser($argv);
 
         $expected = [
             'a' => '',
             'b' => 'arg1',
             'foo' => 'bar',
-            'baz-fez' => 'arg2',
+            'baz-fez' => '-2',
         ];
 
         $this->assertSame($expected, $argParser->getMarkedOptions());
@@ -26,7 +26,7 @@ class ArgParserTest extends TestCase
 
     public function testGetNonOptions(): void
     {
-        $argv = ['script.php', 'file', '-a', '-b', 'arg1', '--foo=bar', '--baz-fez', 'arg2', '--', 'non1', 'non2'];
+        $argv = ['script.php', 'file', '-1', '-a', '-b', 'arg1', '--foo=bar', '--baz-fez', '-2', '--', 'non1', 'non2'];
         $argParser = new ArgParser($argv);
 
         $expected = ['non1', 'non2'];
@@ -36,10 +36,10 @@ class ArgParserTest extends TestCase
 
     public function testGetUnmarkedOptions(): void
     {
-        $argv = ['script.php', 'file', '-a', '-b', 'arg1', '--foo=bar', '--baz-fez', 'arg2', '--', 'non1', 'non2'];
+        $argv = ['script.php', 'file', '-1', '-a', '-b', 'arg1', '--foo=bar', '--baz-fez', '-2', '--', 'non1', 'non2'];
         $argParser = new ArgParser($argv);
 
-        $expected = ['file'];
+        $expected = ['file', '-1'];
 
         $this->assertSame($expected, $argParser->getUnmarkedOptions());
     }

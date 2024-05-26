@@ -51,7 +51,7 @@ class ArgParser
         [$options, $this->nonOptions] = $this->splitArrayAroundDash($args);
         $options = $this->joinArguments($options);
         foreach ($options as $option) {
-            if (preg_match('/^--?(\w+(-\w+)*)(=(.*))?/', $option, $match)) {
+            if (preg_match('/^--?([a-z]\w*(-[a-z]\w*)*)(=(.*))?/', $option, $match)) {
                 $name = $match[1];
                 $arg = $match[4] ?? '';
                 $this->markedOptions[$name] = $arg;
@@ -140,16 +140,16 @@ class ArgParser
         $length = count($array);
         while ($index < $length) {
             $value = $array[$index];
-            if (preg_match('/^-(\w{2,})/', $value, $match)) {
+            if (preg_match('/^-([a-z]{2,})/', $value, $match)) {
                 // Split up -abc into -a -b -c.
                 $chars = str_split($match[1]);
                 foreach ($chars as $char) {
                     $newArray[] = '-' . $char;
                 }
             } elseif (
-                preg_match('/^(-\w|--\w+(-\w+)*)\b/', $value)
+                preg_match('/^(-[a-z]|--[a-z]\w*(-[a-z]\w*)*)\b/', $value)
                 && isset($array[$index + 1])
-                && preg_match('/^-/', $array[$index + 1]) === 0
+                && preg_match('/^--?[a-z]/', $array[$index + 1]) === 0
             ) {
                 // Join parameter with argument by =.
                 $value .= '=' . $array[++$index];
