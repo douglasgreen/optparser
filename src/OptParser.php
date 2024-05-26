@@ -180,7 +180,7 @@ class OptParser
         }
 
         $message .= "\n";
-        $message .= 'Program terminating. Run again with -h for help.';
+        $message .= 'Program terminating. Run again with --help for help.';
         error_log($message);
         if (! $this->debugMode) {
             exit;
