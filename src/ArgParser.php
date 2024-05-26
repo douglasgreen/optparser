@@ -51,9 +51,9 @@ class ArgParser
         [$options, $this->nonOptions] = $this->splitArrayAroundDash($args);
         $options = $this->joinArguments($options);
         foreach ($options as $option) {
-            if (preg_match('/^--?(\w+)(=(.*))?/', $option, $match)) {
+            if (preg_match('/^--?(\w+(-\w+)*)(=(.*))?/', $option, $match)) {
                 $name = $match[1];
-                $arg = $match[3] ?? '';
+                $arg = $match[4] ?? '';
                 $this->markedOptions[$name] = $arg;
             } else {
                 $this->unmarkedOptions[] = $option;
@@ -147,7 +147,7 @@ class ArgParser
                     $newArray[] = '-' . $char;
                 }
             } elseif (
-                preg_match('/^(-\w|--\w+)\b/', $value)
+                preg_match('/^(-\w|--\w+(-\w+)*)\b/', $value)
                 && isset($array[$index + 1])
                 && preg_match('/^-/', $array[$index + 1]) === 0
             ) {
