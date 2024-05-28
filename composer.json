@@ -31,6 +31,9 @@
         }
     ],
     "autoload": {
+        "files": [
+            "src/Exceptions.php"
+        ],
         "psr-4": {
             "DouglasGreen\\OptParser\\": "src/",
             "DouglasGreen\\OptParser\\Tests\\": "tests/"
