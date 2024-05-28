@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
+use DouglasGreen\OptParser\Exceptions\BadArgumentException;
+use DouglasGreen\OptParser\Exceptions\ValueException;
+
 /**
  * Define a program with a series of usage options.
  *
@@ -49,12 +52,12 @@ class OptParser
      *
      * @param list<string> $aliases
      *
-     * @throws ValidationException
+     * @throws ValueException
      */
     public function addCommand(array $aliases, string $desc): self
     {
         if (count($this->usages) > 1) {
-            throw new ValidationException('Cannot add commands after usages');
+            throw new ValueException('Cannot add commands after usages');
         }
 
         $this->optHandler->addCommand($aliases, $desc);
@@ -67,12 +70,12 @@ class OptParser
      *
      * @param list<string> $aliases
      *
-     * @throws ValidationException
+     * @throws ValueException
      */
     public function addFlag(array $aliases, string $desc): self
     {
         if (count($this->usages) > 1) {
-            throw new ValidationException('Cannot add flags after usages');
+            throw new ValueException('Cannot add flags after usages');
         }
 
         $this->optHandler->addFlag($aliases, $desc);
@@ -85,12 +88,12 @@ class OptParser
      *
      * @param list<string> $aliases
      *
-     * @throws ValidationException
+     * @throws ValueException
      */
     public function addParam(array $aliases, string $type, string $desc, ?callable $callback = null): self
     {
         if (count($this->usages) > 1) {
-            throw new ValidationException('Cannot add params after usages');
+            throw new ValueException('Cannot add params after usages');
         }
 
         $this->optHandler->addParam($aliases, $type, $desc, $callback);
@@ -101,12 +104,12 @@ class OptParser
     /**
      * A term is a positional argument.
      *
-     * @throws ValidationException
+     * @throws ValueException
      */
     public function addTerm(string $name, string $type, string $desc, ?callable $callback = null): self
     {
         if (count($this->usages) > 1) {
-            throw new ValidationException('Cannot add terms after usages');
+            throw new ValueException('Cannot add terms after usages');
         }
 
         $this->optHandler->addTerm($name, $type, $desc, $callback);
@@ -118,6 +121,8 @@ class OptParser
      * Add a usage to the command by name.
      *
      * @param list<string> $optionNames
+     *
+     * @throws ValueException
      */
     public function addUsage(array $optionNames): self
     {
@@ -135,7 +140,7 @@ class OptParser
 
         // Multiple usages besides help must define a command.
         if (count($this->usages) > 2 && ! $this->allCommands) {
-            throw new ValidationException('Must define command for each usage');
+            throw new ValueException('Must define command for each usage');
         }
 
         $this->usages[] = new Usage($this->optHandler, $optionNames);
@@ -261,7 +266,7 @@ class OptParser
                 try {
                     $matchedValue = $term->matchValue($inputValue);
                     $optResult->setTerm($termName, $matchedValue);
-                } catch (\InvalidArgumentException $exception) {
+                } catch (BadArgumentException $exception) {
                     $optResult->addError(
                         sprintf(
                             'Term "%s" has invalid argument "%s": %s',
@@ -331,7 +336,7 @@ class OptParser
                         try {
                             $matchedValue = $param->matchValue($savedValue);
                             $optResult->setParam($paramName, $matchedValue);
-                        } catch (\InvalidArgumentException $exception) {
+                        } catch (BadArgumentException $exception) {
                             $optResult->addError(
                                 sprintf(
                                     'Param "%s" has invalid argument "%s": %s',

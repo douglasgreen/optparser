@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
+use DouglasGreen\OptParser\Exceptions\ValueException;
 use DouglasGreen\OptParser\Option\Command;
 use DouglasGreen\OptParser\Option\Flag;
 use DouglasGreen\OptParser\Option\Option;
@@ -103,7 +104,7 @@ class OptHandler
     /**
      * Get the type of an option.
      *
-     * @throws ValidationException
+     * @throws ValueException
      */
     public function getOptionType(string $name): string
     {
@@ -123,13 +124,13 @@ class OptHandler
             return 'flag';
         }
 
-        throw new ValidationException('Name not found');
+        throw new ValueException('Name not found');
     }
 
     /**
      * Get an option by name.
      *
-     * @throws ValidationException
+     * @throws ValueException
      */
     public function getOption(string $name): Option
     {
@@ -149,13 +150,13 @@ class OptHandler
             return $this->flags[$name];
         }
 
-        throw new ValidationException('Name not found');
+        throw new ValueException('Name not found');
     }
 
     /**
      * Check if it has the option type.
      *
-     * @throws ValidationException
+     * @throws ValueException
      */
     public function hasOptionType(string $type): bool
     {
@@ -164,7 +165,7 @@ class OptHandler
             'term' => $this->terms !== [],
             'param' => $this->params !== [],
             'flag' => $this->flags !== [],
-            default => throw new ValidationException('Type not found'),
+            default => throw new ValueException('Type not found'),
         };
     }
 
@@ -207,12 +208,12 @@ class OptHandler
     /**
      * Check alias for uniqueness.
      *
-     * @throws ValidationException
+     * @throws ValueException
      */
     protected function checkAlias(string $alias): void
     {
         if (isset($this->allAliases[$alias])) {
-            throw new ValidationException('Duplicate alias: ' . $alias);
+            throw new ValueException('Duplicate alias: ' . $alias);
         }
 
         $this->allAliases[$alias] = true;
@@ -222,6 +223,8 @@ class OptHandler
      * @param list<string> $aliases
      *
      * @return array{string, list<string>}
+     *
+     * @throws ValueException
      */
     protected function pickName(array $aliases): array
     {
@@ -237,7 +240,7 @@ class OptHandler
         }
 
         if ($name === null) {
-            throw new ValidationException('Missing required long name');
+            throw new ValueException('Missing required long name');
         }
 
         return [$name, $others];

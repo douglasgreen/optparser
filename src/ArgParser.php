@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
+use DouglasGreen\OptParser\Exceptions\ValueException;
+
 /**
  * Parse command-line arguments from $args.
  *
@@ -38,13 +40,13 @@ class ArgParser
      *
      * @param list<string> $args Command-line arguments
      *
-     * @throws ValidationException If no program name is provided
+     * @throws ValueException If no program name is provided
      */
     public function __construct(array $args)
     {
         $programName = array_shift($args);
-        if (! $programName) {
-            throw new ValidationException('No program name');
+        if ($programName === null) {
+            throw new ValueException('No program name');
         }
 
         $this->programName = basename($programName);

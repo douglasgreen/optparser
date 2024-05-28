@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
+use DouglasGreen\OptParser\Exceptions\ValueException;
+
 /**
  * Define a usage with a series of options.
  */
@@ -25,7 +27,7 @@ class Usage
      * @param OptHandler    $optHandler  The option handler instance
      * @param array<string> $optionNames Options of this usage
      *
-     * @throws ValidationException If multiple commands are defined
+     * @throws ValueException If multiple commands are defined
      */
     public function __construct(
         protected OptHandler $optHandler,
@@ -34,7 +36,7 @@ class Usage
         foreach ($optionNames as $optionName) {
             $optionType = $this->optHandler->getOptionType($optionName);
             if ($optionType === 'command' && $this->options['command']) {
-                throw new ValidationException('Multiple commands defined');
+                throw new ValueException('Multiple commands defined');
             }
 
             // Eliminate dupes.
@@ -53,7 +55,7 @@ class Usage
      *
      * @return list<string> The options of the specified type
      *
-     * @throws ValidationException If an invalid type is provided
+     * @throws ValueException If an invalid type is provided
      */
     public function getOptions(string $optionType): array
     {
@@ -61,7 +63,7 @@ class Usage
             return $this->options[$optionType];
         }
 
-        throw new ValidationException('Invalid type: ' . $optionType);
+        throw new ValueException('Invalid type: ' . $optionType);
     }
 
     /**

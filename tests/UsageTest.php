@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace DouglasGreen\OptParser\Tests;
 
 use PHPUnit\Framework\TestCase;
+use DouglasGreen\OptParser\Exceptions\ValueException;
 use DouglasGreen\OptParser\OptHandler;
 use DouglasGreen\OptParser\Usage;
-use DouglasGreen\OptParser\ValidationException;
 
 class UsageTest extends TestCase
 {
@@ -45,7 +45,7 @@ class UsageTest extends TestCase
 
     public function testGetOptionsInvalidType(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(ValueException::class);
 
         $usage = new Usage($this->optHandler, ['add', 'username', 'password', 'verbose']);
         $usage->getOptions('invalid_type');
@@ -67,7 +67,7 @@ class UsageTest extends TestCase
 
     public function testMultipleCommandsException(): void
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(ValueException::class);
 
         new Usage($this->optHandler, ['add', 'delete']);
     }
