@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DouglasGreen\OptParser\Exceptions;
+namespace DouglasGreen\Exceptions;
 
 /**
  * Base class for program exceptions
@@ -15,14 +15,6 @@ abstract class BaseException extends \Exception {}
  * Used for general issues related to data handling.
  */
 class DataException extends BaseException {}
-
-/**
- * Thrown for JSON-related errors
- * Example: Malformed JSON input, failed JSON encoding/decoding.
- *
- * @see https://www.php.net/manual/en/ref.json.php
- */
-class JsonException extends DataException {}
 
 /**
  * Thrown when input has the wrong data type

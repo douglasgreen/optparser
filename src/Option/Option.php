@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser\Option;
 
-use DouglasGreen\OptParser\Exceptions\BadArgumentException;
-use DouglasGreen\OptParser\Exceptions\TypeException;
-use DouglasGreen\OptParser\Exceptions\ValueException;
+use DouglasGreen\Exceptions\BadArgumentException;
+use DouglasGreen\Exceptions\TypeException;
+use DouglasGreen\Exceptions\ValueException;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

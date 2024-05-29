@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use DouglasGreen\OptParser\Exceptions\BadArgumentException;
+use DouglasGreen\Exceptions\BadArgumentException;
 use DouglasGreen\OptParser\OptParser;
 
 require_once __DIR__ . '/../vendor/autoload.php';

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
-use DouglasGreen\OptParser\Exceptions\ValueException;
+use DouglasGreen\Exceptions\ValueException;
 
 /**
  * Define a usage with a series of options.

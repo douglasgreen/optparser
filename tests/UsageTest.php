@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DouglasGreen\OptParser\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DouglasGreen\OptParser\Exceptions\ValueException;
+use DouglasGreen\Exceptions\ValueException;
 use DouglasGreen\OptParser\OptHandler;
 use DouglasGreen\OptParser\Usage;
 

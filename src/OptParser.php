@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
-use DouglasGreen\OptParser\Exceptions\BadArgumentException;
-use DouglasGreen\OptParser\Exceptions\ValueException;
+use DouglasGreen\Exceptions\BadArgumentException;
+use DouglasGreen\Exceptions\ValueException;
 
 /**
  * Define a program with a series of usage options.

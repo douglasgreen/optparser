@@ -2,6 +2,16 @@
     "name": "douglasgreen/optparser",
     "description": "Parser for command-line options in PHP programs",
     "license": "MIT",
+    "type": "library",
+    "homepage": "https://github.com/douglasgreen/optparser",
+    "authors": [
+        {
+            "name": "Douglas Green",
+            "email": "douglas@nurd.site",
+            "homepage": "https://nurd.site/",
+            "role": "Developer"
+        }
+    ],
     "keywords": [
         "automation",
         "cli",
@@ -20,15 +30,6 @@
         "php scripting",
         "scripting",
         "terminal"
-    ],
-    "homepage": "https://github.com/douglasgreen/optparser",
-    "authors": [
-        {
-            "name": "Douglas Green",
-            "email": "douglas@nurd.site",
-            "homepage": "https://nurd.site/",
-            "role": "Developer"
-        }
     ],
     "autoload": {
         "files": [

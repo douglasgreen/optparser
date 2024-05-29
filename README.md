@@ -71,9 +71,8 @@ only has a name, not aliases.
 ## Argument types
 
 Most of the list of permitted argument types was taken from the list of
-[PHP validation
-filters](https://www.php.net/manual/en/filter.filters.validate.php). Some
-custom types were added. Permitted types include:
+[PHP validation filters](https://www.php.net/manual/en/filter.filters.validate.php).
+Some custom types were added. Permitted types include:
 
 -   `BOOL` - Valid Boolean value (true for "1", "true", "on", and "yes")
 -   `DATE` - Valid date value
@@ -105,9 +104,8 @@ termination on failure to validate.
 You can define your own filter callback as the last argument of
 `OptParser::addParam()` and `OptParser::addTerm()` also. The filter can do
 custom validation. If validation succeeds, you can return the original value or
-a filtered version of it. If validation fails, throw a
-`BadArgumentException` with a descriptive error message, and the program
-will error and terminate.
+a filtered version of it. If validation fails, throw a `BadArgumentException`
+with a descriptive error message, and the program will error and terminate.
 
 ## Formatting
 
@@ -117,7 +115,7 @@ a combined flag can't take arguments.
 A space or equal sign must separate every flag or parameter from its argument.
 
 The argument list can be terminated by `--`, which can be followed by
-non-options.  The program ignores non-options but returns them with the matched
+non-options. The program ignores non-options but returns them with the matched
 usage. You can retrieve them using `OptResult::getNonoptions()`.
 
 ## Fetching results
