@@ -82,6 +82,6 @@ class Usage
             }
         }
 
-        return $output . "\n";
+        return $output . PHP_EOL;
     }
 }

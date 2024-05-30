@@ -179,12 +179,12 @@ class OptParser
             $message .= ' for command "' . $command . '"';
         }
 
-        $message .= ":\n";
+        $message .= ':' . PHP_EOL;
         foreach ($errors as $error) {
             $message .= sprintf('* %s%s', $error, PHP_EOL);
         }
 
-        $message .= "\n";
+        $message .= PHP_EOL;
         $message .= 'Program terminating. Run again with --help for help.';
         error_log($message);
         if (! $this->debugMode) {
@@ -378,15 +378,15 @@ class OptParser
      */
     protected function printHelp(): void
     {
-        echo $this->name . "\n\n";
-        echo wordwrap($this->desc) . "\n\n";
-        echo "Usage:\n";
+        echo $this->name . PHP_EOL . PHP_EOL;
+        echo wordwrap($this->desc) . PHP_EOL . PHP_EOL;
+        echo 'Usage:' . PHP_EOL;
         $programName = $this->argParser->getProgramName();
         foreach ($this->usages as $usage) {
             echo $usage->write($programName);
         }
 
-        echo "\n";
+        echo PHP_EOL;
 
         echo $this->optHandler->writeOptionBlock();
         if (! $this->debugMode) {

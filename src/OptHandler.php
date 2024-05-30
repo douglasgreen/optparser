@@ -248,7 +248,7 @@ class OptHandler
 
     protected function writeCommandBlock(): string
     {
-        $output = "Commands:\n";
+        $output = 'Commands:' . PHP_EOL;
         foreach ($this->commands as $name => $command) {
             $output .= '  ' . $name;
             $aliases = $command->getAliases();
@@ -258,15 +258,15 @@ class OptHandler
                 }
             }
 
-            $output .= '  ' . $command->getDesc() . "\n";
+            $output .= '  ' . $command->getDesc() . PHP_EOL;
         }
 
-        return $output . "\n";
+        return $output . PHP_EOL;
     }
 
     protected function writeFlagBlock(): string
     {
-        $output = "Flags:\n";
+        $output = 'Flags:' . PHP_EOL;
         foreach ($this->flags as $name => $flag) {
             $output .= '  ';
             $output .= $flag->hyphenate($name);
@@ -278,15 +278,15 @@ class OptHandler
                 }
             }
 
-            $output .= '  ' . $flag->getDesc() . "\n";
+            $output .= '  ' . $flag->getDesc() . PHP_EOL;
         }
 
-        return $output . "\n";
+        return $output . PHP_EOL;
     }
 
     protected function writeParamBlock(): string
     {
-        $output = "Parameters:\n";
+        $output = 'Parameters:' . PHP_EOL;
         foreach ($this->params as $name => $param) {
             $output .= '  ';
             $output .= $param->hyphenate($name);
@@ -299,19 +299,19 @@ class OptHandler
             }
 
             $output .= ' = ' . $param->getArgType();
-            $output .= '  ' . $param->getDesc() . "\n";
+            $output .= '  ' . $param->getDesc() . PHP_EOL;
         }
 
-        return $output . "\n";
+        return $output . PHP_EOL;
     }
 
     protected function writeTermBlock(): string
     {
-        $output = "Terms:\n";
+        $output = 'Terms:' . PHP_EOL;
         foreach ($this->terms as $name => $term) {
-            $output .= sprintf('  %s: ', $name) . $term->getArgType() . '  ' . $term->getDesc() . "\n";
+            $output .= sprintf('  %s: ', $name) . $term->getArgType() . '  ' . $term->getDesc() . PHP_EOL;
         }
 
-        return $output . "\n";
+        return $output . PHP_EOL;
     }
 }
