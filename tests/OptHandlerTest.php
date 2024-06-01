@@ -59,6 +59,15 @@ class OptHandlerTest extends TestCase
         $this->assertSame('STRING', $term->getArgType());
     }
 
+    public function testDuplicateAliasException(): void
+    {
+        $this->expectException(ValueException::class);
+
+        $optHandler = new OptHandler();
+        $optHandler->addFlag(['verbose', 'v'], 'Enable verbose output');
+        $optHandler->addFlag(['verbose', 'v'], 'Another verbose flag');
+    }
+
     public function testGetOptionType(): void
     {
         $optHandler = new OptHandler();
@@ -71,6 +80,14 @@ class OptHandlerTest extends TestCase
         $this->assertSame('flag', $optHandler->getOptionType('verbose'));
         $this->assertSame('param', $optHandler->getOptionType('password'));
         $this->assertSame('term', $optHandler->getOptionType('username'));
+    }
+
+    public function testInvalidOptionTypeException(): void
+    {
+        $this->expectException(ValueException::class);
+
+        $optHandler = new OptHandler();
+        $optHandler->getOptionType('nonexistent');
     }
 
     public function testWriteOptionBlock(): void
@@ -91,22 +108,5 @@ class OptHandlerTest extends TestCase
         $this->assertStringContainsString('--password | -p = STRING', $output);
         $this->assertStringContainsString('Terms:', $output);
         $this->assertStringContainsString('username: STRING', $output);
-    }
-
-    public function testDuplicateAliasException(): void
-    {
-        $this->expectException(ValueException::class);
-
-        $optHandler = new OptHandler();
-        $optHandler->addFlag(['verbose', 'v'], 'Enable verbose output');
-        $optHandler->addFlag(['verbose', 'v'], 'Another verbose flag');
-    }
-
-    public function testInvalidOptionTypeException(): void
-    {
-        $this->expectException(ValueException::class);
-
-        $optHandler = new OptHandler();
-        $optHandler->getOptionType('nonexistent');
     }
 }

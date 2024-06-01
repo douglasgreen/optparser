@@ -16,24 +16,24 @@ use DouglasGreen\Exceptions\ValueException;
 class ArgParser
 {
     /**
-     * @var list<string> Non-option arguments
-     */
-    protected $nonOptions = [];
-
-    /**
      * @var array<string, string> Marked options (options with leading dash)
      */
-    protected $markedOptions = [];
+    protected array $markedOptions = [];
+
+    /**
+     * @var list<string> Non-option arguments
+     */
+    protected array $nonOptions = [];
+
+    /**
+     * @var list<string> Unmarked options (options without leading dash)
+     */
+    protected array $unmarkedOptions = [];
 
     /**
      * @var string Program name
      */
     protected string $programName;
-
-    /**
-     * @var list<string> Unmarked options (options without leading dash)
-     */
-    protected $unmarkedOptions = [];
 
     /**
      * Constructor.
@@ -104,31 +104,6 @@ class ArgParser
     }
 
     /**
-     * Split an array into two parts around the '--' separator.
-     *
-     * @param list<string> $array Input array
-     *
-     * @return array{list<string>, list<string>} Array with elements before '--' and after '--'
-     */
-    protected function splitArrayAroundDash(array $array): array
-    {
-        // Find the index of '--'
-        $dashIndex = array_search('--', $array, true);
-
-        // Check if '--' was found
-        if ($dashIndex === false) {
-            // '--' is not in the array, return the whole array and an empty array
-            return [$array, []];
-        }
-
-        // Split the array into two subarrays
-        $before = array_slice($array, 0, $dashIndex);
-        $after = array_slice($array, $dashIndex + 1);
-
-        return [$before, $after];
-    }
-
-    /**
      * Join option names with their arguments using '='.
      *
      * @param list<string> $array Input array of options and arguments
@@ -164,5 +139,30 @@ class ArgParser
         }
 
         return $newArray;
+    }
+
+    /**
+     * Split an array into two parts around the '--' separator.
+     *
+     * @param list<string> $array Input array
+     *
+     * @return array{list<string>, list<string>} Array with elements before '--' and after '--'
+     */
+    protected function splitArrayAroundDash(array $array): array
+    {
+        // Find the index of '--'
+        $dashIndex = array_search('--', $array, true);
+
+        // Check if '--' was found
+        if ($dashIndex === false) {
+            // '--' is not in the array, return the whole array and an empty array
+            return [$array, []];
+        }
+
+        // Split the array into two subarrays
+        $before = array_slice($array, 0, $dashIndex);
+        $after = array_slice($array, $dashIndex + 1);
+
+        return [$before, $after];
     }
 }

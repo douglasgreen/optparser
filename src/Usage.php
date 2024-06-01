@@ -14,7 +14,7 @@ class Usage
     /**
      * @var array<string, list<string>>
      */
-    protected $options = [
+    protected array $options = [
         'command' => [],
         'term' => [],
         'param' => [],

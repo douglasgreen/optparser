@@ -11,21 +11,23 @@ use DouglasGreen\OptParser\Usage;
 
 class UsageTest extends TestCase
 {
-    private OptHandler $optHandler;
-
-    protected function setUp(): void
-    {
-        $this->optHandler = new OptHandler();
-        $this->optHandler->addCommand(['add', 'a'], 'Add a new user');
-        $this->optHandler->addTerm('username', 'STRING', 'Username of the user');
-        $this->optHandler->addParam(['password', 'p'], 'STRING', 'Password for the user');
-        $this->optHandler->addFlag(['verbose', 'v'], 'Enable verbose output');
-    }
+    protected OptHandler $optHandler;
 
     public function testCreateUsage(): void
     {
         $usage = new Usage($this->optHandler, ['add', 'username', 'password', 'verbose']);
         $this->assertInstanceOf(Usage::class, $usage);
+    }
+
+    public function testDuplicateOptionsEliminated(): void
+    {
+        $usage = new Usage($this->optHandler, ['add', 'username', 'username', 'password', 'verbose', 'verbose']);
+
+        $terms = $usage->getOptions('term');
+        $this->assertCount(1, $terms); // 'username' should only appear once
+
+        $flags = $usage->getOptions('flag');
+        $this->assertCount(1, $flags); // 'verbose' should only appear once
     }
 
     public function testGetOptions(): void
@@ -51,6 +53,13 @@ class UsageTest extends TestCase
         $usage->getOptions('invalid_type');
     }
 
+    public function testMultipleCommandsException(): void
+    {
+        $this->expectException(ValueException::class);
+
+        new Usage($this->optHandler, ['add', 'delete']);
+    }
+
     public function testWriteUsage(): void
     {
         $usage = new Usage($this->optHandler, ['add', 'username', 'password', 'verbose']);
@@ -65,21 +74,12 @@ class UsageTest extends TestCase
         $this->assertStringContainsString('--verbose', $output);
     }
 
-    public function testMultipleCommandsException(): void
+    protected function setUp(): void
     {
-        $this->expectException(ValueException::class);
-
-        new Usage($this->optHandler, ['add', 'delete']);
-    }
-
-    public function testDuplicateOptionsEliminated(): void
-    {
-        $usage = new Usage($this->optHandler, ['add', 'username', 'username', 'password', 'verbose', 'verbose']);
-
-        $terms = $usage->getOptions('term');
-        $this->assertCount(1, $terms); // 'username' should only appear once
-
-        $flags = $usage->getOptions('flag');
-        $this->assertCount(1, $flags); // 'verbose' should only appear once
+        $this->optHandler = new OptHandler();
+        $this->optHandler->addCommand(['add', 'a'], 'Add a new user');
+        $this->optHandler->addTerm('username', 'STRING', 'Username of the user');
+        $this->optHandler->addParam(['password', 'p'], 'STRING', 'Password for the user');
+        $this->optHandler->addFlag(['verbose', 'v'], 'Enable verbose output');
     }
 }

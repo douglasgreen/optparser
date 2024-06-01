@@ -29,7 +29,7 @@ abstract class Option
      *
      * @see https://www.php.net/manual/en/filter.filters.validate.php
      */
-    protected const ARG_TYPES = [
+    protected const array ARG_TYPES = [
         'BOOL',
         'DATE',
         'DATETIME',
@@ -50,17 +50,19 @@ abstract class Option
         'UUID',
     ];
 
+    protected ?\Closure $callback = null;
+
     /**
      * @var ?list<string>
      */
-    protected $aliases;
+    protected ?array $aliases = null;
 
     /**
      * @var ?string Type of the argument
      */
-    protected $argType;
+    protected ?string $argType = null;
 
-    protected ?\Closure $callback = null;
+    abstract public function write(): string;
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
@@ -151,8 +153,6 @@ abstract class Option
 
         return $filtered;
     }
-
-    abstract public function write(): string;
 
     /**
      * @throws ValueException

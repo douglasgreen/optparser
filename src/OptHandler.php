@@ -19,27 +19,27 @@ class OptHandler
     /**
      * @var array<string, bool>
      */
-    protected $allAliases = [];
+    protected array $allAliases = [];
 
     /**
      * @var array<string, Command>
      */
-    protected $commands = [];
+    protected array $commands = [];
 
     /**
      * @var array<string, Flag>
      */
-    protected $flags = [];
+    protected array $flags = [];
 
     /**
      * @var array<string, Param>
      */
-    protected $params = [];
+    protected array $params = [];
 
     /**
      * @var array<string, Term>
      */
-    protected $terms = [];
+    protected array $terms = [];
 
     public function __construct()
     {
@@ -102,32 +102,6 @@ class OptHandler
     }
 
     /**
-     * Get the type of an option.
-     *
-     * @throws ValueException
-     */
-    public function getOptionType(string $name): string
-    {
-        if (isset($this->commands[$name])) {
-            return 'command';
-        }
-
-        if (isset($this->terms[$name])) {
-            return 'term';
-        }
-
-        if (isset($this->params[$name])) {
-            return 'param';
-        }
-
-        if (isset($this->flags[$name])) {
-            return 'flag';
-        }
-
-        throw new ValueException('Name not found');
-    }
-
-    /**
      * Get an option by name.
      *
      * @throws ValueException
@@ -148,6 +122,32 @@ class OptHandler
 
         if (isset($this->flags[$name])) {
             return $this->flags[$name];
+        }
+
+        throw new ValueException('Name not found');
+    }
+
+    /**
+     * Get the type of an option.
+     *
+     * @throws ValueException
+     */
+    public function getOptionType(string $name): string
+    {
+        if (isset($this->commands[$name])) {
+            return 'command';
+        }
+
+        if (isset($this->terms[$name])) {
+            return 'term';
+        }
+
+        if (isset($this->params[$name])) {
+            return 'param';
+        }
+
+        if (isset($this->flags[$name])) {
+            return 'flag';
         }
 
         throw new ValueException('Name not found');
@@ -186,19 +186,19 @@ class OptHandler
     {
         $output = '';
 
-        if ($this->commands) {
+        if ($this->commands !== []) {
             $output .= $this->writeCommandBlock();
         }
 
-        if ($this->terms) {
+        if ($this->terms !== []) {
             $output .= $this->writeTermBlock();
         }
 
-        if ($this->params) {
+        if ($this->params !== []) {
             $output .= $this->writeParamBlock();
         }
 
-        if ($this->flags) {
+        if ($this->flags !== []) {
             $output .= $this->writeFlagBlock();
         }
 

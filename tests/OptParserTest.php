@@ -14,7 +14,7 @@ class OptParserTest extends TestCase
         $optParser = new OptParser('test', 'Test program');
         $optParser->addCommand(['add', 'a'], 'Add a new user');
 
-        $this->assertTrue($optParser->optHandler->hasOptionType('command'));
+        $this->assertTrue($optParser->getOptHandler()->hasOptionType('command'));
     }
 
     public function testAddFlag(): void
@@ -22,7 +22,7 @@ class OptParserTest extends TestCase
         $optParser = new OptParser('test', 'Test program');
         $optParser->addFlag(['verbose', 'v'], 'Enable verbose output');
 
-        $this->assertTrue($optParser->optHandler->hasOptionType('flag'));
+        $this->assertTrue($optParser->getOptHandler()->hasOptionType('flag'));
     }
 
     public function testAddParam(): void
@@ -30,7 +30,7 @@ class OptParserTest extends TestCase
         $optParser = new OptParser('test', 'Test program');
         $optParser->addParam(['password', 'p'], 'STRING', 'Password for the user');
 
-        $this->assertTrue($optParser->optHandler->hasOptionType('param'));
+        $this->assertTrue($optParser->getOptHandler()->hasOptionType('param'));
     }
 
     public function testAddTerm(): void
@@ -38,7 +38,7 @@ class OptParserTest extends TestCase
         $optParser = new OptParser('test', 'Test program');
         $optParser->addTerm('username', 'STRING', 'Username of the user');
 
-        $this->assertTrue($optParser->optHandler->hasOptionType('term'));
+        $this->assertTrue($optParser->getOptHandler()->hasOptionType('term'));
     }
 
     public function testAddUsage(): void
@@ -49,7 +49,7 @@ class OptParserTest extends TestCase
         $optParser->addParam(['password', 'p'], 'STRING', 'Password for the user');
         $optParser->addUsage(['add', 'username', 'password']);
 
-        $this->assertCount(2, $optParser->usages); // Includes default help usage
+        $this->assertCount(2, $optParser->getUsages()); // Includes default help usage
     }
 
     public function testAddUsageAll(): void
@@ -61,7 +61,16 @@ class OptParserTest extends TestCase
         $optParser->addFlag(['verbose', 'v'], 'Enable verbose output');
         $optParser->addUsageAll();
 
-        $this->assertCount(2, $optParser->usages); // Includes default help usage
+        $this->assertCount(2, $optParser->getUsages()); // Includes default help usage
+    }
+
+    public function testHelp(): void
+    {
+        $optParser = new OptParser('test', 'Test program', true);
+        $optParser->addCommand(['add', 'a'], 'Add a new user');
+
+        $this->expectOutputRegex('/Usage:/');
+        $optParser->parse(['test', '--help']);
     }
 
     public function testParse(): void
@@ -90,14 +99,5 @@ class OptParserTest extends TestCase
         $input = $optParser->parse(['test', 'remove', 'john'], false);
 
         $this->assertNotNull($input->getErrors());
-    }
-
-    public function testHelp(): void
-    {
-        $optParser = new OptParser('test', 'Test program', true);
-        $optParser->addCommand(['add', 'a'], 'Add a new user');
-
-        $this->expectOutputRegex('/Usage:/');
-        $optParser->parse(['test', '--help']);
     }
 }

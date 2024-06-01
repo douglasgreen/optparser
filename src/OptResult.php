@@ -9,14 +9,12 @@ namespace DouglasGreen\OptParser;
  */
 class OptResult
 {
-    protected ?string $command = null;
-
     /**
      * Errors, an array of error strings denoting missing, wrongly typed, or unrecognized arguments.
      *
      * @var list<string>
      */
-    protected $errors = [];
+    protected array $errors = [];
 
     /**
      * The match results, an associative array where keys are the name of the options
@@ -28,7 +26,9 @@ class OptResult
      *
      * @var array<string, null|bool|float|int|string>
      */
-    protected $matchResults = [];
+    protected array $matchResults = [];
+
+    protected ?string $command = null;
 
     /**
      * Constructor to initialize the OptionParserResult class with nonoptions.
@@ -43,14 +43,6 @@ class OptResult
     ) {}
 
     /**
-     * Add an error message.
-     */
-    public function addError(string $error): void
-    {
-        $this->errors[] = $error;
-    }
-
-    /**
      * Get the value of a match result, if any. Converts camel case to kebab
      * case to match option name.
      *
@@ -62,6 +54,14 @@ class OptResult
         $kebabCaseName = strtolower((string) preg_replace('/([a-z])([A-Z])/', '$1-$2', $name));
 
         return $this->matchResults[$kebabCaseName] ?? null;
+    }
+
+    /**
+     * Add an error message.
+     */
+    public function addError(string $error): void
+    {
+        $this->errors[] = $error;
     }
 
     /**
@@ -85,7 +85,7 @@ class OptResult
      *
      * @return list<string>
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }

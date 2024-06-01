@@ -14,27 +14,21 @@ use DouglasGreen\Exceptions\ValueException;
  */
 class OptParser
 {
-    /**
-     * @var ArgParser
-     */
-    public $argParser;
+    protected ArgParser $argParser;
 
-    /**
-     * @var OptHandler
-     */
-    public $optHandler;
+    protected OptHandler $optHandler;
 
     /**
      * @var list<Usage>
      */
-    public $usages = [];
+    protected array $usages = [];
 
     /**
      * @var bool All non-help usages have commands. If allCommands is false,
      * that means there are no commands because a program with only one usage
      * that has a command would also be allCommands = true.
      */
-    protected $allCommands = true;
+    protected bool $allCommands = true;
 
     public function __construct(
         protected string $name,
@@ -190,6 +184,24 @@ class OptParser
         if (! $this->debugMode) {
             exit;
         }
+    }
+
+    public function getArgParser(): ArgParser
+    {
+        return $this->argParser;
+    }
+
+    public function getOptHandler(): OptHandler
+    {
+        return $this->optHandler;
+    }
+
+    /**
+     * @return list<Usage>
+     */
+    public function getUsages(): array
+    {
+        return $this->usages;
     }
 
     /**
