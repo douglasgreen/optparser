@@ -155,7 +155,7 @@ class ArgParser
             } elseif (preg_match('/^' . $wordRegex . '=.+/', $value)) {
                 // Matched a param with = and argument.
                 $newArray[] = $value;
-            } elseif (preg_match('/^' . $wordStartRegex . '/', $value)) {
+            } elseif (preg_match('/^' . $wordStartRegex . '/i', $value)) {
                 $this->errors[] = 'Unrecognized flag or parameter format: ' . $value;
             } else {
                 $newArray[] = $value;
