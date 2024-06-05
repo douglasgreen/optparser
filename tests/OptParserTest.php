@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace DouglasGreen\OptParser\Tests;
 
 use PHPUnit\Framework\TestCase;
+use DouglasGreen\Exceptions\ValueException;
 use DouglasGreen\OptParser\OptParser;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class OptParserTest extends TestCase
 {
     public function testAddCommand(): void
@@ -62,6 +66,37 @@ class OptParserTest extends TestCase
         $optParser->addUsageAll();
 
         $this->assertCount(2, $optParser->getUsages()); // Includes default help usage
+    }
+
+    public function testAddUsageAllEmpty(): void
+    {
+        $optParser = new OptParser('test', 'Test program');
+        $optParser->addCommand(['add', 'a'], 'Add a new user');
+        $optParser->addUsageAll();
+
+        $this->assertCount(2, $optParser->getUsages()); // Includes default help usage
+    }
+
+    public function testAddUsageMixed(): void
+    {
+        $optParser = new OptParser('test', 'Test program');
+
+        // Add usage without command.
+        $optParser->addTerm('username', 'STRING', 'Username of the user');
+        $optParser->addUsageAll();
+
+        // Add usage with command.
+        $this->expectException(ValueException::class);
+        $optParser->addCommand(['add', 'a'], 'Add a new user');
+    }
+
+    public function testAddUsageTwoCommands(): void
+    {
+        $optParser = new OptParser('test', 'Test program');
+        $optParser->addCommand(['add', 'a'], 'Add a new user');
+        $optParser->addCommand(['delete', 'd'], 'Delete a user');
+        $this->expectException(ValueException::class);
+        $optParser->addUsageAll();
     }
 
     public function testHelp(): void

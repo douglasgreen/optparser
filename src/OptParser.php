@@ -124,6 +124,11 @@ class OptParser
             throw new ValueException('Usage argument not a command: ' . $command);
         }
 
+        // Multiple usages besides help must define a command.
+        if (count($this->usages) > 2 && ! $this->allCommands) {
+            throw new ValueException('Must define command for each usage');
+        }
+
         $this->usages[] = new Usage($this->optHandler, $optionNames, $command);
 
         return $this;
@@ -135,8 +140,20 @@ class OptParser
     public function addUsageAll(): self
     {
         $optionNames = $this->optHandler->getAllNames();
-        $filteredOptions = array_filter($optionNames, static fn($option): bool => $option !== 'help');
 
+        $hasCommand = false;
+        foreach ($optionNames as $optionName) {
+            if ($this->optHandler->getOptionType($optionName) === 'command') {
+                $hasCommand = true;
+                break;
+            }
+        }
+
+        if (! $hasCommand) {
+            $this->allCommands = false;
+        }
+
+        $filteredOptions = array_filter($optionNames, static fn($option): bool => $option !== 'help');
         $this->usages[] = new Usage($this->optHandler, $filteredOptions);
 
         return $this;
