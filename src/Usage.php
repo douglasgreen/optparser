@@ -31,8 +31,17 @@ class Usage
      */
     public function __construct(
         protected OptHandler $optHandler,
-        array $optionNames
+        array $optionNames,
+        ?string $command = null
     ) {
+        if ($command !== null) {
+            if ($this->optHandler->getOptionType($command) !== 'command') {
+                throw new ValueException('Usage argument not a command: ' . $command);
+            }
+
+            $this->options['command'][] = $command;
+        }
+
         foreach ($optionNames as $optionName) {
             $optionType = $this->optHandler->getOptionType($optionName);
             if ($optionType === 'command' && $this->options['command']) {

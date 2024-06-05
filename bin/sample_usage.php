@@ -43,9 +43,9 @@ $optParser->addCommand(['add', 'a'], 'Add a new user')
     ->addParam(['o', 'output'], 'OUTFILE', 'Output file for the list command')
 
     // Adding usage examples
-    ->addUsage(['add', 'username', 'email', 'password', 'role'])
-    ->addUsage(['delete', 'username'])
-    ->addUsage(['list', 'output', 'verbose']);
+    ->addUsage('add', ['username', 'email', 'password', 'role'])
+    ->addUsage('delete', ['username'])
+    ->addUsage('list', ['output', 'verbose']);
 
 // Matching usage
 $input = $optParser->parse();
