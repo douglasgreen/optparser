@@ -109,8 +109,9 @@ with a descriptive error message, and the program will error and terminate.
 
 ## Formatting
 
-Flags can be combined, for example `-a -b -c` can be written as `-abc`. However
-a combined flag can't take arguments.
+Flags can't be combined, for example `-a -b -c` can't be written as `-abc`. That
+is to prevent errors where you type one hyphen like -pass instead of --pass and
+get options -a -p and -s by mistake.
 
 A space or equal sign must separate every flag or parameter from its argument.
 

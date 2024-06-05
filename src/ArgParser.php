@@ -16,6 +16,11 @@ use DouglasGreen\Exceptions\ValueException;
 class ArgParser
 {
     /**
+     * @var list<string>
+     */
+    protected array $errors = [];
+
+    /**
      * @var array<string, string> Marked options (options with leading dash)
      */
     protected array $markedOptions = [];
@@ -61,6 +66,14 @@ class ArgParser
                 $this->unmarkedOptions[] = $option;
             }
         }
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 
     /**
@@ -115,22 +128,35 @@ class ArgParser
         $newArray = [];
         $index = 0;
         $length = count($array);
+        $wordRegex = '(-[a-z]|--[a-z]\w*(-[a-z]\w*)*)\b';
+
+        // Note that we must distinguish between flags like -a and negative
+        // numbers like -1 here.
+        $wordStartRegex = '--?[a-z]';
+
         while ($index < $length) {
             $value = $array[$index];
-            if (preg_match('/^-([a-z]{2,})/', $value, $match)) {
-                // Split up -abc into -a -b -c.
-                $chars = str_split($match[1]);
-                foreach ($chars as $char) {
-                    $newArray[] = '-' . $char;
+            if (preg_match('/^-([a-z]{2,})/', $value)) {
+                // Matched combined short options.
+                $this->errors[] = 'Combined short options are not allowed: ' . $value;
+            } elseif (preg_match('/^' . $wordRegex . '$/', $value)) {
+                if (
+                    isset($array[$index + 1])
+                    && preg_match('/^' . $wordStartRegex . '/', $array[$index + 1]) === 0
+                ) {
+                    // Matched a param with no =, so join parameter with
+                    // argument by =.
+                    $value .= '=' . $array[++$index];
+                    $newArray[] = $value;
+                } else {
+                    // Matched a flag.
+                    $newArray[] = $value;
                 }
-            } elseif (
-                preg_match('/^(-[a-z]|--[a-z]\w*(-[a-z]\w*)*)\b/', $value)
-                && isset($array[$index + 1])
-                && preg_match('/^--?[a-z]/', $array[$index + 1]) === 0
-            ) {
-                // Join parameter with argument by =.
-                $value .= '=' . $array[++$index];
+            } elseif (preg_match('/^' . $wordRegex . '=.+/', $value)) {
+                // Matched a param with = and argument.
                 $newArray[] = $value;
+            } elseif (preg_match('/^' . $wordStartRegex . '/', $value)) {
+                $this->errors[] = 'Unrecognized flag or parameter format: ' . $value;
             } else {
                 $newArray[] = $value;
             }

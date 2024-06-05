@@ -159,37 +159,6 @@ class OptParser
         return $this;
     }
 
-    /**
-     * Check for errors then write them and exit.
-     *
-     * @SuppressWarnings(PHPMD.ExitExpression)
-     */
-    public function checkResult(OptResult $optResult): void
-    {
-        $errors = $optResult->getErrors();
-        if ($errors === []) {
-            return;
-        }
-
-        $message = 'Errors found in matching usage';
-        $command = $optResult->getCommand();
-        if ($command !== null) {
-            $message .= ' for command "' . $command . '"';
-        }
-
-        $message .= ':' . PHP_EOL;
-        foreach ($errors as $error) {
-            $message .= sprintf('* %s%s', $error, PHP_EOL);
-        }
-
-        $message .= PHP_EOL;
-        $message .= 'Program terminating. Run again with --help for help.';
-        error_log($message);
-        if (! $this->debugMode) {
-            exit;
-        }
-    }
-
     public function getArgParser(): ArgParser
     {
         return $this->argParser;
@@ -241,6 +210,16 @@ class OptParser
         }
 
         $optResult = new OptResult($nonOptions);
+
+        // Report errors from arg parser.
+        $errors = $this->argParser->getErrors();
+        if ($errors !== []) {
+            foreach ($errors as $error) {
+                $optResult->addError($error);
+            }
+
+            $this->checkResult($optResult);
+        }
 
         // The first unmarked input must be the command name.
         $inputName = null;
@@ -381,6 +360,37 @@ class OptParser
         }
 
         return $optResult;
+    }
+
+    /**
+     * Check for errors then write them and exit.
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    protected function checkResult(OptResult $optResult): void
+    {
+        $errors = $optResult->getErrors();
+        if ($errors === []) {
+            return;
+        }
+
+        $message = 'Errors found in matching usage';
+        $command = $optResult->getCommand();
+        if ($command !== null) {
+            $message .= ' for command "' . $command . '"';
+        }
+
+        $message .= ':' . PHP_EOL;
+        foreach ($errors as $error) {
+            $message .= sprintf('* %s%s', $error, PHP_EOL);
+        }
+
+        $message .= PHP_EOL;
+        $message .= 'Program terminating. Run again with --help for help.';
+        error_log($message);
+        if (! $this->debugMode) {
+            exit;
+        }
     }
 
     /**
