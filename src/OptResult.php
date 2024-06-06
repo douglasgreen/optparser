@@ -45,8 +45,6 @@ class OptResult
     /**
      * Get the value of a match result, if any. Converts camel case to kebab
      * case to match option name.
-     *
-     * @todo Change to throw an exception once all values have been set.
      */
     public function __get(string $name): null|bool|float|int|string
     {

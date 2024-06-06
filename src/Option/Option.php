@@ -194,7 +194,6 @@ abstract class Option
     }
 
     /**
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @throws BadArgumentException
      */

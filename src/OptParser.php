@@ -182,7 +182,6 @@ class OptParser
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function parse(?array $args = null, bool $doResultCheck = true): OptResult
     {
