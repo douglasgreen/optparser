@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DouglasGreen\OptParser\Option;
 
 use DouglasGreen\Exceptions\BadArgumentException;
+use DouglasGreen\Exceptions\Regex;
 use DouglasGreen\Exceptions\TypeException;
 use DouglasGreen\Exceptions\ValueException;
 
@@ -160,8 +161,8 @@ abstract class Option
     protected function addAlias(string $alias): void
     {
         // Only matches lower case separated by hyphens
-        if (preg_match('/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/', $alias) === 0) {
-            throw new ValueException('Alias is not hyphenated lower case: ' . $alias);
+        if (! Regex::hasMatch('/^([a-z][a-z0-9]*(-[a-z0-9]+)*|[A-Z])$/', $alias)) {
+            throw new ValueException('Alias is not hyphenated lower case or single-letter upper case: ' . $alias);
         }
 
         $this->aliases[] = $alias;
@@ -307,8 +308,8 @@ abstract class Option
      */
     protected function castFixed(string $value): string
     {
-        if (preg_match('/^[+-]?\d+([,_]\d{3})*(\.\d+)?$/', $value)) {
-            return (string) preg_replace('/[,_]/', '', $value);
+        if (Regex::hasMatch('/^[+-]?\d+([,_]\d{3})*(\.\d+)?$/', $value)) {
+            return Regex::replace('/[,_]/', '', $value);
         }
 
         throw new BadArgumentException('Not a valid fixed-point number');

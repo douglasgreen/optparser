@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
+use DouglasGreen\Exceptions\Regex;
 use DouglasGreen\Exceptions\ValueException;
 
 /**
@@ -58,7 +59,8 @@ class ArgParser
         [$options, $this->nonOptions] = $this->splitArrayAroundDash($args);
         $options = $this->joinArguments($options);
         foreach ($options as $option) {
-            if (preg_match('/^--?([a-z]\w*(-[a-z]\w*)*)(=(.*))?/', $option, $match)) {
+            $match = Regex::match('/^--?([a-z]\w*(-[a-z]\w*)*)(=(.*))?/', $option);
+            if ($match !== []) {
                 $name = $match[1];
                 $arg = $match[4] ?? '';
                 $this->markedOptions[$name] = $arg;
@@ -136,13 +138,13 @@ class ArgParser
 
         while ($index < $length) {
             $value = $array[$index];
-            if (preg_match('/^-([a-zA-Z]{2,})/', $value)) {
+            if (Regex::hasMatch('/^-([a-zA-Z]{2,})/', $value)) {
                 // Matched combined short options.
                 $this->errors[] = 'Combined short options are not allowed: ' . $value;
-            } elseif (preg_match('/^' . $wordRegex . '$/', $value)) {
+            } elseif (Regex::hasMatch('/^' . $wordRegex . '$/', $value)) {
                 if (
                     isset($array[$index + 1])
-                    && preg_match('/^' . $wordStartRegex . '/', $array[$index + 1]) === 0
+                    && ! Regex::hasMatch('/^' . $wordStartRegex . '/', $array[$index + 1])
                 ) {
                     // Matched a param with no =, so join parameter with
                     // argument by =.
@@ -152,10 +154,10 @@ class ArgParser
                     // Matched a flag.
                     $newArray[] = $value;
                 }
-            } elseif (preg_match('/^' . $wordRegex . '=.+/', $value)) {
+            } elseif (Regex::hasMatch('/^' . $wordRegex . '=.+/', $value)) {
                 // Matched a param with = and argument.
                 $newArray[] = $value;
-            } elseif (preg_match('/^' . $wordStartRegex . '/i', $value)) {
+            } elseif (Regex::hasMatch('/^' . $wordStartRegex . '/i', $value)) {
                 $this->errors[] = 'Unrecognized flag or parameter format: ' . $value;
             } else {
                 $newArray[] = $value;

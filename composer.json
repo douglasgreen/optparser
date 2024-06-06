@@ -48,7 +48,7 @@
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.5",
         "rector/rector": "^1.0",
-        "symplify/easy-coding-standard": "^12.1"
+        "symplify/easy-coding-standard": "^12.2"
     },
     "scripts": {
         "lint": [
