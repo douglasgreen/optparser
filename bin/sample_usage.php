@@ -56,16 +56,16 @@ $command = $input->getCommand();
 // Debugging output
 switch ($command) {
     case 'add':
-        var_dump($input->get('username'));
-        var_dump($input->get('email'));
-        var_dump($input->get('password'));
-        var_dump($input->get('role'));
+        echo $input->get('username');
+        echo $input->get('email');
+        echo $input->get('password');
+        echo $input->get('role');
         break;
     case 'remove':
-        var_dump($input->get('username'));
+        echo $input->get('username');
         break;
     case 'list':
-        var_dump($input->get('output'));
-        var_dump($input->get('verbose'));
+        echo $input->get('output');
+        echo $input->get('verbose') ? 'verbose' : '';
         break;
 }

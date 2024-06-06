@@ -194,7 +194,9 @@ abstract class Option
     }
 
     /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.StaticAccess)
+     *
      * @throws BadArgumentException
      */
     protected function castDateInterval(string $input): string

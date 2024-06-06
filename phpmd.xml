@@ -47,12 +47,7 @@
 
     <rule ref="rulesets/cleancode.xml/UndefinedVariable" />
 
-    <!-- The default value was 10, which is too restrictive -->
-    <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
-        <properties>
-            <property name="reportLevel" value="20" />
-        </properties>
-    </rule>
+    <rule ref="rulesets/codesize.xml/CyclomaticComplexity" />
 
     <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity" />
 
