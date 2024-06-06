@@ -35,7 +35,15 @@
         </properties>
     </rule>
 
-    <rule ref="rulesets/cleancode.xml/StaticAccess" />
+    <!--
+    Static access is acceptable for factory methods, which should be named
+    "create*".
+    -->
+    <rule ref="rulesets/cleancode.xml/StaticAccess">
+        <properties>
+            <property name="ignorepattern" value="/^create/" />
+        </properties>
+    </rule>
 
     <rule ref="rulesets/cleancode.xml/UndefinedVariable" />
 
@@ -64,9 +72,25 @@
 
     <rule ref="rulesets/codesize.xml/TooManyFields" />
 
-    <rule ref="rulesets/codesize.xml/TooManyMethods" />
+    <!--
+    Ignore getters, setters, and unit tests, which are usually named
+    "test*"
+    -->
+    <rule ref="rulesets/codesize.xml/TooManyMethods">
+        <properties>
+            <property name="ignorepattern" value="/^(get|set|test)/" />
+        </properties>
+    </rule>
 
-    <rule ref="rulesets/codesize.xml/TooManyPublicMethods" />
+    <!--
+    Ignore getters, setters, and unit tests, which are usually named
+    "test*"
+    -->
+    <rule ref="rulesets/codesize.xml/TooManyPublicMethods">
+        <properties>
+            <property name="ignorepattern" value="/^(get|set|test)/" />
+        </properties>
+    </rule>
 
     <rule ref="rulesets/controversial.xml/CamelCaseClassName" />
 
