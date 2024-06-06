@@ -36,8 +36,8 @@ flags are optional, because they are named.
 
 ## Naming convention
 
-Commands, flags, and parameters must all follow the Unix convention for their
-names:
+Long names for commands, flags, and parameters must all follow the Unix
+convention for their names:
 
 -   All lowercase
 -   Start with a letter
@@ -56,6 +56,8 @@ only one usage can possibly match at runtime.
 Each argument can have one or more aliases. If an alias is short (only one
 character), it is invoked with a single hyphen like `-h`. If an alias is long
 (more than one character), it is invoked with two hyphens like `--help`.
+
+Short aliases can be lower case or upper case.
 
 Each alias must be defined only once.
 

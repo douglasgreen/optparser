@@ -128,15 +128,15 @@ class ArgParser
         $newArray = [];
         $index = 0;
         $length = count($array);
-        $wordRegex = '(-[a-z]|--[a-z]\w*(-[a-z]\w*)*)\b';
+        $wordRegex = '(-[a-zA-Z]|--[a-z]\w*(-[a-z]\w*)*)\b';
 
         // Note that we must distinguish between flags like -a and negative
         // numbers like -1 here.
-        $wordStartRegex = '--?[a-z]';
+        $wordStartRegex = '--?[a-zA-Z]';
 
         while ($index < $length) {
             $value = $array[$index];
-            if (preg_match('/^-([a-z]{2,})/', $value)) {
+            if (preg_match('/^-([a-zA-Z]{2,})/', $value)) {
                 // Matched combined short options.
                 $this->errors[] = 'Combined short options are not allowed: ' . $value;
             } elseif (preg_match('/^' . $wordRegex . '$/', $value)) {
