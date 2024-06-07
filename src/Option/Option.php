@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser\Option;
 
-use DouglasGreen\Exceptions\BadArgumentException;
-use DouglasGreen\Exceptions\Regex;
-use DouglasGreen\Exceptions\TypeException;
-use DouglasGreen\Exceptions\ValueException;
+use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
+use DouglasGreen\Utility\Regex;
+use DouglasGreen\Utility\Exceptions\Data\TypeException;
+use DouglasGreen\Utility\Exceptions\Data\ValueException;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -116,7 +116,7 @@ abstract class Option
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     public function matchValue(string $value): bool|int|float|string|null
     {
@@ -144,7 +144,7 @@ abstract class Option
 
         // Check for failure of basic type
         if ($filtered === null) {
-            throw new BadArgumentException('Unrecognized type');
+            throw new ArgumentException('Unrecognized type');
         }
 
         // Apply callback to validate if available
@@ -169,20 +169,20 @@ abstract class Option
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castBool(string $value): bool
     {
         $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
-            throw new BadArgumentException('Not a valid Boolean');
+            throw new ArgumentException('Not a valid Boolean');
         }
 
         return $valid;
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castDate(string $value): string
     {
@@ -191,25 +191,25 @@ abstract class Option
             return date('Y-m-d', $timestamp);
         }
 
-        throw new BadArgumentException('Not a valid date');
+        throw new ArgumentException('Not a valid date');
     }
 
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.StaticAccess)
      *
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castDateInterval(string $input): string
     {
         try {
             $interval = \DateInterval::createFromDateString($input);
         } catch (\DateMalformedIntervalStringException) {
-            throw new BadArgumentException('Not a valid date interval');
+            throw new ArgumentException('Not a valid date interval');
         }
 
         if ($interval === false) {
-            throw new BadArgumentException('Not a valid date interval');
+            throw new ArgumentException('Not a valid date interval');
         }
 
         $formatted = [];
@@ -265,7 +265,7 @@ abstract class Option
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castDatetime(string $value): ?string
     {
@@ -274,37 +274,37 @@ abstract class Option
             return date('Y-m-d H:i:s', $timestamp);
         }
 
-        throw new BadArgumentException('Not a valid datetime');
+        throw new ArgumentException('Not a valid datetime');
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castDomain(string $value): string
     {
         $valid = filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME | FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
-            throw new BadArgumentException('Not a valid domain');
+            throw new ArgumentException('Not a valid domain');
         }
 
         return $valid;
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castEmail(string $value): string
     {
         $valid = filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
-            throw new BadArgumentException('Not a valid email');
+            throw new ArgumentException('Not a valid email');
         }
 
         return $valid;
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castFixed(string $value): string
     {
@@ -312,11 +312,11 @@ abstract class Option
             return Regex::replace('/[,_]/', '', $value);
         }
 
-        throw new BadArgumentException('Not a valid fixed-point number');
+        throw new ArgumentException('Not a valid fixed-point number');
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castFloat(string $value): float
     {
@@ -326,14 +326,14 @@ abstract class Option
             FILTER_FLAG_ALLOW_THOUSAND | FILTER_FLAG_ALLOW_SCIENTIFIC | FILTER_NULL_ON_FAILURE
         );
         if ($valid === null) {
-            throw new BadArgumentException('Not a valid floating-point number');
+            throw new ArgumentException('Not a valid floating-point number');
         }
 
         return $valid;
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castInt(string $value): int
     {
@@ -343,40 +343,40 @@ abstract class Option
             FILTER_FLAG_ALLOW_OCTAL | FILTER_FLAG_ALLOW_HEX | FILTER_NULL_ON_FAILURE
         );
         if ($valid === null) {
-            throw new BadArgumentException('Not a valid integer');
+            throw new ArgumentException('Not a valid integer');
         }
 
         return $valid;
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castIpAddress(string $value): string
     {
         $valid = filter_var($value, FILTER_VALIDATE_IP, FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
-            throw new BadArgumentException('Not a valid IP address');
+            throw new ArgumentException('Not a valid IP address');
         }
 
         return $valid;
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castMacAddress(string $value): string
     {
         $valid = filter_var($value, FILTER_VALIDATE_MAC, FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
-            throw new BadArgumentException('Not a valid MAC address');
+            throw new ArgumentException('Not a valid MAC address');
         }
 
         return $valid;
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castTime(string $value): string
     {
@@ -385,24 +385,24 @@ abstract class Option
             return date('H:i:s', $timestamp);
         }
 
-        throw new BadArgumentException('Not a valid time');
+        throw new ArgumentException('Not a valid time');
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castUrl(string $value): string
     {
         $valid = filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
-            throw new BadArgumentException('Not a valid URL');
+            throw new ArgumentException('Not a valid URL');
         }
 
         return $valid;
     }
 
     /**
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function castUuid(string $value): string
     {
@@ -411,12 +411,12 @@ abstract class Option
 
         // Check if the length is 32 characters
         if (strlen($value) !== 32) {
-            throw new BadArgumentException('UUID is not 32 characters');
+            throw new ArgumentException('UUID is not 32 characters');
         }
 
         // Check if it contains only hexadecimal characters
         if (! ctype_xdigit($value)) {
-            throw new BadArgumentException('UUID contains invalid characters');
+            throw new ArgumentException('UUID contains invalid characters');
         }
 
         // Insert hyphens at the appropriate positions
@@ -432,21 +432,21 @@ abstract class Option
     /**
      * Check that the dir is readable then form the dir path.
      *
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function checkDir(string $value): string
     {
         if (! is_dir($value)) {
-            throw new BadArgumentException('Path is not a directory');
+            throw new ArgumentException('Path is not a directory');
         }
 
         if (! is_readable($value)) {
-            throw new BadArgumentException('Directory is not readable');
+            throw new ArgumentException('Directory is not readable');
         }
 
         $path = realpath($value);
         if ($path === false) {
-            throw new BadArgumentException('Directory is invalid');
+            throw new ArgumentException('Directory is invalid');
         }
 
         return $path;
@@ -455,21 +455,21 @@ abstract class Option
     /**
      * Check that the input file is readable then form the file path.
      *
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function checkInputFile(string $value): string
     {
         if (! file_exists($value)) {
-            throw new BadArgumentException('Path is not a file');
+            throw new ArgumentException('Path is not a file');
         }
 
         if (! is_readable($value)) {
-            throw new BadArgumentException('File is not readable');
+            throw new ArgumentException('File is not readable');
         }
 
         $path = realpath($value);
         if ($path === false) {
-            throw new BadArgumentException('Path is invalid');
+            throw new ArgumentException('Path is invalid');
         }
 
         return $path;
@@ -478,18 +478,18 @@ abstract class Option
     /**
      * Check that the parent directory is writable then form the new file path.
      *
-     * @throws BadArgumentException
+     * @throws ArgumentException
      */
     protected function checkOutputFile(string $value): string
     {
         $directory = dirname($value);
         if (! is_writable($directory)) {
-            throw new BadArgumentException('File directory is not writable');
+            throw new ArgumentException('File directory is not writable');
         }
 
         $path = realpath($directory);
         if ($path === false) {
-            throw new BadArgumentException('Directory path is invalid');
+            throw new ArgumentException('Directory path is invalid');
         }
 
         return $path . (DIRECTORY_SEPARATOR . basename($value));

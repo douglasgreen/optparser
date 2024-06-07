@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
-use DouglasGreen\Exceptions\ValueException;
 use DouglasGreen\OptParser\Option\Command;
 use DouglasGreen\OptParser\Option\Flag;
 use DouglasGreen\OptParser\Option\Option;
 use DouglasGreen\OptParser\Option\Param;
 use DouglasGreen\OptParser\Option\Term;
+use DouglasGreen\Utility\Exceptions\Data\ValueException;
 
 /**
  * Define and print options.

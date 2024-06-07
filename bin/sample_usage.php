@@ -3,8 +3,8 @@
 
 declare(strict_types=1);
 
-use DouglasGreen\Exceptions\BadArgumentException;
 use DouglasGreen\OptParser\OptParser;
+use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -31,13 +31,13 @@ $optParser->addCommand(['add', 'a'], 'Add a new user')
         'string',
         'Role of the user',
         // An example callback function that limits role to enumerated values.
-        // Throw an BadArgumentException on failure to describe the reason.
+        // Throw an ArgumentException on failure to describe the reason.
         static function ($role): string {
             if (in_array($role, ['admin', 'manager', 'user'], true)) {
                 return $role;
             }
 
-            throw new BadArgumentException('Role must be admin, manager, or user');
+            throw new ArgumentException('Role must be admin, manager, or user');
         }
     )
     ->addParam(['o', 'output'], 'OUTFILE', 'Output file for the list command')

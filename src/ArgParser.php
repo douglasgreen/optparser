@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
-use DouglasGreen\Exceptions\Regex;
-use DouglasGreen\Exceptions\ValueException;
+use DouglasGreen\Utility\Exceptions\Data\ValueException;
+use DouglasGreen\Utility\Regex;
 
 /**
  * Parse command-line arguments from $args.
@@ -59,7 +59,7 @@ class ArgParser
         [$options, $this->nonOptions] = $this->splitArrayAroundDash($args);
         $options = $this->joinArguments($options);
         foreach ($options as $option) {
-            $match = Regex::match('/^--?([a-z]\w*(-[a-z]\w*)*)(=(.*))?/', $option);
+            $match = Regex::getMatch('/^--?([a-z]\w*(-[a-z]\w*)*)(=(.*))?/', $option);
             if ($match !== []) {
                 $name = $match[1];
                 $arg = $match[4] ?? '';

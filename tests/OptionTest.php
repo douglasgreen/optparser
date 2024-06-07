@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser\Tests;
 
-use PHPUnit\Framework\TestCase;
-use DouglasGreen\Exceptions\BadArgumentException;
-use DouglasGreen\Exceptions\ValueException;
 use DouglasGreen\OptParser\Option\Command;
-use DouglasGreen\OptParser\Option\Term;
-use DouglasGreen\OptParser\Option\Param;
 use DouglasGreen\OptParser\Option\Flag;
+use DouglasGreen\OptParser\Option\Param;
+use DouglasGreen\OptParser\Option\Term;
+use DouglasGreen\Utility\Exceptions\Data\ValueException;
+use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
+use PHPUnit\Framework\TestCase;
 
 class OptionTest extends TestCase
 {
@@ -51,7 +51,7 @@ class OptionTest extends TestCase
         $param = new Param('email', 'User email', ['e'], 'EMAIL');
         $this->assertSame('test@example.com', $param->matchValue('test@example.com'));
 
-        $this->expectException(BadArgumentException::class);
+        $this->expectException(ArgumentException::class);
         $param->matchValue('invalid-email');
     }
 

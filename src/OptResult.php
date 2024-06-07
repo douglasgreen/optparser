@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
-use DouglasGreen\Exceptions\Regex;
+use DouglasGreen\Utility\Regex;
 
 /**
  * Represent data from matching a usage.

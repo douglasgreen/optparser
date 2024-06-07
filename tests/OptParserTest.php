@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser\Tests;
 
-use PHPUnit\Framework\TestCase;
-use DouglasGreen\Exceptions\ValueException;
 use DouglasGreen\OptParser\OptParser;
+use DouglasGreen\Utility\Exceptions\Data\ValueException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)

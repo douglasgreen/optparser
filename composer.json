@@ -32,9 +32,6 @@
         "terminal"
     ],
     "autoload": {
-        "files": [
-            "src/Exceptions.php"
-        ],
         "psr-4": {
             "DouglasGreen\\OptParser\\": "src/",
             "DouglasGreen\\OptParser\\Tests\\": "tests/"
@@ -44,6 +41,7 @@
         "php": ">=8.1"
     },
     "require-dev": {
+        "douglasgreen/utility": "^0.1",
         "phpmd/phpmd": "^2.15",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.5",

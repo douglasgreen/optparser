@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
-use DouglasGreen\Exceptions\BadArgumentException;
-use DouglasGreen\Exceptions\ValueException;
+use DouglasGreen\Utility\Exceptions\Data\ValueException;
+use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
 
 /**
  * Define a program with a series of usage options.
@@ -260,7 +260,7 @@ class OptParser
                 try {
                     $matchedValue = $term->matchValue($inputValue);
                     $optResult->setTerm($termName, $matchedValue);
-                } catch (BadArgumentException $exception) {
+                } catch (ArgumentException $exception) {
                     $optResult->addError(
                         sprintf(
                             'Term "%s" has invalid argument "%s": %s',
@@ -330,7 +330,7 @@ class OptParser
                         try {
                             $matchedValue = $param->matchValue($savedValue);
                             $optResult->setParam($paramName, $matchedValue);
-                        } catch (BadArgumentException $exception) {
+                        } catch (ArgumentException $exception) {
                             $optResult->addError(
                                 sprintf(
                                     'Param "%s" has invalid argument "%s": %s',
