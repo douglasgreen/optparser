@@ -324,7 +324,7 @@ abstract class Option
     protected function castFixed(string $value): string
     {
         if (Regex::hasMatch('/^[+-]?\d+([,_]\d{3})*(\.\d+)?$/', $value)) {
-            return Regex::getReplace('/[,_]/', '', $value);
+            return Regex::doReplace('/[,_]/', '', $value);
         }
 
         throw new ArgumentException('Not a valid fixed-point number');

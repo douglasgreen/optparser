@@ -52,7 +52,7 @@ class OptResult
     {
         // Convert camel case to kebab case
         $kebabCaseName = strtolower(
-            Regex::getReplace('/([a-z])([A-Z])/', '$1-$2', $name),
+            Regex::doReplace('/([a-z])([A-Z])/', '$1-$2', $name),
         );
 
         return $this->matchResults[$kebabCaseName] ?? null;
