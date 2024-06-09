@@ -8,6 +8,7 @@ use DouglasGreen\Utility\Exceptions\Data\TypeException;
 use DouglasGreen\Utility\Exceptions\Data\ValueException;
 use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
 use DouglasGreen\Utility\Regex\Regex;
+use DouglasGreen\Utility\FileSystem\Path;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -65,9 +66,6 @@ abstract class Option
 
     abstract public function write(): string;
 
-    /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     */
     public function __construct(
         protected string $name,
         protected string $desc,
@@ -118,7 +116,7 @@ abstract class Option
     /**
      * @throws ArgumentException
      */
-    public function matchValue(string $value): bool|int|float|string|null
+    public function matchValue(string $value): string|float|int|bool|null
     {
         $filtered = match ($this->argType) {
             'BOOL' => $this->castBool($value),
@@ -161,8 +159,13 @@ abstract class Option
     protected function addAlias(string $alias): void
     {
         // Only matches lower case separated by hyphens
-        if (! Regex::hasMatch('/^([a-z][a-z0-9]*(-[a-z0-9]+)*|[A-Z])$/', $alias)) {
-            throw new ValueException('Alias is not hyphenated lower case or single-letter upper case: ' . $alias);
+        if (! Regex::hasMatch(
+            '/^([a-z][a-z0-9]*(-[a-z0-9]+)*|[A-Z])$/',
+            $alias
+        )) {
+            throw new ValueException(
+                'Alias is not hyphenated lower case or single-letter upper case: ' . $alias
+            );
         }
 
         $this->aliases[] = $alias;
@@ -173,7 +176,11 @@ abstract class Option
      */
     protected function castBool(string $value): bool
     {
-        $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        $valid = filter_var(
+            $value,
+            FILTER_VALIDATE_BOOLEAN,
+            FILTER_NULL_ON_FAILURE
+        );
         if ($valid === null) {
             throw new ArgumentException('Not a valid Boolean');
         }
@@ -282,7 +289,11 @@ abstract class Option
      */
     protected function castDomain(string $value): string
     {
-        $valid = filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME | FILTER_NULL_ON_FAILURE);
+        $valid = filter_var(
+            $value,
+            FILTER_VALIDATE_DOMAIN,
+            FILTER_FLAG_HOSTNAME | FILTER_NULL_ON_FAILURE
+        );
         if ($valid === null) {
             throw new ArgumentException('Not a valid domain');
         }
@@ -295,7 +306,11 @@ abstract class Option
      */
     protected function castEmail(string $value): string
     {
-        $valid = filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
+        $valid = filter_var(
+            $value,
+            FILTER_VALIDATE_EMAIL,
+            FILTER_NULL_ON_FAILURE
+        );
         if ($valid === null) {
             throw new ArgumentException('Not a valid email');
         }
@@ -367,7 +382,11 @@ abstract class Option
      */
     protected function castMacAddress(string $value): string
     {
-        $valid = filter_var($value, FILTER_VALIDATE_MAC, FILTER_NULL_ON_FAILURE);
+        $valid = filter_var(
+            $value,
+            FILTER_VALIDATE_MAC,
+            FILTER_NULL_ON_FAILURE
+        );
         if ($valid === null) {
             throw new ArgumentException('Not a valid MAC address');
         }
@@ -393,7 +412,11 @@ abstract class Option
      */
     protected function castUrl(string $value): string
     {
-        $valid = filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
+        $valid = filter_var(
+            $value,
+            FILTER_VALIDATE_URL,
+            FILTER_NULL_ON_FAILURE
+        );
         if ($valid === null) {
             throw new ArgumentException('Not a valid URL');
         }
@@ -444,12 +467,9 @@ abstract class Option
             throw new ArgumentException('Directory is not readable');
         }
 
-        $path = realpath($value);
-        if ($path === false) {
-            throw new ArgumentException('Directory is invalid');
-        }
+        $path = new Path($value);
 
-        return $path;
+        return $path->resolve();
     }
 
     /**

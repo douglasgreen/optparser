@@ -41,7 +41,7 @@ class OptResult
          *
          * @var list<string> $nonoptions
          */
-        protected array $nonoptions = []
+        protected array $nonoptions = [],
     ) {}
 
     /**
@@ -51,7 +51,9 @@ class OptResult
     public function __get(string $name): null|bool|float|int|string
     {
         // Convert camel case to kebab case
-        $kebabCaseName = strtolower(Regex::getReplace('/([a-z])([A-Z])/', '$1-$2', $name));
+        $kebabCaseName = strtolower(
+            Regex::getReplace('/([a-z])([A-Z])/', '$1-$2', $name),
+        );
 
         return $this->matchResults[$kebabCaseName] ?? null;
     }
@@ -130,16 +132,20 @@ class OptResult
     /**
      * Set the match result for a param.
      */
-    public function setParam(string $param, mixed $value): void
-    {
+    public function setParam(
+        string $param,
+        string|float|int|bool|null $value,
+    ): void {
         $this->matchResults[$param] = $value;
     }
 
     /**
      * Set the match result for a term.
      */
-    public function setTerm(string $term, mixed $value): void
-    {
+    public function setTerm(
+        string $term,
+        string|float|int|bool|null $value,
+    ): void {
         $this->matchResults[$term] = $value;
     }
 }

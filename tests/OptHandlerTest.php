@@ -37,7 +37,11 @@ class OptHandlerTest extends TestCase
     public function testAddParam(): void
     {
         $optHandler = new OptHandler();
-        $optHandler->addParam(['password', 'p'], 'STRING', 'Password for the user');
+        $optHandler->addParam(
+            ['password', 'p'],
+            'STRING',
+            'Password for the user',
+        );
 
         $this->assertTrue($optHandler->hasOptionType('param'));
         $param = $optHandler->getOption('password');
@@ -73,7 +77,11 @@ class OptHandlerTest extends TestCase
         $optHandler = new OptHandler();
         $optHandler->addCommand(['add', 'a'], 'Add a new user');
         $optHandler->addFlag(['verbose', 'v'], 'Enable verbose output');
-        $optHandler->addParam(['password', 'p'], 'STRING', 'Password for the user');
+        $optHandler->addParam(
+            ['password', 'p'],
+            'STRING',
+            'Password for the user',
+        );
         $optHandler->addTerm('username', 'STRING', 'Username of the user');
 
         $this->assertSame('command', $optHandler->getOptionType('add'));
@@ -95,7 +103,11 @@ class OptHandlerTest extends TestCase
         $optHandler = new OptHandler();
         $optHandler->addCommand(['add', 'a'], 'Add a new user');
         $optHandler->addFlag(['verbose', 'v'], 'Enable verbose output');
-        $optHandler->addParam(['password', 'p'], 'STRING', 'Password for the user');
+        $optHandler->addParam(
+            ['password', 'p'],
+            'STRING',
+            'Password for the user',
+        );
         $optHandler->addTerm('username', 'STRING', 'Username of the user');
 
         $output = $optHandler->writeOptionBlock();

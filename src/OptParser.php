@@ -14,6 +14,8 @@ use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
  */
 class OptParser
 {
+    public const int DEBUG_MODE = 1;
+
     protected ArgParser $argParser;
 
     protected OptHandler $optHandler;
@@ -33,7 +35,7 @@ class OptParser
     public function __construct(
         protected string $name,
         protected string $desc,
-        protected bool $debugMode = false
+        protected int $flags = 0
     ) {
         $this->optHandler = new OptHandler();
 
@@ -84,8 +86,12 @@ class OptParser
      *
      * @throws ValueException
      */
-    public function addParam(array $aliases, string $type, string $desc, ?callable $callback = null): self
-    {
+    public function addParam(
+        array $aliases,
+        string $type,
+        string $desc,
+        ?callable $callback = null,
+    ): self {
         if (count($this->usages) > 1) {
             throw new ValueException('Cannot add params after usages');
         }
@@ -100,8 +106,12 @@ class OptParser
      *
      * @throws ValueException
      */
-    public function addTerm(string $name, string $type, string $desc, ?callable $callback = null): self
-    {
+    public function addTerm(
+        string $name,
+        string $type,
+        string $desc,
+        ?callable $callback = null,
+    ): self {
         if (count($this->usages) > 1) {
             throw new ValueException('Cannot add terms after usages');
         }
@@ -121,7 +131,9 @@ class OptParser
     public function addUsage(string $command, array $optionNames): self
     {
         if ($this->optHandler->getOptionType($command) !== 'command') {
-            throw new ValueException('Usage argument not a command: ' . $command);
+            throw new ValueException(
+                'Usage argument not a command: ' . $command,
+            );
         }
 
         // Multiple usages besides help must define a command.
@@ -153,7 +165,10 @@ class OptParser
             $this->allCommands = false;
         }
 
-        $filteredOptions = array_filter($optionNames, static fn($option): bool => $option !== 'help');
+        $filteredOptions = array_filter(
+            $optionNames,
+            static fn($option): bool => $option !== 'help',
+        );
         $this->usages[] = new Usage($this->optHandler, $filteredOptions);
 
         return $this;
@@ -183,7 +198,7 @@ class OptParser
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function parse(?array $args = null, bool $doResultCheck = true): OptResult
+    public function parse(?array $args = null): OptResult
     {
         global $argv;
         if ($args === null) {
@@ -266,8 +281,8 @@ class OptParser
                             'Term "%s" has invalid argument "%s": %s',
                             $termName,
                             $inputValue,
-                            $exception->getMessage()
-                        )
+                            $exception->getMessage(),
+                        ),
                     );
                 }
             }
@@ -301,7 +316,13 @@ class OptParser
                 if ($found) {
                     unset($markedOptions[$savedName]);
                     if ($savedValue !== '') {
-                        $optResult->addError(sprintf('Argument passed to flag "%s": "%s"', $flagName, $savedValue));
+                        $optResult->addError(
+                            sprintf(
+                                'Argument passed to flag "%s": "%s"',
+                                $flagName,
+                                $savedValue,
+                            ),
+                        );
                     }
                 }
             }
@@ -325,7 +346,9 @@ class OptParser
                 if ($found) {
                     unset($markedOptions[$savedName]);
                     if ($savedValue === null) {
-                        $optResult->addError('No value passed to param "' . $paramName . '"');
+                        $optResult->addError(
+                            'No value passed to param "' . $paramName . '"',
+                        );
                     } else {
                         try {
                             $matchedValue = $param->matchValue($savedValue);
@@ -336,8 +359,8 @@ class OptParser
                                     'Param "%s" has invalid argument "%s": %s',
                                     $paramName,
                                     $savedValue,
-                                    $exception->getMessage()
-                                )
+                                    $exception->getMessage(),
+                                ),
                             );
                         }
                     }
@@ -346,7 +369,13 @@ class OptParser
 
             // Warn about unused marked options
             foreach ($markedOptions as $optionName => $optionValue) {
-                $optResult->addError(sprintf('Unused input for "%s": "%s"', $optionName, $optionValue));
+                $optResult->addError(
+                    sprintf(
+                        'Unused input for "%s": "%s"',
+                        $optionName,
+                        $optionValue,
+                    ),
+                );
             }
         }
 
@@ -354,9 +383,7 @@ class OptParser
             $optResult->addError('Matching usage not found');
         }
 
-        if ($doResultCheck) {
-            $this->checkResult($optResult);
-        }
+        $this->checkResult($optResult);
 
         return $optResult;
     }
@@ -387,9 +414,14 @@ class OptParser
         $message .= PHP_EOL;
         $message .= 'Program terminating. Run again with --help for help.';
         error_log($message);
-        if (! $this->debugMode) {
-            exit;
+        if (! $this->isDebugMode()) {
+            exit();
         }
+    }
+
+    protected function isDebugMode(): bool
+    {
+        return (bool) ($this->flags & self::DEBUG_MODE);
     }
 
     /**
@@ -414,8 +446,8 @@ class OptParser
         echo PHP_EOL;
 
         echo $this->optHandler->writeOptionBlock();
-        if (! $this->debugMode) {
-            exit;
+        if (! $this->isDebugMode()) {
+            exit();
         }
     }
 }

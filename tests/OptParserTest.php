@@ -18,7 +18,10 @@ class OptParserTest extends TestCase
         $optParser = new OptParser('test', 'Test program');
         $optParser->addCommand(['add', 'a'], 'Add a new user');
 
-        $this->assertTrue($optParser->getOptHandler()->hasOptionType('command'));
+        $this->assertTrue(
+            $optParser->getOptHandler()
+                ->hasOptionType('command'),
+        );
     }
 
     public function testAddFlag(): void
@@ -32,7 +35,11 @@ class OptParserTest extends TestCase
     public function testAddParam(): void
     {
         $optParser = new OptParser('test', 'Test program');
-        $optParser->addParam(['password', 'p'], 'STRING', 'Password for the user');
+        $optParser->addParam(
+            ['password', 'p'],
+            'STRING',
+            'Password for the user',
+        );
 
         $this->assertTrue($optParser->getOptHandler()->hasOptionType('param'));
     }
@@ -50,10 +57,17 @@ class OptParserTest extends TestCase
         $optParser = new OptParser('test', 'Test program');
         $optParser->addCommand(['add', 'a'], 'Add a new user');
         $optParser->addTerm('username', 'STRING', 'Username of the user');
-        $optParser->addParam(['password', 'p'], 'STRING', 'Password for the user');
+        $optParser->addParam(
+            ['password', 'p'],
+            'STRING',
+            'Password for the user',
+        );
         $optParser->addUsage('add', ['username', 'password']);
 
-        $this->assertCount(2, $optParser->getUsages()); // Includes default help usage
+        $this->assertCount(
+            2,
+            $optParser->getUsages()
+        ); // Includes default help usage
     }
 
     public function testAddUsageAll(): void
@@ -61,11 +75,18 @@ class OptParserTest extends TestCase
         $optParser = new OptParser('test', 'Test program');
         $optParser->addCommand(['add', 'a'], 'Add a new user');
         $optParser->addTerm('username', 'STRING', 'Username of the user');
-        $optParser->addParam(['password', 'p'], 'STRING', 'Password for the user');
+        $optParser->addParam(
+            ['password', 'p'],
+            'STRING',
+            'Password for the user',
+        );
         $optParser->addFlag(['verbose', 'v'], 'Enable verbose output');
         $optParser->addUsageAll();
 
-        $this->assertCount(2, $optParser->getUsages()); // Includes default help usage
+        $this->assertCount(
+            2,
+            $optParser->getUsages()
+        ); // Includes default help usage
     }
 
     public function testAddUsageAllEmpty(): void
@@ -74,7 +95,10 @@ class OptParserTest extends TestCase
         $optParser->addCommand(['add', 'a'], 'Add a new user');
         $optParser->addUsageAll();
 
-        $this->assertCount(2, $optParser->getUsages()); // Includes default help usage
+        $this->assertCount(
+            2,
+            $optParser->getUsages()
+        ); // Includes default help usage
     }
 
     public function testAddUsageMixed(): void
@@ -101,7 +125,11 @@ class OptParserTest extends TestCase
 
     public function testHelp(): void
     {
-        $optParser = new OptParser('test', 'Test program', true);
+        $optParser = new OptParser(
+            'test',
+            'Test program',
+            OptParser::DEBUG_MODE
+        );
         $optParser->addCommand(['add', 'a'], 'Add a new user');
 
         $this->expectOutputRegex('/Usage:/');
@@ -113,10 +141,19 @@ class OptParserTest extends TestCase
         $optParser = new OptParser('test', 'Test program');
         $optParser->addCommand(['add', 'a'], 'Add a new user');
         $optParser->addTerm('username', 'STRING', 'Username of the user');
-        $optParser->addParam(['password', 'p'], 'STRING', 'Password for the user');
+        $optParser->addParam(
+            ['password', 'p'],
+            'STRING',
+            'Password for the user',
+        );
         $optParser->addUsage('add', ['username', 'password']);
 
-        $input = $optParser->parse(['test', 'add', 'john', '--password=secret']);
+        $input = $optParser->parse([
+            'test',
+            'add',
+            'john',
+            '--password=secret',
+        ]);
 
         $this->assertSame('add', $input->getCommand());
         $this->assertSame('john', $input->get('username'));
@@ -128,10 +165,14 @@ class OptParserTest extends TestCase
         $optParser = new OptParser('test', 'Test program');
         $optParser->addCommand(['add', 'a'], 'Add a new user');
         $optParser->addTerm('username', 'STRING', 'Username of the user');
-        $optParser->addParam(['password', 'p'], 'STRING', 'Password for the user');
+        $optParser->addParam(
+            ['password', 'p'],
+            'STRING',
+            'Password for the user',
+        );
         $optParser->addUsage('add', ['username', 'password']);
 
-        $input = $optParser->parse(['test', 'remove', 'john'], false);
+        $input = $optParser->parse(['test', 'remove', 'john']);
 
         $this->assertNotNull($input->getErrors());
     }

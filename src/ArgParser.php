@@ -59,7 +59,10 @@ class ArgParser
         [$options, $this->nonOptions] = $this->splitArrayAroundDash($args);
         $options = $this->joinArguments($options);
         foreach ($options as $option) {
-            $match = Regex::getMatch('/^--?([a-z]\w*(-[a-z]\w*)*)(=(.*))?/', $option);
+            $match = Regex::getMatch(
+                '/^--?([a-z]\w*(-[a-z]\w*)*)(=(.*))?/',
+                $option,
+            );
             if ($match !== []) {
                 $name = $match[1];
                 $arg = $match[4] ?? '';
@@ -140,11 +143,15 @@ class ArgParser
             $value = $array[$index];
             if (Regex::hasMatch('/^-([a-zA-Z]{2,})/', $value)) {
                 // Matched combined short options.
-                $this->errors[] = 'Combined short options are not allowed: ' . $value;
+                $this->errors[] =
+                    'Combined short options are not allowed: ' . $value;
             } elseif (Regex::hasMatch('/^' . $wordRegex . '$/', $value)) {
                 if (
-                    isset($array[$index + 1])
-                    && ! Regex::hasMatch('/^' . $wordStartRegex . '/', $array[$index + 1])
+                    isset($array[$index + 1]) &&
+                    ! Regex::hasMatch(
+                        '/^' . $wordStartRegex . '/',
+                        $array[$index + 1],
+                    )
                 ) {
                     // Matched a param with no =, so join parameter with
                     // argument by =.
@@ -158,7 +165,8 @@ class ArgParser
                 // Matched a param with = and argument.
                 $newArray[] = $value;
             } elseif (Regex::hasMatch('/^' . $wordStartRegex . '/i', $value)) {
-                $this->errors[] = 'Unrecognized flag or parameter format: ' . $value;
+                $this->errors[] =
+                    'Unrecognized flag or parameter format: ' . $value;
             } else {
                 $newArray[] = $value;
             }

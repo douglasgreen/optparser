@@ -73,17 +73,31 @@ class OptHandler
      *
      * @param list<string> $aliases
      */
-    public function addParam(array $aliases, string $type, string $desc, ?callable $callback = null): void
-    {
+    public function addParam(
+        array $aliases,
+        string $type,
+        string $desc,
+        ?callable $callback = null,
+    ): void {
         [$name, $others] = $this->pickName($aliases);
-        $this->params[$name] = new Param($name, $desc, $others, $type, $callback);
+        $this->params[$name] = new Param(
+            $name,
+            $desc,
+            $others,
+            $type,
+            $callback,
+        );
     }
 
     /**
      * A term is a positional argument.
      */
-    public function addTerm(string $name, string $type, string $desc, ?callable $callback = null): void
-    {
+    public function addTerm(
+        string $name,
+        string $type,
+        string $desc,
+        ?callable $callback = null,
+    ): void {
         $this->checkAlias($name);
         $this->terms[$name] = new Term($name, $desc, $type, $callback);
     }
@@ -97,7 +111,7 @@ class OptHandler
             array_keys($this->commands),
             array_keys($this->terms),
             array_keys($this->params),
-            array_keys($this->flags)
+            array_keys($this->flags),
         );
     }
 
@@ -309,7 +323,12 @@ class OptHandler
     {
         $output = 'Terms:' . PHP_EOL;
         foreach ($this->terms as $name => $term) {
-            $output .= sprintf('  %s: ', $name) . $term->getArgType() . '  ' . $term->getDesc() . PHP_EOL;
+            $output .=
+                sprintf('  %s: ', $name) .
+                $term->getArgType() .
+                '  ' .
+                $term->getDesc() .
+                PHP_EOL;
         }
 
         return $output . PHP_EOL;

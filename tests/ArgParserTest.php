@@ -11,7 +11,20 @@ class ArgParserTest extends TestCase
 {
     public function testGetMarkedOptions(): void
     {
-        $argv = ['script.php', 'file', '-1', '-a', '-b', 'arg1', '--foo=bar', '--baz-fez', '-2', '--', 'non1', 'non2'];
+        $argv = [
+            'script.php',
+            'file',
+            '-1',
+            '-a',
+            '-b',
+            'arg1',
+            '--foo=bar',
+            '--baz-fez',
+            '-2',
+            '--',
+            'non1',
+            'non2',
+        ];
         $argParser = new ArgParser($argv);
 
         $expected = [
@@ -26,7 +39,20 @@ class ArgParserTest extends TestCase
 
     public function testGetNonOptions(): void
     {
-        $argv = ['script.php', 'file', '-1', '-a', '-b', 'arg1', '--foo=bar', '--baz-fez', '-2', '--', 'non1', 'non2'];
+        $argv = [
+            'script.php',
+            'file',
+            '-1',
+            '-a',
+            '-b',
+            'arg1',
+            '--foo=bar',
+            '--baz-fez',
+            '-2',
+            '--',
+            'non1',
+            'non2',
+        ];
         $argParser = new ArgParser($argv);
 
         $expected = ['non1', 'non2'];
@@ -36,7 +62,20 @@ class ArgParserTest extends TestCase
 
     public function testGetUnmarkedOptions(): void
     {
-        $argv = ['script.php', 'file', '-1', '-a', '-b', 'arg1', '--foo=bar', '--baz-fez', '-2', '--', 'non1', 'non2'];
+        $argv = [
+            'script.php',
+            'file',
+            '-1',
+            '-a',
+            '-b',
+            'arg1',
+            '--foo=bar',
+            '--baz-fez',
+            '-2',
+            '--',
+            'non1',
+            'non2',
+        ];
         $argParser = new ArgParser($argv);
 
         $expected = ['file', '-1'];

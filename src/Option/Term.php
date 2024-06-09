@@ -10,7 +10,7 @@ class Term extends Option
         string $name,
         string $desc,
         string $argType,
-        ?callable $callback = null
+        ?callable $callback = null,
     ) {
         parent::__construct($name, $desc, $callback);
         $this->setArgType($argType);

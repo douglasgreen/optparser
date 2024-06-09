@@ -9,11 +9,8 @@ class Flag extends Option
     /**
      * @param list<string> $aliases
      */
-    public function __construct(
-        string $name,
-        string $desc,
-        array $aliases
-    ) {
+    public function __construct(string $name, string $desc, array $aliases)
+    {
         parent::__construct($name, $desc);
         foreach ($aliases as $alias) {
             $this->addAlias($alias);

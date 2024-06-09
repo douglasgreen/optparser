@@ -14,7 +14,7 @@ class Param extends Option
         string $desc,
         array $aliases,
         string $argType,
-        ?callable $callback = null
+        ?callable $callback = null,
     ) {
         parent::__construct($name, $desc, $callback);
         foreach ($aliases as $alias) {
