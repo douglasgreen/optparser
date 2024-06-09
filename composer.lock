@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "118d79fbd6714ca75f3f848133c312e8",
+    "content-hash": "b1feab9a8b49d3912ee44e6901e81394",
     "packages": [],
     "packages-dev": [
         {
@@ -146,16 +146,16 @@
         },
         {
             "name": "douglasgreen/utility",
-            "version": "0.1.1",
+            "version": "0.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/utility.git",
-                "reference": "7622b2bd4ab3db1316e694dc21a5f45f6b9bd22c"
+                "reference": "49f13a4914a9ef54181eab2446bec00fd5586fed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/7622b2bd4ab3db1316e694dc21a5f45f6b9bd22c",
-                "reference": "7622b2bd4ab3db1316e694dc21a5f45f6b9bd22c",
+                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/49f13a4914a9ef54181eab2446bec00fd5586fed",
+                "reference": "49f13a4914a9ef54181eab2446bec00fd5586fed",
                 "shasum": ""
             },
             "require": {
@@ -165,6 +165,7 @@
                 "phpmd/phpmd": "^2.15",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^10.5",
+                "phpunitgen/console": "^6.1",
                 "rector/rector": "^1.0",
                 "symplify/easy-coding-standard": "^12.2"
             },
@@ -200,9 +201,9 @@
             ],
             "support": {
                 "issues": "https://github.com/douglasgreen/utility/issues",
-                "source": "https://github.com/douglasgreen/utility/tree/0.1.1"
+                "source": "https://github.com/douglasgreen/utility/tree/0.2.6"
             },
-            "time": "2024-06-07T10:21:52+00:00"
+            "time": "2024-06-09T16:55:29+00:00"
         },
         {
             "name": "myclabs/deep-copy",

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DouglasGreen\OptParser;
 
 use DouglasGreen\Utility\Exceptions\Data\ValueException;
-use DouglasGreen\Utility\Regex;
+use DouglasGreen\Utility\Regex\Regex;
 
 /**
  * Parse command-line arguments from $args.

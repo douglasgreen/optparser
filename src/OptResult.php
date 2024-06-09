@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser;
 
-use DouglasGreen\Utility\Regex;
+use DouglasGreen\Utility\Regex\Regex;
 
 /**
  * Represent data from matching a usage.
@@ -51,7 +51,7 @@ class OptResult
     public function __get(string $name): null|bool|float|int|string
     {
         // Convert camel case to kebab case
-        $kebabCaseName = strtolower(Regex::replace('/([a-z])([A-Z])/', '$1-$2', $name));
+        $kebabCaseName = strtolower(Regex::getReplace('/([a-z])([A-Z])/', '$1-$2', $name));
 
         return $this->matchResults[$kebabCaseName] ?? null;
     }

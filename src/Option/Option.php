@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser\Option;
 
-use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
-use DouglasGreen\Utility\Regex;
 use DouglasGreen\Utility\Exceptions\Data\TypeException;
 use DouglasGreen\Utility\Exceptions\Data\ValueException;
+use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
+use DouglasGreen\Utility\Regex\Regex;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -309,7 +309,7 @@ abstract class Option
     protected function castFixed(string $value): string
     {
         if (Regex::hasMatch('/^[+-]?\d+([,_]\d{3})*(\.\d+)?$/', $value)) {
-            return Regex::replace('/[,_]/', '', $value);
+            return Regex::getReplace('/[,_]/', '', $value);
         }
 
         throw new ArgumentException('Not a valid fixed-point number');
