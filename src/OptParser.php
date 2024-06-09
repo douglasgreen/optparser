@@ -16,6 +16,8 @@ class OptParser
 {
     public const int DEBUG_MODE = 1;
 
+    public const int RESULT_CHECK = 1;
+
     protected ArgParser $argParser;
 
     protected OptHandler $optHandler;
@@ -383,7 +385,9 @@ class OptParser
             $optResult->addError('Matching usage not found');
         }
 
-        $this->checkResult($optResult);
+        if ($this->doResultCheck()) {
+            $this->checkResult($optResult);
+        }
 
         return $optResult;
     }
@@ -417,6 +421,11 @@ class OptParser
         if (! $this->isDebugMode()) {
             exit();
         }
+    }
+
+    protected function doResultCheck(): bool
+    {
+        return (bool) ($this->flags & self::RESULT_CHECK);
     }
 
     protected function isDebugMode(): bool
