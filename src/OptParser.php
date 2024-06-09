@@ -16,7 +16,7 @@ class OptParser
 {
     public const int DEBUG_MODE = 1;
 
-    public const int RESULT_CHECK = 1;
+    public const int SKIP_RESULT_CHECK = 1;
 
     protected ArgParser $argParser;
 
@@ -390,9 +390,7 @@ class OptParser
             $optResult->addError('Matching usage not found');
         }
 
-        if ($this->doResultCheck()) {
-            $this->checkResult($optResult);
-        }
+        $this->checkResult($optResult);
 
         return $optResult;
     }
@@ -404,6 +402,10 @@ class OptParser
      */
     protected function checkResult(OptResult $optResult): void
     {
+        if ($this->hasFlag(self::SKIP_RESULT_CHECK)) {
+            return;
+        }
+
         $errors = $optResult->getErrors();
         if ($errors === []) {
             return;
@@ -423,19 +425,14 @@ class OptParser
         $message .= PHP_EOL;
         $message .= 'Program terminating. Run again with --help for help.';
         error_log($message);
-        if (! $this->isDebugMode()) {
+        if (! $this->hasFlag(self::DEBUG_MODE)) {
             exit();
         }
     }
 
-    protected function doResultCheck(): bool
+    protected function hasFlag(int $flag): bool
     {
-        return (bool) ($this->flags & self::RESULT_CHECK);
-    }
-
-    protected function isDebugMode(): bool
-    {
-        return (bool) ($this->flags & self::DEBUG_MODE);
+        return (bool) ($this->flags & $flag);
     }
 
     /**
@@ -460,7 +457,7 @@ class OptParser
         echo PHP_EOL;
 
         echo $this->optHandler->writeOptionBlock();
-        if (! $this->isDebugMode()) {
+        if (! $this->hasFlag(self::DEBUG_MODE)) {
             exit();
         }
     }

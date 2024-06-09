@@ -128,7 +128,7 @@ class OptParserTest extends TestCase
         $optParser = new OptParser(
             'test',
             'Test program',
-            OptParser::RESULT_CHECK
+            OptParser::SKIP_RESULT_CHECK
         );
         $optParser->addCommand(['add', 'a'], 'Add a new user');
 
