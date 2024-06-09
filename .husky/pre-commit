@@ -1,2 +1,2 @@
-composer lint
-composer test
+script/lint
+script/test

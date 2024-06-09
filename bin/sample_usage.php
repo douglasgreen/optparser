@@ -12,7 +12,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $optParser = new OptParser('User Manager', 'A program to manage user accounts');
 
 // Adding commands
-$optParser->addCommand(['add', 'a'], 'Add a new user')
+$optParser
+    ->addCommand(['add', 'a'], 'Add a new user')
     ->addCommand(['delete', 'd'], 'Delete an existing user')
     ->addCommand(['list', 'l'], 'List all users')
 
@@ -38,7 +39,7 @@ $optParser->addCommand(['add', 'a'], 'Add a new user')
             }
 
             throw new ArgumentException('Role must be admin, manager, or user');
-        }
+        },
     )
     ->addParam(['o', 'output'], 'OUTFILE', 'Output file for the list command')
 

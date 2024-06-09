@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 
-# script/bootstrap: Resolve all dependencies that the application requires to
-#                   run.
+# script/bootstrap: Resolve all dependencies that the application requires to run.
 # @see https://github.blog/2015-06-30-scripts-to-rule-them-all/
 
 set -e
