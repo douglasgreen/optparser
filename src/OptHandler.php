@@ -192,6 +192,14 @@ class OptHandler
     }
 
     /**
+     * Check if the name is a command.
+     */
+    public function isCommand(string $name): bool
+    {
+        return isset($this->commands[$name]);
+    }
+
+    /**
      * Write an option by name.
      */
     public function writeOption(string $name): string

@@ -244,6 +244,11 @@ class OptParser
             if ($inputName === null) {
                 $optResult->addError('Command name not provided');
                 $this->checkResult($optResult);
+            } elseif (! $this->optHandler->isCommand($inputName)) {
+                $optResult->addError(
+                    sprintf('Command name not recognized: "%s"', $inputName)
+                );
+                $this->checkResult($optResult);
             }
         }
 
