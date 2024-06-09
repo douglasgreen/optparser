@@ -51,10 +51,12 @@ class OptHandler
      *
      * @param list<string> $aliases
      */
-    public function addCommand(array $aliases, string $desc): void
+    public function addCommand(array $aliases, string $desc): self
     {
         [$name, $others] = $this->pickName($aliases);
         $this->commands[$name] = new Command($name, $desc, $others);
+
+        return $this;
     }
 
     /**
@@ -62,10 +64,12 @@ class OptHandler
      *
      * @param list<string> $aliases
      */
-    public function addFlag(array $aliases, string $desc): void
+    public function addFlag(array $aliases, string $desc): self
     {
         [$name, $others] = $this->pickName($aliases);
         $this->flags[$name] = new Flag($name, $desc, $others);
+
+        return $this;
     }
 
     /**
@@ -78,7 +82,7 @@ class OptHandler
         string $type,
         string $desc,
         ?callable $callback = null,
-    ): void {
+    ): self {
         [$name, $others] = $this->pickName($aliases);
         $this->params[$name] = new Param(
             $name,
@@ -87,6 +91,8 @@ class OptHandler
             $type,
             $callback,
         );
+
+        return $this;
     }
 
     /**
@@ -97,9 +103,11 @@ class OptHandler
         string $type,
         string $desc,
         ?callable $callback = null,
-    ): void {
+    ): self {
         $this->checkAlias($name);
         $this->terms[$name] = new Term($name, $desc, $type, $callback);
+
+        return $this;
     }
 
     /**

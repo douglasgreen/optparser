@@ -61,9 +61,11 @@ class OptResult
     /**
      * Add an error message.
      */
-    public function addError(string $error): void
+    public function addError(string $error): self
     {
         $this->errors[] = $error;
+
+        return $this;
     }
 
     /**
@@ -115,18 +117,22 @@ class OptResult
     /**
      * Set the match result for a command.
      */
-    public function setCommand(string $command, bool $value): void
+    public function setCommand(string $command, bool $value): self
     {
         $this->command = $command;
         $this->matchResults[$command] = $value;
+
+        return $this;
     }
 
     /**
      * Set the match result for a flag.
      */
-    public function setFlag(string $flag, bool $value): void
+    public function setFlag(string $flag, bool $value): self
     {
         $this->matchResults[$flag] = $value;
+
+        return $this;
     }
 
     /**
@@ -135,8 +141,10 @@ class OptResult
     public function setParam(
         string $param,
         string|float|int|bool|null $value,
-    ): void {
+    ): self {
         $this->matchResults[$param] = $value;
+
+        return $this;
     }
 
     /**
@@ -145,7 +153,9 @@ class OptResult
     public function setTerm(
         string $term,
         string|float|int|bool|null $value,
-    ): void {
+    ): self {
         $this->matchResults[$term] = $value;
+
+        return $this;
     }
 }
