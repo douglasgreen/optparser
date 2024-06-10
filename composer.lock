@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b1feab9a8b49d3912ee44e6901e81394",
+    "content-hash": "7ff80544a3cc649d4ce39f10d8ff2a04",
     "packages": [],
     "packages-dev": [
         {
@@ -146,16 +146,16 @@
         },
         {
             "name": "douglasgreen/utility",
-            "version": "0.2.7",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/utility.git",
-                "reference": "33291505c081bf5437d5320e2c350bc15c22feac"
+                "reference": "78eb841d9c064c6f4ef7f3d8532de651a19496db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/33291505c081bf5437d5320e2c350bc15c22feac",
-                "reference": "33291505c081bf5437d5320e2c350bc15c22feac",
+                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/78eb841d9c064c6f4ef7f3d8532de651a19496db",
+                "reference": "78eb841d9c064c6f4ef7f3d8532de651a19496db",
                 "shasum": ""
             },
             "require": {
@@ -201,9 +201,9 @@
             ],
             "support": {
                 "issues": "https://github.com/douglasgreen/utility/issues",
-                "source": "https://github.com/douglasgreen/utility/tree/0.2.7"
+                "source": "https://github.com/douglasgreen/utility/tree/0.3.0"
             },
-            "time": "2024-06-09T21:01:18+00:00"
+            "time": "2024-06-10T09:52:24+00:00"
         },
         {
             "name": "myclabs/deep-copy",
