@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace DouglasGreen\OptParser\Option;
 
+use Closure;
+use DateInterval;
+use DateMalformedIntervalStringException;
+use DateTimeImmutable;
 use DouglasGreen\Utility\Exceptions\Data\TypeException;
 use DouglasGreen\Utility\Exceptions\Data\ValueException;
 use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
 use DouglasGreen\Utility\Regex\Regex;
 use DouglasGreen\Utility\FileSystem\Path;
 
-/**
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- */
 abstract class Option
 {
     /**
@@ -52,7 +53,7 @@ abstract class Option
         'UUID',
     ];
 
-    protected ?\Closure $callback = null;
+    protected ?Closure $callback = null;
 
     /**
      * @var ?list<string>
@@ -72,7 +73,7 @@ abstract class Option
         ?callable $callback = null
     ) {
         if ($callback !== null) {
-            $this->callback = \Closure::fromCallable($callback);
+            $this->callback = Closure::fromCallable($callback);
         }
     }
 
@@ -146,7 +147,7 @@ abstract class Option
         }
 
         // Apply callback to validate if available
-        if ($this->callback instanceof \Closure) {
+        if ($this->callback instanceof Closure) {
             return ($this->callback)($filtered);
         }
 
@@ -202,16 +203,13 @@ abstract class Option
     }
 
     /**
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     *
      * @throws ArgumentException
      */
     protected function castDateInterval(string $input): string
     {
         try {
-            $interval = \DateInterval::createFromDateString($input);
-        } catch (\DateMalformedIntervalStringException) {
+            $interval = DateInterval::createFromDateString($input);
+        } catch (DateMalformedIntervalStringException) {
             throw new ArgumentException('Not a valid date interval');
         }
 
@@ -222,7 +220,7 @@ abstract class Option
         $formatted = [];
 
         // Convert DateInterval to total seconds
-        $start = new \DateTimeImmutable();
+        $start = new DateTimeImmutable();
         $end = $start->add($interval);
         $seconds = $end->getTimestamp() - $start->getTimestamp();
 
@@ -487,12 +485,8 @@ abstract class Option
             throw new ArgumentException('File is not readable');
         }
 
-        $path = realpath($value);
-        if ($path === false) {
-            throw new ArgumentException('Path is invalid');
-        }
-
-        return $path;
+        $path = new Path($value);
+        return $path->resolve();
     }
 
     /**
@@ -507,12 +501,8 @@ abstract class Option
             throw new ArgumentException('File directory is not writable');
         }
 
-        $path = realpath($directory);
-        if ($path === false) {
-            throw new ArgumentException('Directory path is invalid');
-        }
-
-        return $path . (DIRECTORY_SEPARATOR . basename($value));
+        $path = new Path($directory);
+        return $path->resolve() . (DIRECTORY_SEPARATOR . basename($value));
     }
 
     /**

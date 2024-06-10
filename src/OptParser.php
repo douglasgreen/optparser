@@ -9,8 +9,6 @@ use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
 
 /**
  * Define a program with a series of usage options.
- *
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class OptParser
 {
@@ -197,7 +195,6 @@ class OptParser
     /**
      * @param ?string[] $args
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function parse(?array $args = null): OptResult

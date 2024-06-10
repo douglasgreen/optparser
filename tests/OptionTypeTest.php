@@ -9,10 +9,6 @@ use DouglasGreen\Utility\Exceptions\Data\TypeException;
 use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyMethods)
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
- */
 class OptionTypeTest extends TestCase
 {
     public function testBoolArgType(): void

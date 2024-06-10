@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Rector configuration file
+ * Rector configuration file.
  *
  * This file is used to configure the Rector PHP code quality tool.
  *

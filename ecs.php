@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Easy Coding Standard (ECS) configuration file
+ * Easy Coding Standard (ECS) configuration file.
  *
  * This file is used to configure the ECS PHP code style and quality tool.
  *
@@ -29,9 +29,14 @@
 
 declare(strict_types=1);
 
-use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
+/*
+ * The Symplify statements must precede the PhpCsFixer statements or PHPStan reports namespace errors.
+ */
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
+use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
+use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
+use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 
 $hasPhpUnit = false;
 $hasSymfony = false;
@@ -100,7 +105,6 @@ switch ($phpVersion) {
         break;
 }
 
-// I removed phpCsFixer and phpCsFixerRisky because they conflict with Rector.
 $sets = [
     'doctrineAnnotation' => $hasDoctrine,
     'perCS' => true,
@@ -109,6 +113,8 @@ $sets = [
     'php81Migration' => $php81Migration,
     'php82Migration' => $php82Migration,
     'php83Migration' => $php83Migration,
+    'phpCsFixer' => true,
+    'phpCsFixerRisky' => false,
     'phpunit100MigrationRisky' => false,
     'symfony' => $hasSymfony,
     'symfonyRisky' => false,
@@ -166,7 +172,6 @@ return ECSConfig::configure()
         // Be careful about this part of the config. ECS removes the tag and its
         // contents when what you often want to do is remove or modify the tag
         // only and not its contents.
-        /* @phpstan-ignore-next-line PHPStan can't find this class for some reason */
         GeneralPhpdocAnnotationRemoveFixer::class,
         [
             'annotations' => [
@@ -252,4 +257,10 @@ return ECSConfig::configure()
                 'usedby',
             ],
         ],
+    )
+    ->withSkip(
+        [
+            GlobalNamespaceImportFixer::class,
+            OrderedImportsFixer::class => __DIR__ . '/ecs.php',
+        ]
     );

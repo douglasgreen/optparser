@@ -8,9 +8,6 @@ use DouglasGreen\OptParser\OptParser;
 use DouglasGreen\Utility\Exceptions\Data\ValueException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
- */
 class OptParserTest extends TestCase
 {
     protected OptParser $optParser;

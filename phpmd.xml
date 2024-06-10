@@ -14,23 +14,35 @@
     <exclude-pattern>tests/*</exclude-pattern>
 
     <rule ref="rulesets/cleancode.xml">
-        <!-- Avoid else expresssions does not help -->
+        <!-- Avoiding else expresssions does not help -->
         <exclude name="ElseExpression" />
-        <!-- This does not help since = is not ===. -->
+
+        <!-- This does not help since = is not === so we don't confuse them. -->
         <exclude name="IfStatementAssignment" />
-        <!-- Customized below -->
-        <exclude name="MissingImport" />
+
         <!-- Calling static functions is necessary sometimes. -->
         <exclude name="StaticAccess" />
     </rule>
     <rule ref="rulesets/codesize.xml">
-        <!-- Redundant and not a good measurement. -->
-        <exclude name="NPathComplexity" />
-        <!-- Customized below -->
+        <!-- Redundant, not visible in code, and not good measurements. -->
         <exclude name="CyclomaticComplexity" />
-        <!-- Customized below -->
+        <exclude name="ExcessiveClassComplexity" />
+        <exclude name="NPathComplexity" />
+
+        <!-- Lumps together public properties and methods so it's redundant -->
+        <exclude name="ExcessivePublicCount" />
+
+        <!-- Protected and private properties are not part of the class API -->
+        <exclude name="TooManyFields" />
+
+        <!-- Lumps together public, protected, and private methods -->
         <exclude name="TooManyMethods" />
+
         <!-- Customized below -->
+        <exclude name="ExcessiveClassLength" />
+        <exclude name="ExcessiveMethodLength" />
+        <exclude name="ExcessiveParameterList" />
+        <exclude name="TooManyMethods" />
         <exclude name="TooManyPublicMethods" />
     </rule>
     <rule ref="rulesets/controversial.xml" />
@@ -38,31 +50,31 @@
     <rule ref="rulesets/naming.xml" />
     <rule ref="rulesets/unusedcode.xml" />
 
-    <!-- Mark globals like \PDO rather than importing them -->
-    <rule ref="rulesets/cleancode.xml/MissingImport">
+    <!-- 99% of our PHP classes are less than this length. -->
+    <rule ref="rulesets/codesize.xml/ExcessiveClassLength">
         <properties>
-            <property name="ignore-global" value="true" />
+            <property name="minimum" value="2500" />
         </properties>
     </rule>
 
-    <!-- The default value was 10, which is too restrictive -->
-    <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
+    <!-- 99% of our PHP functions are less than this length. -->
+    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
         <properties>
-            <property name="reportLevel" value="20" />
+            <property name="minimum" value="150" />
         </properties>
     </rule>
 
-    <!-- Ignore getters and setters -->
-    <rule ref="rulesets/codesize.xml/TooManyMethods">
+    <!-- 99% of our PHP functions are less than this parameter count. -->
+    <rule ref="rulesets/codesize.xml/ExcessiveParameterList">
         <properties>
-            <property name="ignorepattern" value="/^(get|set)/" />
+            <property name="minimum" value="8" />
         </properties>
     </rule>
 
-    <!-- Ignore getters and setters` -->
+    <!-- 99% of our PHP classes have less public methods, excluding get|set. -->
     <rule ref="rulesets/codesize.xml/TooManyPublicMethods">
         <properties>
-            <property name="ignorepattern" value="/^(get|set)/" />
+            <property name="maxmethods" value="25" />
         </properties>
     </rule>
 </ruleset>
