@@ -6,8 +6,8 @@ namespace DouglasGreen\OptParser\Option;
 
 use Closure;
 use DateInterval;
-use DateMalformedIntervalStringException;
 use DateTimeImmutable;
+use Exception;
 use DouglasGreen\Utility\Exceptions\Data\TypeException;
 use DouglasGreen\Utility\Exceptions\Data\ValueException;
 use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
@@ -32,7 +32,7 @@ abstract class Option
      *
      * @see https://www.php.net/manual/en/filter.filters.validate.php
      */
-    protected const array ARG_TYPES = [
+    protected const ARG_TYPES = [
         'BOOL',
         'DATE',
         'DATETIME',
@@ -209,8 +209,9 @@ abstract class Option
     {
         try {
             $interval = DateInterval::createFromDateString($input);
-        } catch (DateMalformedIntervalStringException) {
-            throw new ArgumentException('Not a valid date interval');
+        } catch (Exception) {
+            // Catch a generic exception because catching DateMalformedIntervalStringException requires PHP 8.3.
+            $interval = false;
         }
 
         if ($interval === false) {

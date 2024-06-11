@@ -12,9 +12,9 @@ use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
  */
 class OptParser
 {
-    public const int DEBUG_MODE = 1;
+    public const DEBUG_MODE = 1;
 
-    public const int SKIP_RESULT_CHECK = 1;
+    public const SKIP_RESULT_CHECK = 1;
 
     protected ArgParser $argParser;
 

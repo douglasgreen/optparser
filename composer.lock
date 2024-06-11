@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4936b81340b6a17b53f3c1cdecf1accf",
+    "content-hash": "7134cfe0ce064e1218dd5104aa450ecc",
     "packages": [],
     "packages-dev": [
         {
@@ -150,12 +150,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/config-setup.git",
-                "reference": "e89610479ecf08686af13ac1ff0e817790fde74f"
+                "reference": "cbf4dd88108ff788ffeb1095763bd0c2011118e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/e89610479ecf08686af13ac1ff0e817790fde74f",
-                "reference": "e89610479ecf08686af13ac1ff0e817790fde74f",
+                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/cbf4dd88108ff788ffeb1095763bd0c2011118e4",
+                "reference": "cbf4dd88108ff788ffeb1095763bd0c2011118e4",
                 "shasum": ""
             },
             "require": {
@@ -220,26 +220,27 @@
                 "source": "https://github.com/douglasgreen/config-setup/tree/main",
                 "issues": "https://github.com/douglasgreen/config-setup/issues"
             },
-            "time": "2024-06-11T17:17:23+00:00"
+            "time": "2024-06-11T20:42:15+00:00"
         },
         {
             "name": "douglasgreen/utility",
-            "version": "0.3.6",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/utility.git",
-                "reference": "7bcd9c335afee77862c568b9a0da633f8d18cd0e"
+                "reference": "9d2ea5800ac6593ddfebfc1f246ed1521e029049"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/7bcd9c335afee77862c568b9a0da633f8d18cd0e",
-                "reference": "7bcd9c335afee77862c568b9a0da633f8d18cd0e",
+                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/9d2ea5800ac6593ddfebfc1f246ed1521e029049",
+                "reference": "9d2ea5800ac6593ddfebfc1f246ed1521e029049",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
             "require-dev": {
+                "douglasgreen/config-setup": "dev-main",
                 "phpmd/phpmd": "^2.15",
                 "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^10.5",
@@ -247,6 +248,7 @@
                 "rector/rector": "^1.0",
                 "symplify/easy-coding-standard": "^12.2"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -279,9 +281,9 @@
             ],
             "support": {
                 "issues": "https://github.com/douglasgreen/utility/issues",
-                "source": "https://github.com/douglasgreen/utility/tree/0.3.6"
+                "source": "https://github.com/douglasgreen/utility/tree/main"
             },
-            "time": "2024-06-11T12:12:51+00:00"
+            "time": "2024-06-11T17:28:38+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2943,7 +2945,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "douglasgreen/config-setup": 20
+        "douglasgreen/config-setup": 20,
+        "douglasgreen/utility": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
