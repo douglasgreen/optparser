@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ff80544a3cc649d4ce39f10d8ff2a04",
+    "content-hash": "4936b81340b6a17b53f3c1cdecf1accf",
     "packages": [],
     "packages-dev": [
         {
@@ -145,17 +145,95 @@
             "time": "2024-05-06T16:37:16+00:00"
         },
         {
-            "name": "douglasgreen/utility",
-            "version": "0.3.0",
+            "name": "douglasgreen/config-setup",
+            "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/douglasgreen/utility.git",
-                "reference": "78eb841d9c064c6f4ef7f3d8532de651a19496db"
+                "url": "https://github.com/douglasgreen/config-setup.git",
+                "reference": "e89610479ecf08686af13ac1ff0e817790fde74f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/78eb841d9c064c6f4ef7f3d8532de651a19496db",
-                "reference": "78eb841d9c064c6f4ef7f3d8532de651a19496db",
+                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/e89610479ecf08686af13ac1ff0e817790fde74f",
+                "reference": "e89610479ecf08686af13ac1ff0e817790fde74f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "^2.15",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^10.5",
+                "rector/rector": "^1.0",
+                "symplify/easy-coding-standard": "^12.2"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DouglasGreen\\ConfigSetup\\": "src/"
+                }
+            },
+            "scripts": {
+                "lint": [
+                    "ecs",
+                    "rector --dry-run",
+                    "./run_phpmd.sh",
+                    "./run_phpstan.sh"
+                ],
+                "lint:fix": [
+                    "ecs --fix",
+                    "rector"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Douglas Green",
+                    "email": "douglas@nurd.site",
+                    "homepage": "https://nurd.site/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Preconfigured setup files for linting, fixing, and testing PHP and JavaScript projects",
+            "homepage": "https://github.com/douglasgreen/config-setup",
+            "keywords": [
+                "automation",
+                "ci-cd",
+                "code-quality",
+                "coding-standards",
+                "composer",
+                "config",
+                "fixing",
+                "linting",
+                "php",
+                "php-cs-fixer",
+                "phpcs",
+                "phpunit",
+                "static-analysis",
+                "testing"
+            ],
+            "support": {
+                "source": "https://github.com/douglasgreen/config-setup/tree/main",
+                "issues": "https://github.com/douglasgreen/config-setup/issues"
+            },
+            "time": "2024-06-11T17:17:23+00:00"
+        },
+        {
+            "name": "douglasgreen/utility",
+            "version": "0.3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/douglasgreen/utility.git",
+                "reference": "7bcd9c335afee77862c568b9a0da633f8d18cd0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/7bcd9c335afee77862c568b9a0da633f8d18cd0e",
+                "reference": "7bcd9c335afee77862c568b9a0da633f8d18cd0e",
                 "shasum": ""
             },
             "require": {
@@ -201,9 +279,9 @@
             ],
             "support": {
                 "issues": "https://github.com/douglasgreen/utility/issues",
-                "source": "https://github.com/douglasgreen/utility/tree/0.3.0"
+                "source": "https://github.com/douglasgreen/utility/tree/0.3.6"
             },
-            "time": "2024-06-10T09:52:24+00:00"
+            "time": "2024-06-11T12:12:51+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2864,7 +2942,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "douglasgreen/config-setup": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -41,6 +41,7 @@
         "php": ">=8.1"
     },
     "require-dev": {
+        "douglasgreen/config-setup": "dev-main",
         "douglasgreen/utility": "^0.3",
         "phpmd/phpmd": "^2.15",
         "phpstan/phpstan": "^1.10",
@@ -59,6 +60,18 @@
             "ecs --fix",
             "rector"
         ],
-        "test": "phpunit"
-    }
+        "test": "phpunit",
+        "post-install-cmd": [
+            "vendor/douglasgreen/config-setup/bin/copy_files.php"
+        ],
+        "post-update-cmd": [
+            "vendor/douglasgreen/config-setup/bin/copy_files.php"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/douglasgreen/config-setup"
+        }
+    ]
 }
