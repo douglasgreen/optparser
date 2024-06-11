@@ -60,13 +60,13 @@
             "ecs --fix",
             "rector"
         ],
-        "test": "phpunit",
         "post-install-cmd": [
             "vendor/douglasgreen/config-setup/bin/copy_files.php"
         ],
         "post-update-cmd": [
             "vendor/douglasgreen/config-setup/bin/copy_files.php"
-        ]
+        ],
+        "test": "phpunit"
     },
     "repositories": [
         {
