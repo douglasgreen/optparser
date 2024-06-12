@@ -49,10 +49,7 @@ class OptionTest extends TestCase
     public function testOptionMatchValue(): void
     {
         $param = new Param('email', 'User email', ['e'], 'EMAIL');
-        $this->assertSame(
-            'test@example.com',
-            $param->matchValue('test@example.com'),
-        );
+        $this->assertSame('test@example.com', $param->matchValue('test@example.com'));
 
         $this->expectException(ArgumentException::class);
         $param->matchValue('invalid-email');
@@ -60,12 +57,7 @@ class OptionTest extends TestCase
 
     public function testParamCreation(): void
     {
-        $param = new Param(
-            'password',
-            'Password for the user',
-            ['p'],
-            'STRING',
-        );
+        $param = new Param('password', 'Password for the user', ['p'], 'STRING');
         $this->assertSame('password', $param->getName());
         $this->assertSame('Password for the user', $param->getDesc());
         $this->assertSame(['p'], $param->getAliases());

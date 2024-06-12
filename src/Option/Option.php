@@ -70,7 +70,7 @@ abstract class Option
     public function __construct(
         protected string $name,
         protected string $desc,
-        ?callable $callback = null
+        ?callable $callback = null,
     ) {
         if ($callback !== null) {
             $this->callback = Closure::fromCallable($callback);
@@ -160,12 +160,9 @@ abstract class Option
     protected function addAlias(string $alias): void
     {
         // Only matches lower case separated by hyphens
-        if (! Regex::hasMatch(
-            '/^([a-z][a-z0-9]*(-[a-z0-9]+)*|[A-Z])$/',
-            $alias
-        )) {
+        if (! Regex::hasMatch('/^([a-z][a-z0-9]*(-[a-z0-9]+)*|[A-Z])$/', $alias)) {
             throw new ValueException(
-                'Alias is not hyphenated lower case or single-letter upper case: ' . $alias
+                'Alias is not hyphenated lower case or single-letter upper case: ' . $alias,
             );
         }
 
@@ -177,11 +174,7 @@ abstract class Option
      */
     protected function castBool(string $value): bool
     {
-        $valid = filter_var(
-            $value,
-            FILTER_VALIDATE_BOOLEAN,
-            FILTER_NULL_ON_FAILURE
-        );
+        $valid = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
             throw new ArgumentException('Not a valid Boolean');
         }
@@ -291,7 +284,7 @@ abstract class Option
         $valid = filter_var(
             $value,
             FILTER_VALIDATE_DOMAIN,
-            FILTER_FLAG_HOSTNAME | FILTER_NULL_ON_FAILURE
+            FILTER_FLAG_HOSTNAME | FILTER_NULL_ON_FAILURE,
         );
         if ($valid === null) {
             throw new ArgumentException('Not a valid domain');
@@ -305,11 +298,7 @@ abstract class Option
      */
     protected function castEmail(string $value): string
     {
-        $valid = filter_var(
-            $value,
-            FILTER_VALIDATE_EMAIL,
-            FILTER_NULL_ON_FAILURE
-        );
+        $valid = filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
             throw new ArgumentException('Not a valid email');
         }
@@ -337,7 +326,7 @@ abstract class Option
         $valid = filter_var(
             $value,
             FILTER_VALIDATE_FLOAT,
-            FILTER_FLAG_ALLOW_THOUSAND | FILTER_FLAG_ALLOW_SCIENTIFIC | FILTER_NULL_ON_FAILURE
+            FILTER_FLAG_ALLOW_THOUSAND | FILTER_FLAG_ALLOW_SCIENTIFIC | FILTER_NULL_ON_FAILURE,
         );
         if ($valid === null) {
             throw new ArgumentException('Not a valid floating-point number');
@@ -354,7 +343,7 @@ abstract class Option
         $valid = filter_var(
             $value,
             FILTER_VALIDATE_INT,
-            FILTER_FLAG_ALLOW_OCTAL | FILTER_FLAG_ALLOW_HEX | FILTER_NULL_ON_FAILURE
+            FILTER_FLAG_ALLOW_OCTAL | FILTER_FLAG_ALLOW_HEX | FILTER_NULL_ON_FAILURE,
         );
         if ($valid === null) {
             throw new ArgumentException('Not a valid integer');
@@ -381,11 +370,7 @@ abstract class Option
      */
     protected function castMacAddress(string $value): string
     {
-        $valid = filter_var(
-            $value,
-            FILTER_VALIDATE_MAC,
-            FILTER_NULL_ON_FAILURE
-        );
+        $valid = filter_var($value, FILTER_VALIDATE_MAC, FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
             throw new ArgumentException('Not a valid MAC address');
         }
@@ -411,11 +396,7 @@ abstract class Option
      */
     protected function castUrl(string $value): string
     {
-        $valid = filter_var(
-            $value,
-            FILTER_VALIDATE_URL,
-            FILTER_NULL_ON_FAILURE
-        );
+        $valid = filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE);
         if ($valid === null) {
             throw new ArgumentException('Not a valid URL');
         }
@@ -442,11 +423,16 @@ abstract class Option
         }
 
         // Insert hyphens at the appropriate positions
-        $uuid = substr($value, 0, 8) . '-' .
-                substr($value, 8, 4) . '-' .
-                substr($value, 12, 4) . '-' .
-                substr($value, 16, 4) . '-' .
-                substr($value, 20);
+        $uuid =
+            substr($value, 0, 8) .
+            '-' .
+            substr($value, 8, 4) .
+            '-' .
+            substr($value, 12, 4) .
+            '-' .
+            substr($value, 16, 4) .
+            '-' .
+            substr($value, 20);
 
         return $uuid;
     }

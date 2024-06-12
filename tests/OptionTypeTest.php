@@ -40,12 +40,8 @@ class OptionTypeTest extends TestCase
         $this->assertSame('1 year', $param->matchValue('365 days'));
         $this->assertSame('1 year', $param->matchValue('1 year'));
         $this->assertSame('2 years', $param->matchValue('2 years'));
-        $this->assertTrue(
-            str_starts_with((string) $param->matchValue('1 month'), '1 month'),
-        );
-        $this->assertTrue(
-            str_starts_with((string) $param->matchValue('2 month'), '2 month'),
-        );
+        $this->assertTrue(str_starts_with((string) $param->matchValue('1 month'), '1 month'));
+        $this->assertTrue(str_starts_with((string) $param->matchValue('2 month'), '2 month'));
         $this->assertSame('1 day', $param->matchValue('24 hours'));
         $this->assertSame('2 days', $param->matchValue('2 days'));
         $this->assertSame('1 hour', $param->matchValue('60 minutes'));
@@ -61,18 +57,9 @@ class OptionTypeTest extends TestCase
     public function testDatetimeArgType(): void
     {
         $param = new Param('datetime', 'Datetime', ['d'], 'DATETIME');
-        $this->assertSame(
-            '2024-05-23 15:30:45',
-            $param->matchValue('2024-05-23 15:30:45'),
-        );
-        $this->assertSame(
-            '2024-05-23 15:30:45',
-            $param->matchValue('May 23, 2024 15:30:45'),
-        );
-        $this->assertSame(
-            '2024-05-23 15:30:45',
-            $param->matchValue('23rd May 2024 15:30:45'),
-        );
+        $this->assertSame('2024-05-23 15:30:45', $param->matchValue('2024-05-23 15:30:45'));
+        $this->assertSame('2024-05-23 15:30:45', $param->matchValue('May 23, 2024 15:30:45'));
+        $this->assertSame('2024-05-23 15:30:45', $param->matchValue('23rd May 2024 15:30:45'));
 
         $this->expectException(ArgumentException::class);
         $param->matchValue('invalid-datetime');
@@ -99,10 +86,7 @@ class OptionTypeTest extends TestCase
     public function testEmailArgType(): void
     {
         $param = new Param('email', 'User email', ['e'], 'EMAIL');
-        $this->assertSame(
-            'test@example.com',
-            $param->matchValue('test@example.com'),
-        );
+        $this->assertSame('test@example.com', $param->matchValue('test@example.com'));
 
         $this->expectException(ArgumentException::class);
         $param->matchValue('invalid-email');
@@ -129,11 +113,7 @@ class OptionTypeTest extends TestCase
     public function testFloatArgType(): void
     {
         $param = new Param('price', 'Item price', ['p'], 'FLOAT');
-        $this->assertEqualsWithDelta(
-            19.99,
-            $param->matchValue('19.99'),
-            PHP_FLOAT_EPSILON,
-        );
+        $this->assertEqualsWithDelta(19.99, $param->matchValue('19.99'), PHP_FLOAT_EPSILON);
 
         $this->expectException(ArgumentException::class);
         $param->matchValue('notafloat');
@@ -172,10 +152,7 @@ class OptionTypeTest extends TestCase
     public function testMacAddrArgType(): void
     {
         $param = new Param('mac', 'MAC address', ['m'], 'MAC_ADDR');
-        $this->assertSame(
-            '00:1A:2B:3C:4D:5E',
-            $param->matchValue('00:1A:2B:3C:4D:5E'),
-        );
+        $this->assertSame('00:1A:2B:3C:4D:5E', $param->matchValue('00:1A:2B:3C:4D:5E'));
 
         $this->expectException(ArgumentException::class);
         $param->matchValue('notamac');
@@ -218,10 +195,7 @@ class OptionTypeTest extends TestCase
     public function testUrlArgType(): void
     {
         $param = new Param('website', 'Website URL', ['w'], 'URL');
-        $this->assertSame(
-            'https://www.example.com',
-            $param->matchValue('https://www.example.com'),
-        );
+        $this->assertSame('https://www.example.com', $param->matchValue('https://www.example.com'));
 
         $this->expectException(ArgumentException::class);
         $param->matchValue('invalid-url');
@@ -243,9 +217,7 @@ class OptionTypeTest extends TestCase
 
         // Invalid UUIDs
         $this->expectException(ArgumentException::class);
-        $param->matchValue(
-            '123e4567e89b12d3a45642661417400z'
-        ); // Invalid character 'z'
+        $param->matchValue('123e4567e89b12d3a45642661417400z'); // Invalid character 'z'
 
         $this->expectException(ArgumentException::class);
         $param->matchValue('123e4567e89b12d3a45642661417400'); // Too short

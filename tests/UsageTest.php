@@ -15,12 +15,7 @@ class UsageTest extends TestCase
 
     public function testCreateUsage(): void
     {
-        $usage = new Usage($this->optHandler, [
-            'add',
-            'username',
-            'password',
-            'verbose',
-        ]);
+        $usage = new Usage($this->optHandler, ['add', 'username', 'password', 'verbose']);
         $this->assertInstanceOf(Usage::class, $usage);
     }
 
@@ -44,12 +39,7 @@ class UsageTest extends TestCase
 
     public function testGetOptions(): void
     {
-        $usage = new Usage($this->optHandler, [
-            'add',
-            'username',
-            'password',
-            'verbose',
-        ]);
+        $usage = new Usage($this->optHandler, ['add', 'username', 'password', 'verbose']);
 
         $commands = $usage->getOptions('command');
         $terms = $usage->getOptions('term');
@@ -66,12 +56,7 @@ class UsageTest extends TestCase
     {
         $this->expectException(ValueException::class);
 
-        $usage = new Usage($this->optHandler, [
-            'add',
-            'username',
-            'password',
-            'verbose',
-        ]);
+        $usage = new Usage($this->optHandler, ['add', 'username', 'password', 'verbose']);
         $usage->getOptions('invalid_type');
     }
 
@@ -84,12 +69,7 @@ class UsageTest extends TestCase
 
     public function testWriteUsage(): void
     {
-        $usage = new Usage($this->optHandler, [
-            'add',
-            'username',
-            'password',
-            'verbose',
-        ]);
+        $usage = new Usage($this->optHandler, ['add', 'username', 'password', 'verbose']);
         $programName = 'test_program';
 
         $output = $usage->write($programName);
@@ -105,16 +85,8 @@ class UsageTest extends TestCase
     {
         $this->optHandler = new OptHandler();
         $this->optHandler->addCommand(['add', 'a'], 'Add a new user');
-        $this->optHandler->addTerm(
-            'username',
-            'STRING',
-            'Username of the user',
-        );
-        $this->optHandler->addParam(
-            ['password', 'p'],
-            'STRING',
-            'Password for the user',
-        );
+        $this->optHandler->addTerm('username', 'STRING', 'Username of the user');
+        $this->optHandler->addParam(['password', 'p'], 'STRING', 'Password for the user');
         $this->optHandler->addFlag(['verbose', 'v'], 'Enable verbose output');
     }
 }

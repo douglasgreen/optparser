@@ -84,13 +84,7 @@ class OptHandler
         ?callable $callback = null,
     ): self {
         [$name, $others] = $this->pickName($aliases);
-        $this->params[$name] = new Param(
-            $name,
-            $desc,
-            $others,
-            $type,
-            $callback,
-        );
+        $this->params[$name] = new Param($name, $desc, $others, $type, $callback);
 
         return $this;
     }
@@ -340,11 +334,7 @@ class OptHandler
         $output = 'Terms:' . PHP_EOL;
         foreach ($this->terms as $name => $term) {
             $output .=
-                sprintf('  %s: ', $name) .
-                $term->getArgType() .
-                '  ' .
-                $term->getDesc() .
-                PHP_EOL;
+                sprintf('  %s: ', $name) . $term->getArgType() . '  ' . $term->getDesc() . PHP_EOL;
         }
 
         return $output . PHP_EOL;

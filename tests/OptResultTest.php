@@ -14,10 +14,7 @@ class OptResultTest extends TestCase
         $optResult = new OptResult([]);
         $optResult->addError('Missing term: "username"');
 
-        $this->assertContains(
-            'Missing term: "username"',
-            $optResult->getErrors(),
-        );
+        $this->assertContains('Missing term: "username"', $optResult->getErrors());
     }
 
     public function testGetMatchResults(): void

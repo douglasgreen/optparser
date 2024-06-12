@@ -35,7 +35,7 @@ class OptParser
     public function __construct(
         protected string $name,
         protected string $desc,
-        protected int $flags = 0
+        protected int $flags = 0,
     ) {
         $this->optHandler = new OptHandler();
 
@@ -131,9 +131,7 @@ class OptParser
     public function addUsage(string $command, array $optionNames): self
     {
         if ($this->optHandler->getOptionType($command) !== 'command') {
-            throw new ValueException(
-                'Usage argument not a command: ' . $command,
-            );
+            throw new ValueException('Usage argument not a command: ' . $command);
         }
 
         // Multiple usages besides help must define a command.
@@ -195,6 +193,7 @@ class OptParser
     /**
      * @param ?string[] $args
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function parse(?array $args = null): OptResult
@@ -242,9 +241,7 @@ class OptParser
                 $optResult->addError('Command name not provided');
                 $this->checkResult($optResult);
             } elseif (! $this->optHandler->isCommand($inputName)) {
-                $optResult->addError(
-                    sprintf('Command name not recognized: "%s"', $inputName)
-                );
+                $optResult->addError(sprintf('Command name not recognized: "%s"', $inputName));
                 $this->checkResult($optResult);
             }
         }
@@ -321,11 +318,7 @@ class OptParser
                     unset($markedOptions[$savedName]);
                     if ($savedValue !== '') {
                         $optResult->addError(
-                            sprintf(
-                                'Argument passed to flag "%s": "%s"',
-                                $flagName,
-                                $savedValue,
-                            ),
+                            sprintf('Argument passed to flag "%s": "%s"', $flagName, $savedValue),
                         );
                     }
                 }
@@ -350,9 +343,7 @@ class OptParser
                 if ($found) {
                     unset($markedOptions[$savedName]);
                     if ($savedValue === null) {
-                        $optResult->addError(
-                            'No value passed to param "' . $paramName . '"',
-                        );
+                        $optResult->addError('No value passed to param "' . $paramName . '"');
                     } else {
                         try {
                             $matchedValue = $param->matchValue($savedValue);
@@ -374,11 +365,7 @@ class OptParser
             // Warn about unused marked options
             foreach ($markedOptions as $optionName => $optionValue) {
                 $optResult->addError(
-                    sprintf(
-                        'Unused input for "%s": "%s"',
-                        $optionName,
-                        $optionValue,
-                    ),
+                    sprintf('Unused input for "%s": "%s"', $optionName, $optionValue),
                 );
             }
         }

@@ -36,9 +36,7 @@ class Usage
     ) {
         if ($command !== null) {
             if ($this->optHandler->getOptionType($command) !== 'command') {
-                throw new ValueException(
-                    'Usage argument not a command: ' . $command,
-                );
+                throw new ValueException('Usage argument not a command: ' . $command);
             }
 
             $this->options['command'][] = $command;

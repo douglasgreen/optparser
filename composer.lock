@@ -150,12 +150,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/config-setup.git",
-                "reference": "cbf4dd88108ff788ffeb1095763bd0c2011118e4"
+                "reference": "f1a53adf294b9213a7147687247d64323274c221"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/cbf4dd88108ff788ffeb1095763bd0c2011118e4",
-                "reference": "cbf4dd88108ff788ffeb1095763bd0c2011118e4",
+                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/f1a53adf294b9213a7147687247d64323274c221",
+                "reference": "f1a53adf294b9213a7147687247d64323274c221",
                 "shasum": ""
             },
             "require": {
@@ -220,7 +220,7 @@
                 "source": "https://github.com/douglasgreen/config-setup/tree/main",
                 "issues": "https://github.com/douglasgreen/config-setup/issues"
             },
-            "time": "2024-06-11T20:42:15+00:00"
+            "time": "2024-06-12T13:22:49+00:00"
         },
         {
             "name": "douglasgreen/utility",
@@ -228,12 +228,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/utility.git",
-                "reference": "9d2ea5800ac6593ddfebfc1f246ed1521e029049"
+                "reference": "2ffb41b826a0ed5075c27f37395c4fda719eada5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/9d2ea5800ac6593ddfebfc1f246ed1521e029049",
-                "reference": "9d2ea5800ac6593ddfebfc1f246ed1521e029049",
+                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/2ffb41b826a0ed5075c27f37395c4fda719eada5",
+                "reference": "2ffb41b826a0ed5075c27f37395c4fda719eada5",
                 "shasum": ""
             },
             "require": {
@@ -283,7 +283,7 @@
                 "issues": "https://github.com/douglasgreen/utility/issues",
                 "source": "https://github.com/douglasgreen/utility/tree/main"
             },
-            "time": "2024-06-11T17:28:38+00:00"
+            "time": "2024-06-12T12:20:50+00:00"
         },
         {
             "name": "myclabs/deep-copy",
