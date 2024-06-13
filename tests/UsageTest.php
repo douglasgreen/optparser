@@ -6,7 +6,7 @@ namespace DouglasGreen\OptParser\Tests;
 
 use DouglasGreen\OptParser\OptHandler;
 use DouglasGreen\OptParser\Usage;
-use DouglasGreen\Utility\Exceptions\Data\ValueException;
+use DouglasGreen\Utility\Data\ValueException;
 use PHPUnit\Framework\TestCase;
 
 class UsageTest extends TestCase

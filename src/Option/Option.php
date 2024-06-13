@@ -8,9 +8,9 @@ use Closure;
 use DateInterval;
 use DateTimeImmutable;
 use Exception;
-use DouglasGreen\Utility\Exceptions\Data\TypeException;
-use DouglasGreen\Utility\Exceptions\Data\ValueException;
-use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
+use DouglasGreen\Utility\Data\TypeException;
+use DouglasGreen\Utility\Data\ValueException;
+use DouglasGreen\Utility\Process\ArgumentException;
 use DouglasGreen\Utility\Regex\Regex;
 use DouglasGreen\Utility\FileSystem\Path;
 

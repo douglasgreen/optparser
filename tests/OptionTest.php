@@ -8,8 +8,8 @@ use DouglasGreen\OptParser\Option\Command;
 use DouglasGreen\OptParser\Option\Flag;
 use DouglasGreen\OptParser\Option\Param;
 use DouglasGreen\OptParser\Option\Term;
-use DouglasGreen\Utility\Exceptions\Data\ValueException;
-use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
+use DouglasGreen\Utility\Data\ValueException;
+use DouglasGreen\Utility\Process\ArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class OptionTest extends TestCase

@@ -9,7 +9,7 @@ use DouglasGreen\OptParser\Option\Flag;
 use DouglasGreen\OptParser\Option\Option;
 use DouglasGreen\OptParser\Option\Param;
 use DouglasGreen\OptParser\Option\Term;
-use DouglasGreen\Utility\Exceptions\Data\ValueException;
+use DouglasGreen\Utility\Data\ValueException;
 
 /**
  * Define and print options.

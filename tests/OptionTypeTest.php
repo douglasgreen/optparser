@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace DouglasGreen\OptParser\Tests;
 
 use DouglasGreen\OptParser\Option\Param;
-use DouglasGreen\Utility\Exceptions\Data\TypeException;
-use DouglasGreen\Utility\Exceptions\Process\ArgumentException;
+use DouglasGreen\Utility\Data\TypeException;
+use DouglasGreen\Utility\Process\ArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class OptionTypeTest extends TestCase
