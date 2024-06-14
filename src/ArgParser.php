@@ -59,7 +59,7 @@ class ArgParser
         [$options, $this->nonOptions] = $this->splitArrayAroundDash($args);
         $options = $this->joinArguments($options);
         foreach ($options as $option) {
-            $match = Regex::getMatch('/^--?([a-z]\w*(-[a-z]\w*)*)(=(.*))?/', $option);
+            $match = Regex::match('/^--?([a-z]\w*(-[a-z]\w*)*)(=(.*))?/', $option);
             if ($match !== []) {
                 $name = $match[1];
                 $arg = $match[4] ?? '';
