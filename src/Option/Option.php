@@ -12,7 +12,7 @@ use DouglasGreen\Utility\Data\TypeException;
 use DouglasGreen\Utility\Data\ValueException;
 use DouglasGreen\Utility\Process\ArgumentException;
 use DouglasGreen\Utility\Regex\Regex;
-use DouglasGreen\Utility\FileSystem\Path;
+use DouglasGreen\Utility\FileSystem\PathUtil;
 
 abstract class Option
 {
@@ -452,9 +452,7 @@ abstract class Option
             throw new ArgumentException('Directory is not readable');
         }
 
-        $path = new Path($value);
-
-        return $path->resolve();
+        return PathUtil::resolve($value);
     }
 
     /**
@@ -472,8 +470,7 @@ abstract class Option
             throw new ArgumentException('File is not readable');
         }
 
-        $path = new Path($value);
-        return $path->resolve();
+        return PathUtil::resolve($value);
     }
 
     /**
@@ -488,8 +485,7 @@ abstract class Option
             throw new ArgumentException('File directory is not writable');
         }
 
-        $path = new Path($directory);
-        return $path->resolve() . (DIRECTORY_SEPARATOR . basename($value));
+        return PathUtil::resolve($directory) . (DIRECTORY_SEPARATOR . basename($value));
     }
 
     /**
