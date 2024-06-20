@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace DouglasGreen\OptParser\Tests;
 
 use DouglasGreen\OptParser\Option\Param;
+use DouglasGreen\Utility\Data\ArgumentException;
 use DouglasGreen\Utility\Data\TypeException;
-use DouglasGreen\Utility\Process\ArgumentException;
+use DouglasGreen\Utility\FileSystem\FileException;
 use PHPUnit\Framework\TestCase;
 
 class OptionTypeTest extends TestCase
@@ -169,7 +170,7 @@ class OptionTypeTest extends TestCase
         $param = new Param('output', 'Output file name', ['o'], 'OUTFILE');
         $this->assertNotNull($param->matchValue('var/file.txt'));
 
-        $this->expectException(ArgumentException::class);
+        $this->expectException(FileException::class);
         $param->matchValue('/path/to/unwritable/directory/file.txt');
     }
 

@@ -8,11 +8,11 @@ use Closure;
 use DateInterval;
 use DateTimeImmutable;
 use Exception;
+use DouglasGreen\Utility\Data\ArgumentException;
 use DouglasGreen\Utility\Data\TypeException;
 use DouglasGreen\Utility\Data\ValueException;
-use DouglasGreen\Utility\Process\ArgumentException;
-use DouglasGreen\Utility\Regex\Regex;
 use DouglasGreen\Utility\FileSystem\PathUtil;
+use DouglasGreen\Utility\Regex\Regex;
 
 abstract class Option
 {
@@ -480,12 +480,12 @@ abstract class Option
      */
     protected function checkOutputFile(string $value): string
     {
-        $directory = dirname($value);
+        $directory = PathUtil::resolve(dirname($value));
         if (! is_writable($directory)) {
             throw new ArgumentException('File directory is not writable');
         }
 
-        return PathUtil::resolve($directory) . (DIRECTORY_SEPARATOR . basename($value));
+        return PathUtil::addSubpath($directory, basename($value));
     }
 
     /**

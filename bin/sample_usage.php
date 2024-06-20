@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 use DouglasGreen\OptParser\OptParser;
-use DouglasGreen\Utility\Process\ArgumentException;
+use DouglasGreen\Utility\Data\ArgumentException;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
