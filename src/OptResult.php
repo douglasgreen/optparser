@@ -8,6 +8,7 @@ use DouglasGreen\Utility\Regex\Regex;
 
 /**
  * Represent data from matching a usage.
+ * @see \DouglasGreen\OptParser\Tests\OptResultTest
  */
 class OptResult
 {

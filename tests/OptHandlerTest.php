@@ -16,10 +16,10 @@ class OptHandlerTest extends TestCase
         $optHandler->addCommand(['add', 'a'], 'Add a new user');
 
         $this->assertTrue($optHandler->hasOptionType('command'));
-        $command = $optHandler->getOption('add');
-        $this->assertSame('add', $command->getName());
-        $this->assertSame('Add a new user', $command->getDesc());
-        $this->assertSame(['a'], $command->getAliases());
+        $option = $optHandler->getOption('add');
+        $this->assertSame('add', $option->getName());
+        $this->assertSame('Add a new user', $option->getDesc());
+        $this->assertSame(['a'], $option->getAliases());
     }
 
     public function testAddFlag(): void
@@ -28,10 +28,10 @@ class OptHandlerTest extends TestCase
         $optHandler->addFlag(['verbose', 'v'], 'Enable verbose output');
 
         $this->assertTrue($optHandler->hasOptionType('flag'));
-        $flag = $optHandler->getOption('verbose');
-        $this->assertSame('verbose', $flag->getName());
-        $this->assertSame('Enable verbose output', $flag->getDesc());
-        $this->assertSame(['v'], $flag->getAliases());
+        $option = $optHandler->getOption('verbose');
+        $this->assertSame('verbose', $option->getName());
+        $this->assertSame('Enable verbose output', $option->getDesc());
+        $this->assertSame(['v'], $option->getAliases());
     }
 
     public function testAddParam(): void
@@ -40,11 +40,11 @@ class OptHandlerTest extends TestCase
         $optHandler->addParam(['password', 'p'], 'STRING', 'Password for the user');
 
         $this->assertTrue($optHandler->hasOptionType('param'));
-        $param = $optHandler->getOption('password');
-        $this->assertSame('password', $param->getName());
-        $this->assertSame('Password for the user', $param->getDesc());
-        $this->assertSame(['p'], $param->getAliases());
-        $this->assertSame('STRING', $param->getArgType());
+        $option = $optHandler->getOption('password');
+        $this->assertSame('password', $option->getName());
+        $this->assertSame('Password for the user', $option->getDesc());
+        $this->assertSame(['p'], $option->getAliases());
+        $this->assertSame('STRING', $option->getArgType());
     }
 
     public function testAddTerm(): void
@@ -53,10 +53,10 @@ class OptHandlerTest extends TestCase
         $optHandler->addTerm('username', 'STRING', 'Username of the user');
 
         $this->assertTrue($optHandler->hasOptionType('term'));
-        $term = $optHandler->getOption('username');
-        $this->assertSame('username', $term->getName());
-        $this->assertSame('Username of the user', $term->getDesc());
-        $this->assertSame('STRING', $term->getArgType());
+        $option = $optHandler->getOption('username');
+        $this->assertSame('username', $option->getName());
+        $this->assertSame('Username of the user', $option->getDesc());
+        $this->assertSame('STRING', $option->getArgType());
     }
 
     public function testDuplicateAliasException(): void

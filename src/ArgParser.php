@@ -13,6 +13,7 @@ use DouglasGreen\Utility\Regex\Regex;
  * This class parses command-line arguments according to the GNU argument syntax.
  *
  * @see https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html
+ * @see \DouglasGreen\OptParser\Tests\ArgParserTest
  */
 class ArgParser
 {

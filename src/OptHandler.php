@@ -13,6 +13,7 @@ use DouglasGreen\Utility\Data\ValueException;
 
 /**
  * Define and print options.
+ * @see \DouglasGreen\OptParser\Tests\OptHandlerTest
  */
 class OptHandler
 {

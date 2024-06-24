@@ -8,6 +8,7 @@ use DouglasGreen\Utility\Data\ValueException;
 
 /**
  * Define a usage with a series of options.
+ * @see \DouglasGreen\OptParser\Tests\UsageTest
  */
 class Usage
 {
