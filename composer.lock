@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e07d08efee05e3eec1bf916d385b0ff8",
+    "content-hash": "2c8ed30571e0d9f18c57edec51627a83",
     "packages": [],
     "packages-dev": [
         {
@@ -150,12 +150,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/config-setup.git",
-                "reference": "ff6a40af08b5a8a80094afce1ca8191ef2ed5ea6"
+                "reference": "79ccace6df2c39c0f49e1c5d6bfcc108a61a0ebd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/ff6a40af08b5a8a80094afce1ca8191ef2ed5ea6",
-                "reference": "ff6a40af08b5a8a80094afce1ca8191ef2ed5ea6",
+                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/79ccace6df2c39c0f49e1c5d6bfcc108a61a0ebd",
+                "reference": "79ccace6df2c39c0f49e1c5d6bfcc108a61a0ebd",
                 "shasum": ""
             },
             "require": {
@@ -225,7 +225,7 @@
                 "source": "https://github.com/douglasgreen/config-setup/tree/main",
                 "issues": "https://github.com/douglasgreen/config-setup/issues"
             },
-            "time": "2024-06-24T17:42:38+00:00"
+            "time": "2024-06-24T17:51:14+00:00"
         },
         {
             "name": "douglasgreen/php-linter",
@@ -233,12 +233,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/php-linter.git",
-                "reference": "063a03a95d36cf2277be31be9e866d30bdb16b73"
+                "reference": "07ca40b32272afbb34d5cbd5293a4de3ab4216fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/php-linter/zipball/063a03a95d36cf2277be31be9e866d30bdb16b73",
-                "reference": "063a03a95d36cf2277be31be9e866d30bdb16b73",
+                "url": "https://api.github.com/repos/douglasgreen/php-linter/zipball/07ca40b32272afbb34d5cbd5293a4de3ab4216fb",
+                "reference": "07ca40b32272afbb34d5cbd5293a4de3ab4216fb",
                 "shasum": ""
             },
             "require": {
@@ -322,7 +322,7 @@
                 "source": "https://github.com/douglasgreen/php-linter/tree/main",
                 "issues": "https://github.com/douglasgreen/php-linter/issues"
             },
-            "time": "2024-06-24T17:41:15+00:00"
+            "time": "2024-06-24T17:52:43+00:00"
         },
         {
             "name": "douglasgreen/utility",
@@ -330,12 +330,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/utility.git",
-                "reference": "21b50426bb31a7efca8b72df123b9bd930f2316f"
+                "reference": "60870d0930fdc4bff706dfb7cec9cdb1952c0bd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/21b50426bb31a7efca8b72df123b9bd930f2316f",
-                "reference": "21b50426bb31a7efca8b72df123b9bd930f2316f",
+                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/60870d0930fdc4bff706dfb7cec9cdb1952c0bd6",
+                "reference": "60870d0930fdc4bff706dfb7cec9cdb1952c0bd6",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +385,7 @@
                 "issues": "https://github.com/douglasgreen/utility/issues",
                 "source": "https://github.com/douglasgreen/utility/tree/main"
             },
-            "time": "2024-06-24T17:45:49+00:00"
+            "time": "2024-06-24T19:10:02+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -3112,13 +3112,13 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "douglasgreen/config-setup": 20,
         "douglasgreen/php-linter": 20,
         "douglasgreen/utility": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.1"
