@@ -150,12 +150,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/config-setup.git",
-                "reference": "8a0e24220d2ac18b3dfc34bfbe72e3b5f5673d01"
+                "reference": "ff6a40af08b5a8a80094afce1ca8191ef2ed5ea6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/8a0e24220d2ac18b3dfc34bfbe72e3b5f5673d01",
-                "reference": "8a0e24220d2ac18b3dfc34bfbe72e3b5f5673d01",
+                "url": "https://api.github.com/repos/douglasgreen/config-setup/zipball/ff6a40af08b5a8a80094afce1ca8191ef2ed5ea6",
+                "reference": "ff6a40af08b5a8a80094afce1ca8191ef2ed5ea6",
                 "shasum": ""
             },
             "require": {
@@ -171,7 +171,7 @@
             },
             "default-branch": true,
             "bin": [
-                "bin/config_setup.php"
+                "bin/config-setup"
             ],
             "type": "library",
             "autoload": {
@@ -181,11 +181,10 @@
             },
             "scripts": {
                 "lint": [
-                    "check_metrics.php",
-                    "check_style.php",
                     "ecs",
-                    "phpstan analyse",
+                    "php-linter",
                     "phpmd --cache --cache-file var/cache/phpmd/cache.php . text phpmd.xml",
+                    "phpstan analyse",
                     "rector --dry-run"
                 ],
                 "lint:fix": [
@@ -226,7 +225,7 @@
                 "source": "https://github.com/douglasgreen/config-setup/tree/main",
                 "issues": "https://github.com/douglasgreen/config-setup/issues"
             },
-            "time": "2024-06-24T14:24:07+00:00"
+            "time": "2024-06-24T17:42:38+00:00"
         },
         {
             "name": "douglasgreen/php-linter",
@@ -234,12 +233,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/php-linter.git",
-                "reference": "798020e8132c0aebc68b7eb1f0fd2339ed07f35b"
+                "reference": "063a03a95d36cf2277be31be9e866d30bdb16b73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/php-linter/zipball/798020e8132c0aebc68b7eb1f0fd2339ed07f35b",
-                "reference": "798020e8132c0aebc68b7eb1f0fd2339ed07f35b",
+                "url": "https://api.github.com/repos/douglasgreen/php-linter/zipball/063a03a95d36cf2277be31be9e866d30bdb16b73",
+                "reference": "063a03a95d36cf2277be31be9e866d30bdb16b73",
                 "shasum": ""
             },
             "require": {
@@ -259,9 +258,10 @@
             },
             "default-branch": true,
             "bin": [
-                "bin/check_metrics.php",
-                "bin/check_style.php",
-                "bin/run_pdepend.php"
+                "bin/check-metrics",
+                "bin/check-style",
+                "bin/php-linter",
+                "bin/run-pdepend"
             ],
             "type": "project",
             "autoload": {
@@ -272,6 +272,7 @@
             },
             "scripts": {
                 "lint": [
+                    "php-linter",
                     "ecs",
                     "phpstan analyse",
                     "phpmd --cache --cache-file var/cache/phpmd/cache.php . text phpmd.xml",
@@ -282,10 +283,10 @@
                     "rector"
                 ],
                 "post-install-cmd": [
-                    "config_setup.php"
+                    "config-setup"
                 ],
                 "post-update-cmd": [
-                    "config_setup.php"
+                    "config-setup"
                 ],
                 "test": [
                     "phpunit"
@@ -321,7 +322,7 @@
                 "source": "https://github.com/douglasgreen/php-linter/tree/main",
                 "issues": "https://github.com/douglasgreen/php-linter/issues"
             },
-            "time": "2024-06-24T14:20:37+00:00"
+            "time": "2024-06-24T17:41:15+00:00"
         },
         {
             "name": "douglasgreen/utility",
@@ -329,12 +330,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/utility.git",
-                "reference": "857fb6b9ccf10c1cc1130000b915d1bff7069431"
+                "reference": "21b50426bb31a7efca8b72df123b9bd930f2316f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/857fb6b9ccf10c1cc1130000b915d1bff7069431",
-                "reference": "857fb6b9ccf10c1cc1130000b915d1bff7069431",
+                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/21b50426bb31a7efca8b72df123b9bd930f2316f",
+                "reference": "21b50426bb31a7efca8b72df123b9bd930f2316f",
                 "shasum": ""
             },
             "require": {
@@ -384,7 +385,7 @@
                 "issues": "https://github.com/douglasgreen/utility/issues",
                 "source": "https://github.com/douglasgreen/utility/tree/main"
             },
-            "time": "2024-06-24T12:53:04+00:00"
+            "time": "2024-06-24T17:45:49+00:00"
         },
         {
             "name": "myclabs/deep-copy",

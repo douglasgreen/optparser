@@ -65,9 +65,8 @@
     },
     "scripts": {
         "lint": [
-            "check_metrics.php",
-            "check_style.php",
             "ecs",
+            "php-linter",
             "phpstan analyse",
             "phpmd --cache --cache-file var/cache/phpmd/cache.php . text phpmd.xml",
             "rector --dry-run"
@@ -76,8 +75,8 @@
             "ecs --fix",
             "rector"
         ],
-        "post-install-cmd": "config_setup.php",
-        "post-update-cmd": "config_setup.php",
+        "post-install-cmd": "config-setup",
+        "post-update-cmd": "config-setup",
         "test": "phpunit"
     }
 }
