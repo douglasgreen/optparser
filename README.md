@@ -145,7 +145,7 @@ To use OptParser:
 
 ## Sample usage
 
-There is a [sample usage](bin/sample_usage.php) in a file. You can also run the program with `-h` to
+There is a [sample usage](bin/sample-usage) in a file. You can also run the program with `-h` to
 see sample help output.
 
 ## Sample help
@@ -158,10 +158,10 @@ User Manager
 A program to manage user accounts
 
 Usage:
-  sample_usage.php --help
-  sample_usage.php add username:STRING email:STRING --password=STRING --role=STRING
-  sample_usage.php delete username:STRING
-  sample_usage.php list --output=OUTFILE --verbose
+  sample-usage --help
+  sample-usage add username:STRING email:STRING --password=STRING --role=STRING
+  sample-usage delete username:STRING
+  sample-usage list --output=OUTFILE --verbose
 
 Commands:
   add | a  Add a new user
