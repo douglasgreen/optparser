@@ -170,12 +170,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/douglasgreen/utility.git",
-                "reference": "081487e77788b00ecbde367c77dd43cb7b36b0fd"
+                "reference": "341c4eb6359c5a2b6419c42246c7e07b157029b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/081487e77788b00ecbde367c77dd43cb7b36b0fd",
-                "reference": "081487e77788b00ecbde367c77dd43cb7b36b0fd",
+                "url": "https://api.github.com/repos/douglasgreen/utility/zipball/341c4eb6359c5a2b6419c42246c7e07b157029b0",
+                "reference": "341c4eb6359c5a2b6419c42246c7e07b157029b0",
                 "shasum": ""
             },
             "require": {
@@ -224,7 +224,7 @@
                 "issues": "https://github.com/douglasgreen/utility/issues",
                 "source": "https://github.com/douglasgreen/utility/tree/main"
             },
-            "time": "2024-07-01T11:58:22+00:00"
+            "time": "2024-07-01T12:03:21+00:00"
         },
         {
             "name": "myclabs/deep-copy",
